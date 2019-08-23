@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="template.html::head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:replace="template.html::navbar"></div>
+<div class="container">
+    <div class="content">
+    <br/>
+    <header><h2>Payment history</h2></header>
+    <a href="/payment/add" onclick="changeContent('newPayment'); return false;" class="btn btn-secondary button-mid" id="addPayment">
+        Add
+    </a>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+            Launch demo modal
+        </button>
+
+
+    <table class="table table-sm table-hover">
+        <thead class="thead-dark">
+        <tr>
+
+            <th scope="col">Pos name</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Date</th>
+            <th scope="col">Category</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+            <th:block th:each="payment: ${payments}">
+                <tr>
+                    <td th:text="${payment.name}"></td>
+                    <td th:text="${payment.amount}"></td>
+                    <td th:text="${payment.date}"></td>
+                    <!--<td th:text="${payment.category!=null}?${payment.category.name} : ''"></td>-->
+                    <td> <a th:href="${payment.category!=null}?@{'/category/'+${payment.category.name}} : '#'" th:text="${payment.category!=null}?${payment.category.name} : ''"></a></td>
+                    <!--<td><a th:href="@{'/payment/delete/' +${payment.id}}" th:onclick="'deletePos('+${payment.id}+')'">delete</a> </td>-->
+                    <td><a data-toggle="modal" href="#deletePayConfirm" th:attr="data-id=${payment.id}, data-name=${payment.name}">delete</a> </td>
+                </tr>
+            </th:block>
+        </tbody>
+    </table>
+
+    </div>
+
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Add position</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="modal fade" id="deletePayConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmTitle">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Do you really want to delete position <span class="name" style="font-weight: bold;"></span>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <form action="" method="get" id="hiddenForm">
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="template.html :: js-include"></div>
+
+</body>
+</html>
