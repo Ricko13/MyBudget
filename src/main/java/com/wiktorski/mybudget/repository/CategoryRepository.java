@@ -1,6 +1,6 @@
-package com.wiktorski.mybudget.Repository;
+package com.wiktorski.mybudget.repository;
 
-import com.wiktorski.mybudget.Model.Category;
+import com.wiktorski.mybudget.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {

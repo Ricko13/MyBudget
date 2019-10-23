@@ -1,8 +1,8 @@
-package com.wiktorski.mybudget.Service;
+package com.wiktorski.mybudget.service;
 
-import com.wiktorski.mybudget.Model.Role;
-import com.wiktorski.mybudget.Model.User;
-import com.wiktorski.mybudget.Repository.UserRepository;
+import com.wiktorski.mybudget.model.Role;
+import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

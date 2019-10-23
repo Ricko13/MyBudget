@@ -2,19 +2,15 @@ package com.wiktorski.mybudget.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
-
-import java.sql.Connection;
 
 //@ConfigurationProperties(prefix = "custom")
 //@Validated
 
 @Component
-@EnableConfigurationProperties(DevMode.class)
+@EnableConfigurationProperties(PropertyConfig.class)
 @ConfigurationProperties("custom")
-public class DevMode {
+public class PropertyConfig {
 
     private boolean devMode;
 

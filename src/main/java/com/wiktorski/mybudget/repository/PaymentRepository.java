@@ -1,12 +1,13 @@
-package com.wiktorski.mybudget.Repository;
+package com.wiktorski.mybudget.repository;
 
-import com.wiktorski.mybudget.Model.Payment;
+import com.wiktorski.mybudget.model.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface PaymentRepository extends JpaRepository<Payment,Integer> {
 
+ //   List<Payment> findAllByOrderByDateAsc();
 //    List<Payment> findByCategory(String name);
 
 }

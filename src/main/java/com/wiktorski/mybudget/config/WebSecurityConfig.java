@@ -1,4 +1,4 @@
-package com.wiktorski.mybudget.Config;
+package com.wiktorski.mybudget.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

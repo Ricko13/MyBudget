@@ -1,4 +1,4 @@
-package com.wiktorski.mybudget.Validator.ReCaptcha;
+package com.wiktorski.mybudget.validator.ReCaptcha;
 
 import java.util.HashMap;
 import java.util.Map;

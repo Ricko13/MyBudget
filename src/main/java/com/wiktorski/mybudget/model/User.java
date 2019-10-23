@@ -1,19 +1,14 @@
-package com.wiktorski.mybudget.Model;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package com.wiktorski.mybudget.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.Set;
 
-//notes on the bottom
 
-//class is annotated with @Entity, indicating that it is a JPA entity
 @Entity
 public class User {
 
-    /*id property is annotated with @Id so that JPA will recognize it as the object’s ID. The id property
-     is also annotated with @GeneratedValue to indicate that the ID should be generated automatically.*/
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -28,48 +23,61 @@ public class User {
     private String passwordConfirm;
     //private String role;
 
+    @Null
     @OneToMany(mappedBy = "user")
     private List<Payment> payments;
-        public List<Payment> getPayments() {
-            return payments;
-        }
-        public void addPayment(Payment payment) {
-            this.payments.add(payment);
-        }
-        public void setPayments(List<Payment> payments) {
-            this.payments = payments;
-        }
 
-    @OneToMany(mappedBy="user")
-    private List<Category> categories;
-        public List<Category> getCategories() { return categories; }
-        public void setCategories(List<Category> categories) { this.categories = categories; }
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void addPayment(Payment payment) {
+        this.payments.add(payment);
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
+    }
 
     @OneToMany(mappedBy = "user")
-    private List<BillingPeriod> billingPeriods;
-    private int currentBillingPeriodId;
-        public List<BillingPeriod> getBillingPeriods() {
-            return billingPeriods; }
-        public void setBillingPeriods(List<BillingPeriod> billingPeriods) {
-            this.billingPeriods = billingPeriods; }
-        public int getCurrentBillingPeriodId() {
-            return currentBillingPeriodId; }
-        public void setCurrentBillingPeriodId(int currentBillingPeriodId) {
-            this.currentBillingPeriodId = currentBillingPeriodId; }
+    private List<Category> categories;
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
 
     @ManyToMany
     private Set<Role> roles;
+    /*
+    @OneToMany(mappedBy = "user")
+    private List<BillingPeriod> billingPeriods;
+    private int currentBillingPeriodId;
 
-    /*@OneToMany
-    @JoinColumn(name="userId")
-    List<Data> payment=new ArrayList<>();*/
+    public List<BillingPeriod> getBillingPeriods() {
+        return billingPeriods;
+    }
 
+    public void setBillingPeriods(List<BillingPeriod> billingPeriods) {
+        this.billingPeriods = billingPeriods;
+    }
 
-    /*The default constructor only exists for the sake of JPA. You won’t use it directly, so it is designated as protected.*/
+    public int getCurrentBillingPeriodId() {
+        return currentBillingPeriodId;
+    }
+
+    public void setCurrentBillingPeriodId(int currentBillingPeriodId) {
+        this.currentBillingPeriodId = currentBillingPeriodId;
+    }
+
+    */
+
     public User() {
     }
 
-    /*The other constructor is the one you’ll use to create instances of Customer to be saved to the database.*/
     public User(String name, String surname, String email, String username, String password) {
         this.name = name;
         this.surname = surname;
@@ -77,6 +85,7 @@ public class User {
         this.username = username;
         this.password = password;
     }
+
 
     public int getId() {
         return id;
@@ -169,9 +178,3 @@ public class User {
                 '}';
     }
 }
-
-/*
-@Entity: Specifies that the class is an entity. This annotation is applied to the entity class.
-@Id: Specifies the primary key of an entity.
-@GeneratedValue: Provides for the specification of generation strategies for the values of primary keys.
-public Student(): Default constructor to make JPA Happy*/

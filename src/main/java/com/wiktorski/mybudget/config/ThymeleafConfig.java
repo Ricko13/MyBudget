@@ -1,4 +1,4 @@
-package com.wiktorski.mybudget.Config;
+package com.wiktorski.mybudget.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

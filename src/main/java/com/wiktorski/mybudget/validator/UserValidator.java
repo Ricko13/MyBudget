@@ -1,8 +1,8 @@
-package com.wiktorski.mybudget.Validator;
+package com.wiktorski.mybudget.validator;
 
 
-import com.wiktorski.mybudget.Model.User;
-import com.wiktorski.mybudget.Service.UserService;
+import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -27,8 +27,6 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         User user = (User) o;
 
-
-        //if (userService.findByUsername(user.getUsername()) != null) {
         if (userService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
@@ -39,7 +37,6 @@ public class UserValidator implements Validator {
             errors.rejectValue("username", "Size.userForm.username");
         }
 
-
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
 
         if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
@@ -48,12 +45,11 @@ public class UserValidator implements Validator {
             errors.rejectValue("password", "Size.userForm.password");
         }
 
-
         /*if(userService.findByEmail(user.getEmail())!=null){
             errors.rejectValue("email", "Duplicate.userForm.email");
         }*/
 
-        /*DODAJ POTWIERDZANIE HASLA, mailem tez nie zaszkodzi xddd*/
+        /*DODAJ POTWIERDZANIE HASLA, mailem tez nie zaszkodzi */
         if (!user.getPasswordConfirm().equals(user.getPassword())) {
             errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
         }
@@ -66,7 +62,6 @@ public class UserValidator implements Validator {
             Pattern digit = Pattern.compile("[0-9]");
             Pattern special = Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
             //Pattern eight = Pattern.compile (".{8}");
-
 
             Matcher hasUpperCase = upperCase.matcher(password);
             Matcher hasLowerCase = lowerCase.matcher(password);

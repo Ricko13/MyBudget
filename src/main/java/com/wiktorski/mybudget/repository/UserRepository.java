@@ -1,11 +1,11 @@
-package com.wiktorski.mybudget.Repository;
+package com.wiktorski.mybudget.repository;
 
 
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
 // CRUD refers Create, Read, Update, Delete
 
 
-import com.wiktorski.mybudget.Model.User;
+import com.wiktorski.mybudget.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

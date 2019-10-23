@@ -1,4 +1,4 @@
-package com.wiktorski.mybudget.Validator.ReCaptcha;
+package com.wiktorski.mybudget.validator.ReCaptcha;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

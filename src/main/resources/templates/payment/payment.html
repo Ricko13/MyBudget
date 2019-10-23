@@ -10,46 +10,104 @@
 <div th:replace="template.html::navbar"></div>
 <div class="container">
     <div class="content">
-    <br/>
-    <header><h2>Payment history</h2></header>
-    <a href="/payment/add" onclick="changeContent('newPayment'); return false;" class="btn btn-secondary button-mid" id="addPayment">
-        Add
-    </a>
+        <br/>
+        <header><h2>Payment history</h2></header>
+        <!--<a href="/payment/add" onclick="changeContent('newPayment'); return false;" class="btn btn-secondary button-mid" id="addPayment">
+            Add
+        </a>-->
+        <button href="/payment/add" id="addPayment" class="btn btn-secondary button-mid" type="button"
+                data-toggle="collapse" data-target="#collapseAddPayment" aria-expanded="false"
+                aria-controls="collapseExample">
+            Add
+        </button>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
             Launch demo modal
         </button>
 
+        <div class="collapse" id="collapseAddPayment" style="margin-top:20px; ">
+            <div class="card card-body" style="width: 60%; margin-left: auto; margin-right: auto;">
+                <header><h2>Add payment</h2></header>
+                <form th:action="@{/payment/add}" method="post">
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div class="col">
+                                <label for="name" style="font-weight: bold">Position name *</label>
+                                <input type="text" class="form-control" id="name"
+                                       placeholder="Position name" name="name" autofocus="autofocus" required
+                                       style="width: 250px; margin-right: auto; margin-left: auto;">
+                            </div>
 
-    <table class="table table-sm table-hover">
-        <thead class="thead-dark">
-        <tr>
+                            <div class="col">
+                                <label for="price">Value *</label>
+                                <input type="number"
+                                       min="1" step="any" class="form-control" id="price" placeholder="Type price"
+                                       name="price" required
+                                       style="width: 200px; margin-right: auto; margin-left: auto;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div class="col">
+                                <label for="categories">Category</label>
+                                <select id="categories" name="categories" class="form-control"
+                                        style="width: 250px; margin-right: auto; margin-left: auto;">
+                                    <option value="-1">None</option>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.id}"
+                                            th:text="${category.name}"></option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="date" th:value="${date}">Date</label>
+                                <input class="form-control" type="datetime-local" id="date" name="date"
+                                       style="width: 200px; margin-right: auto; margin-left: auto;">
+                            </div>
+                        </div>
+                    </div>
 
-            <th scope="col">Pos name</th>
-            <th scope="col">Amount</th>
-            <th scope="col">Date</th>
-            <th scope="col">Category</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
+                    <button id="buttonPaymentCollapse" type="submit" class="btn btn-secondary pull-right">Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+
+<div class="overflow">
+        <table class="table table-sm table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Pos name</th>
+                <th scope="col">price</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Category</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
             <th:block th:each="payment: ${payments}">
                 <tr>
                     <td th:text="${payment.name}"></td>
-                    <td th:text="${payment.amount}"></td>
-                    <td th:text="${payment.date}"></td>
+                    <td th:text="${payment.price}"></td>
+                    <td th:text="${payment.justDate}"></td>
+                    <td th:text="${payment.justTime}"></td>
                     <!--<td th:text="${payment.category!=null}?${payment.category.name} : ''"></td>-->
-                    <td> <a th:href="${payment.category!=null}?@{'/category/'+${payment.category.name}} : '#'" th:text="${payment.category!=null}?${payment.category.name} : ''"></a></td>
+                    <td><a th:href="${payment.category!=null}?@{'/category/'+${payment.category.name}} : '#'"
+                           th:text="${payment.category!=null}?${payment.category.name} : ''"></a></td>
                     <!--<td><a th:href="@{'/payment/delete/' +${payment.id}}" th:onclick="'deletePos('+${payment.id}+')'">delete</a> </td>-->
-                    <td><a data-toggle="modal" href="#deletePayConfirm" th:attr="data-id=${payment.id}, data-name=${payment.name}">delete</a> </td>
+                    <td><a data-toggle="modal" href="#deletePayConfirm"
+                           th:attr="data-id=${payment.id}, data-name=${payment.name}">delete</a></td>
                 </tr>
             </th:block>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+</div>
 
     </div>
 
 
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -70,10 +128,8 @@
     </div>
 
 
-
-
-
-    <div class="modal fade" id="deletePayConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="deletePayConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">

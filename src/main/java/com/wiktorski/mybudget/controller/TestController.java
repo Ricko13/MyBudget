@@ -1,17 +1,16 @@
-package com.wiktorski.mybudget.Controller;
+package com.wiktorski.mybudget.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wiktorski.mybudget.Model.Category;
-import com.wiktorski.mybudget.Model.Payment;
-import com.wiktorski.mybudget.Repository.CategoryRepository;
-import com.wiktorski.mybudget.Repository.PaymentRepository;
-import com.wiktorski.mybudget.Service.UserService;
+import com.wiktorski.mybudget.model.Category;
+import com.wiktorski.mybudget.model.Payment;
+import com.wiktorski.mybudget.repository.CategoryRepository;
+import com.wiktorski.mybudget.repository.PaymentRepository;
+import com.wiktorski.mybudget.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -39,14 +38,14 @@ public class TestController {
     @GetMapping("/category")
     public String showCategories() throws JsonProcessingException {
         //return  objectMapper.writeValueAsString(categoryRepo.findAll());
-        return objectMapper.writeValueAsString(userService.getCurrentUserCategories());
+        return objectMapper.writeValueAsString(userService.getUserCategories());
     }
 
     @GetMapping("/payment/test/{idCat}")
     public void addPaymentToCat(@PathVariable int idCat) throws Exception {
         Optional<Category> cat=categoryRepo.findById(idCat);
         if(cat.isPresent()){
-        paymentRepo.save(new Payment("test",(float)13.40,cat.get(),null));
+        //paymentRepo.save(new Payment("test",(float)13.40,cat.get()));
         }else{
             throw new Exception("Didnt find category with that id");
         }
@@ -56,7 +55,7 @@ public class TestController {
     @GetMapping("/payment")
     public String showPayments() throws JsonProcessingException {
        // return objectMapper.writeValueAsString(paymentRepo.findAll());
-        return objectMapper.writeValueAsString(userService.getCurrentUserPayments());
+        return objectMapper.writeValueAsString(userService.getUserPaymentsDesc());
     }
 
     @GetMapping("/showCat")

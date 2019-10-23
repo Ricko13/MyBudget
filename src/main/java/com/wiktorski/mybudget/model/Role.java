@@ -1,4 +1,4 @@
-package com.wiktorski.mybudget.Model;
+package com.wiktorski.mybudget.model;
 
 
 import javax.persistence.*;

@@ -1,10 +1,10 @@
-package com.wiktorski.mybudget.Model;
+package com.wiktorski.mybudget.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -14,45 +14,59 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
-    private float amount;
+    private float price;
+    @NotNull
     private Date date;
+    private String description;
     @ManyToOne
-    @JoinColumn(name="category_id")
+    @JoinColumn(name = "category_id")
     private Category category;
-
-    @ManyToOne
-    @JoinColumn(name="billingPeriod_id")
-    private BillingPeriod billingPeriod;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
+    @Transient
+    private String justDate;
+    @Transient
+    private String justTime;
 
-    public Payment() {
+   /* @ManyToOne
+    @JoinColumn(name="billingPeriod_id")
+    private BillingPeriod billingPeriod;*/
+
+    public Payment() { }
+
+    public Payment(String name, float price, User user) {
+        this.name = name;
+        this.price = price;
+        this.user = user;
     }
 
-    public Payment(String name, float amount) {
+    public Payment(String name, float price, User user, Category category) {
         this.name = name;
-        this.amount = amount;
-    }
-
-    public Payment(String name, float amount, User user) {
-        this.name = name;
-        this.amount = amount;
-        this.user=user;
-    }
-
-    public Payment(String name, float amount, Category category, User user) {
-        this.name = name;
-        this.amount = amount;
+        this.price = price;
         this.category = category;
-        this.user=user;
+        this.user = user;
     }
 
-    public User getUser() { return user;}
-    public void setUser(User user) {  this.user = user;}
+    public Payment(String name, float price, User user, Date date) {
+        this.name = name;
+        this.price = price;
+        this.date = date;
+        this.description = description;
+        this.category = category;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getName() {
         return name;
@@ -62,17 +76,21 @@ public class Payment {
         this.name = name;
     }
 
-    public float getAmount() {
-        return amount;
+    public float getPrice() {
+        return price;
     }
 
-    public void setAmount(float amount) {
-        this.amount = amount;
+    public void setPrice(float price) {
+        this.price = price;
     }
 
-    public Date getDate() { return date;}
+    public Date getDate() {
+        return date;
+    }
 
-    public void setDate(Date date) { this.date = date; }
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     @JsonManagedReference
     public Category getCategory() {
@@ -83,15 +101,15 @@ public class Payment {
         this.category = category;
     }
 
-    @JsonIgnore
-    public BillingPeriod getBillingPeriod() {
-        return billingPeriod;
-    }
-
-    public void setBillingPeriod(BillingPeriod billingPeriod) {
-        this.billingPeriod = billingPeriod;
-    }
-
+    /*
+        @JsonIgnore
+        public BillingPeriod getBillingPeriod() {
+            return billingPeriod;
+        }
+        public void setBillingPeriod(BillingPeriod billingPeriod) {
+            this.billingPeriod = billingPeriod;
+        }
+    */
     public int getId() {
         return id;
     }
@@ -100,12 +118,36 @@ public class Payment {
         this.id = id;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getJustDate() {
+        return justDate;
+    }
+
+    public void setJustDate(String justDate) {
+        this.justDate = justDate;
+    }
+
+    public String getJustTime() {
+        return justTime;
+    }
+
+    public void setJustTime(String justTime) {
+        this.justTime = justTime;
+    }
+
     @Override
     public String toString() {
         return "Payment{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", amount=" + amount +
+                ", price=" + price +
                 ", category=" + category +
                 '}';
     }

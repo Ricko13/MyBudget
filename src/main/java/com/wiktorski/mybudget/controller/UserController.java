@@ -1,12 +1,12 @@
-package com.wiktorski.mybudget.Controller;
+package com.wiktorski.mybudget.controller;
 
 
-import com.wiktorski.mybudget.Model.User;
-import com.wiktorski.mybudget.Service.EmailService;
-import com.wiktorski.mybudget.Service.SecurityService;
-import com.wiktorski.mybudget.Service.UserService;
-import com.wiktorski.mybudget.Validator.ReCaptcha.RecaptchaService;
-import com.wiktorski.mybudget.Validator.UserValidator;
+import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.service.EmailService;
+import com.wiktorski.mybudget.service.SecurityService;
+import com.wiktorski.mybudget.service.UserService;
+import com.wiktorski.mybudget.validator.ReCaptcha.RecaptchaService;
+import com.wiktorski.mybudget.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,8 +26,6 @@ import java.util.UUID;
 @Controller
 //@RequestMapping("/user")
 public class UserController {
-
-
     @Autowired
     private UserService userService;
 
@@ -43,20 +41,18 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
+    @Autowired
+    RecaptchaService captchaService;
+
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
         return "user/registration";
     }
 
-   /* @Autowired
-    UserRepository userRepo;*/
-
-    @Autowired
-    RecaptchaService captchaService;
-
     @PostMapping("/registration")
     public String registration(@ModelAttribute("userForm") User userForm, @RequestParam(name = "g-recaptcha-response") String recaptchaResponse, BindingResult bindingResult, RedirectAttributes redir, HttpServletRequest request) {
+
         userValidator.validate(userForm, bindingResult);
         if (bindingResult.hasErrors()) {
             return "/user/registration";
@@ -70,7 +66,6 @@ public class UserController {
         if (captchaVerifyMessage != null && captchaVerifyMessage != "") {
             return "redirect:/registration";
         }
-
 
         userForm.setConfirmationToken(UUID.randomUUID().toString());
         userForm.setEnabled(false);
@@ -108,14 +103,6 @@ public class UserController {
     /*/login POST controller, it is provided by Spring Security so we dont need to write this*/
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
-
-        /*ONLY FOR TEST CASES*/
-        /*User user = userService.findByUsername("q");
-        securityService.autoLogin(user.getUsername(), user.getPassword());
-        return "redirect:/";*/
-
-        //**********************
-
         if (error != null)
             model.addAttribute("error", "Your username or password is invalid");
         if (logout != null)
@@ -123,12 +110,9 @@ public class UserController {
         return "user/login";
     }
 
-
-
     @PostMapping("/loginCheckpoint")
     public String check(@RequestParam String username, @RequestParam String password, Model model, HttpServletRequest request) {
         if (username == null || username == "" || password == null || password == "") return "/user/login";
-
 
         User user = userService.findByUsername(username);
 
@@ -150,14 +134,6 @@ public class UserController {
             model.addAttribute("loggedIn", "user " + username);
             return "index";
         }
-
-
     }
-
-    /*@GetMapping({"/","hello"})
-    public String welcome(Model model){
-        return "welcome";
-    }*/
-
 
 }

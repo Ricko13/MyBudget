@@ -1,10 +1,11 @@
-package com.wiktorski.mybudget.Service;
+package com.wiktorski.mybudget.service;
 
-import com.wiktorski.mybudget.Model.User;
-import com.wiktorski.mybudget.Repository.UserRepository;
+import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,13 +18,14 @@ public class SecurityServiceImpl implements SecurityService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
 
     @Override
-    public String findLoggedInUsername() {
+    public String getLoggedInUsername() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userDetails instanceof UserDetails) {
             return ((UserDetails) userDetails).getUsername();
@@ -37,7 +39,7 @@ public class SecurityServiceImpl implements SecurityService {
     UserRepository userRepository;
 
     public User getLoggedInUser() {
-        String username = findLoggedInUsername();
+        String username = getLoggedInUsername();
         if (username != null) {
             User user = userRepository.findByUsername(username);
             return user;

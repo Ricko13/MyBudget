@@ -1,6 +1,6 @@
-package com.wiktorski.mybudget.Service;
+package com.wiktorski.mybudget.service;
 
-import com.wiktorski.mybudget.Model.User;
+import com.wiktorski.mybudget.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

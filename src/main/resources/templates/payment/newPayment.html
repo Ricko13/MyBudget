@@ -9,8 +9,8 @@
 
 <div th:replace="template.html::navbar"></div>
 <div class="container container-small">
-    <header><h2>Add payment</h2></header>
 
+    <header><h2>Add payment</h2></header>
     <form th:action="@{/payment/add}" method="post">
         <div class="form-group">
             <label for="name">Position name</label>
@@ -19,9 +19,9 @@
             <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
         </div>
         <div class="form-group">
-            <label for="amount">Amount</label>
-            <input style="width: 150px; margin-right: auto; margin-left: auto;" type="number" min="1" step="any" class="form-control" id="amount" placeholder="Type amount"
-                   name="amount" required>
+            <label for="price">price</label>
+            <input style="width: 150px; margin-right: auto; margin-left: auto;" type="number" min="1" step="any" class="form-control" id="price" placeholder="Type price"
+                   name="price" required>
         </div>
         <div class="form-group">
             <!--https://www.thymeleaf.org/doc/tutorials/2.1/thymeleafspring.html#dropdownlist-selectors-->

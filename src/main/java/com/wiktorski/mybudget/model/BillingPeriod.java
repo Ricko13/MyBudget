@@ -1,9 +1,9 @@
-package com.wiktorski.mybudget.Model;
+package com.wiktorski.mybudget.model;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+//@Entity
 public class BillingPeriod {
 
     @Id
@@ -11,7 +11,7 @@ public class BillingPeriod {
     private int id;
     private float budget;
     private float savings;
-    @OneToMany(mappedBy = "billingPeriod")
+    //@OneToMany(mappedBy = "billingPeriod")
     private List<Payment> payments;
     @ManyToOne
     @JoinColumn(name = "user_id")
