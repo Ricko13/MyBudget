@@ -42,7 +42,10 @@ public class PaymentService {
     }
 
     public void addPayment(String name, float price, @Nullable String idCat, @Nullable String date) {
-        addPayment(name, price, idCat, parseStringDate(date));
+        if((idCat.equals("") || idCat==null) ){
+
+        }
+        else{ addPayment(name, price, idCat, parseStringDate(date)); }
     }
 
     private Date parseStringDate(String date) {

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="template.html::head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:replace="template.html::navbar"></div>
+<div class="container">
+    <br/>
+    <header><h2>Welcome in MyBudget</h2></header>
+
+    <div class="button-group" sec:authorize="isAuthenticated()">
+        <!--<p th:if="${loggedIn}"><h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]] !</h1></p>-->
+        <div th:if="${loggedIn}" class="alert alert-success" role="alert">
+            <h5>Signed in</h5>
+            <h5 th:text="${loggedIn}"></h5>
+            <!--<h5>Hello [[${#httpServletRequest.remoteUser}]] !</h5>-->
+        </div>
+
+
+
+
+
+        <!--TU DEJ CONTENT-->
+
+
+
+
+
+
+
+    </div>
+
+    <!--<div class="button-group" sec:authorize="isAnonymous()">-->
+    <div class="button-group" sec:authorize="!isFullyAuthenticated()">
+        <p><a href="/login">Login</a></p>
+        <p><a href="/registration">Register</a></p>
+    </div>
+
+</div>
+<div th:replace="template.html :: js-include"></div>
+</body>
+</html>
