@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="template.html::head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:replace="template.html::navbar"></div>
+<div class="container container-small">
+
+    <header><h2>Add payment</h2></header>
+    <form th:action="@{/payment/add}" method="post">
+        <div class="form-group">
+            <label for="name">Position name</label>
+            <input type="text" class="form-control" id="name"
+                   placeholder="Position name" name="name" autofocus="autofocus" required>
+            <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+        </div>
+        <div class="form-group">
+            <label for="price">price</label>
+            <input style="width: 150px; margin-right: auto; margin-left: auto;" type="number" min="1" step="any" class="form-control" id="price" placeholder="Type price"
+                   name="price" required>
+        </div>
+        <div class="form-group">
+            <!--https://www.thymeleaf.org/doc/tutorials/2.1/thymeleafspring.html#dropdownlist-selectors-->
+            <label for="categories">Category</label>
+            <select   id="categories" name="categories" class="form-control" style="width: 150px; margin-right: auto; margin-left: auto;">
+                <option value="">None</option>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}"></option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-secondary">Submit</button>
+    </form>
+
+
+</div>
+<div th:replace="template.html :: js-include"></div>
+</body>
+</html>

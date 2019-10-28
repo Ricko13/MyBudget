@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="template.html::head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:replace="template.html::navbar"></div>
+<div class="container">
+    <div class="content">
+        <br/>
+        <header><h2 th:text="'Category: '+${category}">Payment history</h2></header>
+
+
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+
+                <th scope="col">Pos name</th>
+                <th scope="col">price</th>
+                <th scope="col">Date</th>
+                <th scope="col">Category</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="payment: ${payments}">
+                <tr>
+                    <td th:text="${payment.name}"></td>
+                    <td th:text="${payment.price}"></td>
+                    <td th:text="${payment.date}"></td>
+                    <!--<td th:text="${payment.category!=null}?${payment.category.name} : ''"></td>-->
+                    <td th:text="${payment.category!=null}?${payment.category.name} : ''"> </td>
+                    <td><a th:href="@{'/payment/delete/' +${payment.id}}" th:onclick="'deletePos('+${payment.id}+')'">delete</a> </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<div th:replace="template.html :: js-include"></div>
+
+
+</body>
+</html>
