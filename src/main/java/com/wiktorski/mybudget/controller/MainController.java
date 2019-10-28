@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,8 +41,8 @@ public class MainController {
         List<Payment> payments=userService.getUserPaymentsDesc();
             for(Payment p:payments){
                 Date date=p.getDate();
-                p.setJustDate(new SimpleDateFormat("dd-mm-yyyy").format(date));
-                p.setJustTime(new SimpleDateFormat("hh:mm").format(date));
+                p.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(date));
+                p.setJustTime(new SimpleDateFormat("HH:mm").format(date));
             }
 
         model.addAttribute("payments", userService.getUserPaymentsDesc());
@@ -58,8 +59,13 @@ public class MainController {
     //@Transactional
     @PostMapping("/payment/add")
     public String paymentAddFinal(@RequestParam String name, @RequestParam float price,
-                                  @RequestParam(required = true, name = "categories") String idCat, @RequestParam(required = false, name = "date") String date) {
-        paymentService.addPayment(name, price, idCat, date);
+                                  @RequestParam(name = "categories") String idCat,
+                                  @RequestParam String date, @RequestParam String time, @RequestParam String description) {
+        try {
+            paymentService.addPayment(name, price, idCat, date, time, description);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return "redirect:/history";
     }
 

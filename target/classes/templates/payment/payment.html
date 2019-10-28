@@ -20,9 +20,6 @@
                 aria-controls="collapseExample">
             Add
         </button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-            Launch demo modal
-        </button>
 
         <div class="collapse" id="collapseAddPayment" style="margin-top:20px; ">
             <div class="card card-body" style="width: 60%; margin-left: auto; margin-right: auto;">
@@ -40,7 +37,7 @@
                             <div class="col">
                                 <label for="price">Value *</label>
                                 <input type="number"
-                                       min="1" step="any" class="form-control" id="price" placeholder="Type price"
+                                       min="0" step="any" class="form-control" id="price" placeholder="Type price"
                                        name="price" required
                                        style="width: 200px; margin-right: auto; margin-left: auto;">
                             </div>
@@ -60,8 +57,21 @@
                             </div>
                             <div class="col">
                                 <label for="date" th:value="${date}">Date</label>
-                                <input class="form-control" type="datetime-local" id="date" name="date"
-                                       style="width: 200px; margin-right: auto; margin-left: auto;">
+                                <input class="form-control" type="date" id="date" name="date"
+                                       style="width: 160px; margin-right: auto; margin-left: auto;">
+                            </div>
+                            <div class="col">
+                                <label for="time" th:value="${date}">Time</label>
+                                <input class="form-control" type="time" id="time" name="time"
+                                       style="width: 100px; margin-right: auto; margin-left: auto;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div class="col">
+                                <label for="description">Description</label>
+                                <input id="description" name="description" class="form-control" type="text">
                             </div>
                         </div>
                     </div>
@@ -103,28 +113,6 @@
         </table>
 </div>
 
-    </div>
-
-
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Add position</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Add</button>
-                </div>
-            </div>
-        </div>
     </div>
 
 

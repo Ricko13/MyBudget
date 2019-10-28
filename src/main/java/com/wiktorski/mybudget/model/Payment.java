@@ -36,27 +36,14 @@ public class Payment {
     @JoinColumn(name="billingPeriod_id")
     private BillingPeriod billingPeriod;*/
 
-    public Payment() { }
-
-    public Payment(String name, float price, User user) {
-        this.name = name;
-        this.price = price;
-        this.user = user;
+    public Payment() {
     }
 
-    public Payment(String name, float price, User user, Category category) {
-        this.name = name;
-        this.price = price;
-        this.category = category;
-        this.user = user;
-    }
 
     public Payment(String name, float price, User user, Date date) {
         this.name = name;
         this.price = price;
         this.date = date;
-        this.description = description;
-        this.category = category;
         this.user = user;
     }
 

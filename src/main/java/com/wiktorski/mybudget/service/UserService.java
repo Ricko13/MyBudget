@@ -25,9 +25,6 @@ public class UserService {
     @Autowired
     private SecurityService securityService;
 
-    @Autowired
-    private PaymentRepository paymentRepository;
-
     public void save(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
         //user.setRoles(new HashSet<>(roleRepository.findAll())); // daje tu wszystkie role z bazy
@@ -44,14 +41,6 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepo.findByEmail(email);
-    }
-
-    public void currentUserAddPayment(String name, float price) throws Exception {
-        User user = securityService.getLoggedInUser();
-        if (user != null)
-            paymentRepository.save(new Payment(name, price, user));
-        else
-            throw new Exception();
     }
 
     public List<Payment> getUserPaymentsDesc() {
@@ -76,8 +65,6 @@ public class UserService {
         payments.sort(comp);
         return payments;
     }
-
-
 
     /*@Override
     @Transactional

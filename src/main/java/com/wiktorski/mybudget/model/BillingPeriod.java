@@ -57,13 +57,5 @@ public class BillingPeriod {
         this.user = user;
     }
 
-    @Override
-    public String toString() {
-        return "BillingPeriod{" +
-                "id=" + id +
-                ", budget=" + budget +
-                ", savings=" + savings +
-                ", payments=" + payments +
-                '}';
-    }
+
 }
