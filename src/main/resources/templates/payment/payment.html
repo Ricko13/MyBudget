@@ -90,6 +90,7 @@
                 <th scope="col">price</th>
                 <th scope="col">Date</th>
                 <th scope="col">Time</th>
+                <th scope="col">Description</th>
                 <th scope="col">Category</th>
                 <th scope="col"></th>
             </tr>
@@ -101,8 +102,9 @@
                     <td th:text="${payment.price}"></td>
                     <td th:text="${payment.justDate}"></td>
                     <td th:text="${payment.justTime}"></td>
+                    <td th:text="${payment.description}" style="width: 220px;"></td>
                     <!--<td th:text="${payment.category!=null}?${payment.category.name} : ''"></td>-->
-                    <td><a th:href="${payment.category!=null}?@{'/category/'+${payment.category.name}} : '#'"
+                    <td style="width: 220px;"><a th:href="${payment.category!=null}?@{'/category/'+${payment.category.name}} : '#'"
                            th:text="${payment.category!=null}?${payment.category.name} : ''"></a></td>
                     <!--<td><a th:href="@{'/payment/delete/' +${payment.id}}" th:onclick="'deletePos('+${payment.id}+')'">delete</a> </td>-->
                     <td><a data-toggle="modal" href="#deletePayConfirm"

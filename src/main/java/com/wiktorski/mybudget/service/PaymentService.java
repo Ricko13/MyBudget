@@ -1,5 +1,4 @@
 package com.wiktorski.mybudget.service;
-
 import com.wiktorski.mybudget.model.Category;
 import com.wiktorski.mybudget.model.Payment;
 import com.wiktorski.mybudget.repository.CategoryRepository;
@@ -7,24 +6,24 @@ import com.wiktorski.mybudget.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
 @Service
 public class PaymentService {
 
-
-    @Autowired
     private PaymentRepository paymentRepo;
-    @Autowired
     private SecurityService securityService;
-    @Autowired
     private CategoryRepository categoryRepo;
+
+    public PaymentService(PaymentRepository paymentRepo, SecurityService securityService, CategoryRepository categoryRepo) {
+        this.paymentRepo = paymentRepo;
+        this.securityService = securityService;
+        this.categoryRepo = categoryRepo;
+    }
 
     public void addPayment(String name, float price, String idCat, @Nullable Date date, String description) {
         int idCategory = Integer.parseInt(idCat);
@@ -36,7 +35,9 @@ public class PaymentService {
 
         if (!description.equals("")) {
             payment.setDescription(description);
-        } else if (idCategory != -1) {
+        }
+
+        if (idCategory != -1) {
             Optional cat = categoryRepo.findById(idCategory);
             cat.ifPresent(
                     catg -> {
@@ -45,7 +46,7 @@ public class PaymentService {
                     }
             );
         }
-        paymentRepo.save(new Payment(name, price, securityService.getLoggedInUser(), date));
+        paymentRepo.save(payment);
 
     }
 

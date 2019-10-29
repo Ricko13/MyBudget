@@ -135,7 +135,6 @@ public class Payment {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
-                ", category=" + category +
                 '}';
     }
 }

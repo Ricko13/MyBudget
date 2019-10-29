@@ -1,26 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d22ca14e-f6aa-4028-b67c-ea642026067b" name="Default Changelist" comment="">
+    <list default="true" id="8bd45317-7382-4603-b833-6c38229943ac" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/MybudgetApplication.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/bootstrap/DevBootstrap.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/config/MvcConfig.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/config/PropertyConfig.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/config/ThymeleafConfig.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/config/WebSecurityConfig.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/controller/MainController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/controller/TestController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/controller/UserController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/model/BillingPeriod.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/model/Category.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/model/Payment.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/model/Role.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/model/User.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/repository/CategoryRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/repository/PaymentRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/repository/RoleRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/repository/UserRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/service/EmailService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/service/PaymentService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/service/SecurityService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/service/SecurityServiceImpl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/service/UserDetailsServiceImpl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/service/UserService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/validator/ReCaptcha/RecaptchaService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/validator/ReCaptcha/RecaptchaUtil.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/wiktorski/mybudget/validator/UserValidator.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/test-classes/com/wiktorski/mybudget/MybudgetApplicationTests.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/controller/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/model/BillingPeriod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/model/BillingPeriod.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/model/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/model/Payment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/service/EmailService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/service/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/service/PaymentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/autologin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/autologin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/modals.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/modals.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/redirect.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/redirect.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/payment/payment.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/payment/payment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/user/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/user/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/static/js/modals.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/modals.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/payment/payment.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/payment/payment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/user/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/user/login.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,9 +47,6 @@
   </component>
   <component name="CompilerWorkspaceConfiguration">
     <option name="MAKE_PROJECT_ON_SAVE" value="true" />
-  </component>
-  <component name="FavoritesManager">
-    <favorites_list name="mybudget" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -70,8 +84,8 @@
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
@@ -102,7 +116,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="d22ca14e-f6aa-4028-b67c-ea642026067b" name="Default Changelist" comment="" />
+      <changelist id="8bd45317-7382-4603-b833-6c38229943ac" name="Default Changelist" comment="" />
       <created>1571129440660</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -119,6 +133,8 @@
       <workItem from="1572250312973" duration="1202000" />
       <workItem from="1572251530553" duration="1020000" />
       <workItem from="1572259616592" duration="14383000" />
+      <workItem from="1572335316089" duration="49000" />
+      <workItem from="1572335419705" duration="2762000" />
     </task>
     <servers />
   </component>
@@ -156,23 +172,36 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/service/PaymentService.java</url>
-          <line>37</line>
+          <line>36</line>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/service/PaymentService.java</url>
-          <line>34</line>
+          <line>33</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/service/PaymentService.java</url>
-          <line>47</line>
+          <line>48</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/service/PaymentService.java</url>
+          <line>40</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/service/PaymentService.java</url>
           <line>43</line>
-          <option name="timeStamp" value="31" />
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/wiktorski/mybudget/service/PaymentService.java</url>
+          <line>25</line>
+          <properties class="com.wiktorski.mybudget.service.PaymentService">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="32" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
