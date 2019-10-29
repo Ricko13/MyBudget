@@ -11,17 +11,7 @@
 <div class="container">
     <header><h2>Welcome in MyBudget</h2></header>
 
-    <div class="button-group" sec:authorize="isAuthenticated()">
-        <!--<p th:if="${loggedIn}"><h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]] !</h1></p>-->
-        <div th:if="${loggedIn}" class="alert alert-success" role="alert">
-            <h5>Signed in</h5>
-            <h5 th:text="${loggedIn}"></h5>
-            <!--<h5>Hello [[${#httpServletRequest.remoteUser}]] !</h5>-->
-        </div>
 
-        <!--CONTENT-->
-
-    </div>
 
     <!--<div class="button-group" sec:authorize="isAnonymous()">-->
     <div class="button-group" sec:authorize="!isFullyAuthenticated()">

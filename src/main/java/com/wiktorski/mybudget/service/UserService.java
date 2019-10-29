@@ -6,6 +6,7 @@ import com.wiktorski.mybudget.model.Payment;
 import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,15 +16,11 @@ import java.util.List;
 
 //public class UserServiceImpl implements UserDetailsService {
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    @Autowired
-    private UserRepository userRepo;
-
-    @Autowired
-    private BCryptPasswordEncoder encoder;
-
-    @Autowired
-    private SecurityService securityService;
+    private final UserRepository userRepo;
+    private final BCryptPasswordEncoder encoder;
+    private final SecurityService securityService;
 
     public void save(User user) {
         user.setPassword(encoder.encode(user.getPassword()));

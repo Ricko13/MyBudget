@@ -1,29 +1,27 @@
 package com.wiktorski.mybudget.service;
+
 import com.wiktorski.mybudget.model.Category;
 import com.wiktorski.mybudget.model.Payment;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Service
+@RequiredArgsConstructor
 public class PaymentService {
 
-    private PaymentRepository paymentRepo;
-    private SecurityService securityService;
-    private CategoryRepository categoryRepo;
-
-    public PaymentService(PaymentRepository paymentRepo, SecurityService securityService, CategoryRepository categoryRepo) {
-        this.paymentRepo = paymentRepo;
-        this.securityService = securityService;
-        this.categoryRepo = categoryRepo;
-    }
+    private final PaymentRepository paymentRepo;
+    private final SecurityService securityService;
+    private final CategoryRepository categoryRepo;
 
     public void addPayment(String name, float price, String idCat, @Nullable Date date, String description) {
         int idCategory = Integer.parseInt(idCat);
@@ -42,23 +40,19 @@ public class PaymentService {
             cat.ifPresent(
                     catg -> {
                         payment.setCategory((Category) catg);
-                        //paymentRepo.save(payment);
                     }
             );
         }
         paymentRepo.save(payment);
-
     }
 
     public void addPayment(String name, float price, String idCat, String date, String time, String description) throws ParseException {
         addPayment(name, price, idCat, parseStringDate(date, time), description);
     }
 
-
     //    form always sends data but data can be empty like ""
     private Date parseStringDate(String date, String time) throws ParseException {
         Date dt;
-        //Calendar calendar;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddHH:mm");
 
         if (date.equals("") && time.equals("")) {
@@ -73,6 +67,14 @@ public class PaymentService {
         } else dt = sdf.parse(date + time);
 
         return dt;
+    }
+
+    public void deleteCategory(int id) {
+        final List<Payment> payments = paymentRepo.findByCategoryId(id);
+        payments.forEach(payment -> {
+            payment.setCategory(null);
+        });
+        categoryRepo.deleteById(id);
     }
 
 }

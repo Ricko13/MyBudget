@@ -2,20 +2,18 @@ package com.wiktorski.mybudget.controller;
 
 import com.wiktorski.mybudget.model.Category;
 import com.wiktorski.mybudget.model.Payment;
-import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.PaymentService;
 import com.wiktorski.mybudget.service.SecurityService;
 import com.wiktorski.mybudget.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,17 +21,13 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
+@AllArgsConstructor
 public class MainController {
 
-    @Autowired
     UserService userService;
-    @Autowired
     PaymentService paymentService;
-    @Autowired
     SecurityService securityService;
-    @Autowired
     PaymentRepository paymentRepository;
-    @Autowired
     CategoryRepository categoryRepository;
 
     @GetMapping("/history")
@@ -94,13 +88,12 @@ public class MainController {
 
     @GetMapping("/category/delete/{id}")
     public String deleteCategory(@PathVariable int id) {
-        categoryRepository.deleteById(id);
+        paymentService.deleteCategory(id);
         return "redirect:/category";
     }
 
     @GetMapping("/category/{name}")
     public String showInCategory(@PathVariable String name, Model model) {
-        User user = securityService.getLoggedInUser();
         List<Payment> payments = userService.getUserPaymentsDesc();
         List<Payment> returnPayments = new ArrayList<>();
         for (Payment payment : payments) {
@@ -112,6 +105,17 @@ public class MainController {
         model.addAttribute("category", name);
         model.addAttribute("payments", returnPayments);
         return "/payment/paymentInCategory";
+    }
+
+    @GetMapping("/budget")
+    public String budget(Model model){
+//        model.addAttribute("budget", );
+        return "/budget/budget";
+    }
+
+    @GetMapping("/myAccount")
+    public String account(){
+        return "/user/account";
     }
 
 }

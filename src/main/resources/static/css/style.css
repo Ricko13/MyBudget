@@ -12,6 +12,7 @@ body {
     overflow-y: scroll;
 }
 .container, .container-small{
+    padding-top: 20px;
     text-align: center;
     margin-top: 60px;
     /*margin-bottom: 60px;*/
@@ -67,7 +68,11 @@ header {
 
 .table{
     margin-top: 40px;
+}
 
+.table-budget{
+    margin-right: auto; margin-left: auto;
+    width: 400px;
 }
 
 .str-box {
