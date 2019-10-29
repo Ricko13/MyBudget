@@ -1,0 +1,185 @@
+
+body {
+    /*OBRAZ W TLE*/
+    /*background-image: url(../assets/padlock_photo.jpg);
+    background-size: auto;*/
+    /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+    background-color: #e6e6e6;
+    /*disable scroll*/
+    margin: 0;
+    height: 100%;
+    overflow: auto; /* scroll/hidden/auto/visible */
+}
+.container, .container-small{
+    text-align: center;
+    margin-top: 60px;
+    /*margin-bottom: 60px;*/
+    padding-bottom: 60px;
+    background-color: white;
+    /*background-color: rgba(255, 250, 250, .7);*/
+
+    /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+    /*border: 1px solid black;*/
+    /* opacity: 0.6;
+     filter: alpha(opacity=60); !* For IE8 and earlier *!*/
+}
+
+.container {
+    margin-top: 10px;
+    width: 1000px;
+    /*height: 750px;*/
+    /*height:86vh;                                            !*!!!!!!!!!!!!!!!!!!*!*/
+    border-radius: 15px 50px;
+
+    overflow: auto;
+}
+
+.container-small {
+    width: 400px;
+    height: auto;
+    margin-left: auto; margin-right:auto; padding: 20px;
+    border-radius: 15px 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.overflow{
+    overflow: auto;
+}
+
+.navbar{
+    padding-left:20%;
+}
+
+.g-recaptcha {
+    margin: 25px;
+}
+
+.alert{
+    width: 400px; margin-left: auto; margin-right: auto;
+}
+
+
+header {
+    text-align: center;
+    margin-bottom: 10px; /*old 50*/
+}
+
+.table{
+    margin-top: 40px;
+
+}
+
+.str-box {
+    position: relative;
+    width: 56px;
+    height: 12px;
+    float: left;
+}
+
+.str-box div {
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    -moz-transition: 1s;
+    -o-transition: 1s;
+    -webkit-transition: 1s;
+    transition: 1s;
+}
+
+.button-mid{
+    margin-left: auto; margin-right:auto;
+}
+
+.alert{
+    /*width: auto;*/
+    width: 350px;
+    margin: 10px auto;
+}
+
+
+.nav-link{
+    color:#6c757d;
+}
+.nav-link:hover{
+    color:red;
+}
+a{
+    color:#6c757d;
+}
+a:hover{
+    color:black;
+}
+
+.collapse{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+/*DO MIERNIKA HASLA*/
+.short {
+    color: #FF0000;
+}
+.short .str-box.box1 div {
+    /*background: #f6dfc9;*/
+    background: #FF0000;
+    width: 100%;
+}
+.weak {
+    color: #E66C2C;
+}
+.weak .str-box.box1 div {
+    background: #f4c9a0;
+    width: 100%;
+}
+.weak .str-box.box2 div {
+    background: #f4c9a0;
+    width: 100%;
+}
+.good {
+    color: #2D98F3;
+}
+.good .str-box.box1 div {
+    background: #f6b578;
+    width: 100%;
+}
+.good .str-box.box2 div {
+    background: #f6b578;
+    width: 100%;
+}
+.good .str-box.box3 div {
+    background: #f6b578;
+    width: 100%;
+}
+.strong {
+    color: #006400;
+}
+.strong .str-box.box1 div {
+    background: #006400;
+    width: 100%;
+}
+.strong .str-box.box2 div {
+    background: #006400;
+    width: 100%;
+}
+.strong .str-box.box3 div {
+    background: #006400;
+    width: 100%;
+}
+.strong .str-box.box4 div {
+    background: #006400;
+    width: 100%;
+}
+
+.result {
+    font-size: 18px;
+    font-family: arial;
+    width: auto;
+    display: block;
+    -moz-transition: 0.5s;
+    -o-transition: 0.5s;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    font-variant: small-caps;
+}
+
