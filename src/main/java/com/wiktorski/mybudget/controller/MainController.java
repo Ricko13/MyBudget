@@ -2,10 +2,11 @@ package com.wiktorski.mybudget.controller;
 
 import com.wiktorski.mybudget.model.Category;
 import com.wiktorski.mybudget.model.Payment;
+import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.PaymentService;
-import com.wiktorski.mybudget.service.SecurityService;
+import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,23 @@ public class MainController {
     SecurityService securityService;
     PaymentRepository paymentRepository;
     CategoryRepository categoryRepository;
+
+    @GetMapping("/")
+    public String index(Model model){
+        User u = securityService.getLoggedInUser();
+        model.addAttribute("user", u);
+        model.addAttribute("budgetSum", u.getBudget()+u.getSavings());
+        model.addAttribute("");
+        return "index";
+    }
+
+    @GetMapping("/budget")
+    public String budget(Model model){
+        User u = securityService.getLoggedInUser();
+        model.addAttribute("user", u);
+        model.addAttribute("budgetSum", u.getBudget()+u.getSavings());
+        return "/user/budget";
+    }
 
     @GetMapping("/history")
     public String history(Model model) {
@@ -105,12 +123,6 @@ public class MainController {
         model.addAttribute("category", name);
         model.addAttribute("payments", returnPayments);
         return "/payment/paymentInCategory";
-    }
-
-    @GetMapping("/budget")
-    public String budget(Model model){
-//        model.addAttribute("budget", );
-        return "/budget/budget";
     }
 
     @GetMapping("/myAccount")

@@ -14,17 +14,22 @@
     <table class="table table-budget">
         <tr>
             <td>Budget:</td>
-            <td>0</td>
+            <td th:text="${user.budget}"></td>
             <td>edit</td>
         </tr>
         <tr>
             <td>Savings:</td>
-            <td>0</td>
+            <td th:text="${user.savings}"></td>
+            <td>edit</td>
+        </tr>
+        <tr>
+            <td>Budget sum:</td>
+            <td th:text="${budgetSum}"></td>
             <td>edit</td>
         </tr>
         <tr>
             <td>I'd like to save monthly:</td>
-            <td>0</td>
+            <td th:text="${user.toSave}"></td>
             <td>edit</td>
         </tr>
         <tr>
@@ -32,12 +37,19 @@
             <td></td>
             <td><strong>clear</strong></td>
         </tr>
-
     </table>
+
+    <form th:action="@{/addToBudget}" method="post" style="width: 100px;">
+        <input type="number" name="amount" class="form-control" min="0">
+        <button type="submit" class="btn btn-secondary pull-right">
+            add
+        </button>
+
+    </form>
 
 
 </div>
 <div th:replace="template.html :: js-include"></div>
-<script src="/js/redirect.js"></script>
+<script src="/static/js/redirect.js"></script>
 </body>
 </html>

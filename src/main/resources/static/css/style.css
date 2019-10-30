@@ -11,7 +11,8 @@ body {
     overflow: auto; /* scroll/hidden/auto/visible */
     overflow-y: scroll;
 }
-.container, .container-small{
+
+.container, .container-small {
     padding-top: 20px;
     text-align: center;
     margin-top: 60px;
@@ -32,32 +33,63 @@ body {
     /*height: 750px;*/
     /*height:86vh;                                            !*!!!!!!!!!!!!!!!!!!*!*/
     border-radius: 15px 50px;
-
     overflow: auto;
 }
 
 .container-small {
     width: 400px;
     height: auto;
-    margin-left: auto; margin-right:auto; padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
     border-radius: 15px 50px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.overflow{
+.container-wide {
+
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    width: 1300px;
+}
+
+.addPayment, .indexBudget {
+    /*margin: 20px;*/
+    padding: 40px;
+    /*margin-left: auto; margin-right: auto;*/
+    float: left;
+    display: inline;
+    width: 49%;
+    height: 450px;
+    border-style: groove;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.indexHistory {
+    clear: both;
+    width: auto;
+    background-color: white;
+}
+
+.overflow {
     overflow: auto;
 }
 
-.navbar{
-    padding-left:20%;
+.navbar {
+    padding-left: 20%;
 }
 
 .g-recaptcha {
     margin: 25px;
 }
 
-.alert{
-    width: 400px; margin-left: auto; margin-right: auto;
+.alert {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
@@ -66,13 +98,18 @@ header {
     margin-bottom: 10px; /*old 50*/
 }
 
-.table{
+.table {
     margin-top: 40px;
 }
 
-.table-budget{
-    margin-right: auto; margin-left: auto;
-    width: 400px;
+.table-budget {
+    margin-right: auto;
+    margin-left: auto;
+    width: 600px;
+}
+
+.table-budget .small {
+    width: 100px;
 }
 
 .str-box {
@@ -92,31 +129,35 @@ header {
     transition: 1s;
 }
 
-.button-mid{
-    margin-left: auto; margin-right:auto;
+.button-mid {
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.alert{
+.alert {
     /*width: auto;*/
     width: 350px;
     margin: 10px auto;
 }
 
 
-.nav-link{
-    color:#6c757d;
-}
-.nav-link:hover{
-    color:red;
-}
-a{
-    color:#6c757d;
-}
-a:hover{
-    color:black;
+.nav-link {
+    color: #6c757d;
 }
 
-.collapse{
+.nav-link:hover {
+    color: red;
+}
+
+a {
+    color: #6c757d;
+}
+
+a:hover {
+    color: black;
+}
+
+.collapse {
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
@@ -126,52 +167,65 @@ a:hover{
 .short {
     color: #FF0000;
 }
+
 .short .str-box.box1 div {
     /*background: #f6dfc9;*/
     background: #FF0000;
     width: 100%;
 }
+
 .weak {
     color: #E66C2C;
 }
+
 .weak .str-box.box1 div {
     background: #f4c9a0;
     width: 100%;
 }
+
 .weak .str-box.box2 div {
     background: #f4c9a0;
     width: 100%;
 }
+
 .good {
     color: #2D98F3;
 }
+
 .good .str-box.box1 div {
     background: #f6b578;
     width: 100%;
 }
+
 .good .str-box.box2 div {
     background: #f6b578;
     width: 100%;
 }
+
 .good .str-box.box3 div {
     background: #f6b578;
     width: 100%;
 }
+
 .strong {
     color: #006400;
 }
+
 .strong .str-box.box1 div {
     background: #006400;
     width: 100%;
 }
+
 .strong .str-box.box2 div {
     background: #006400;
     width: 100%;
 }
+
 .strong .str-box.box3 div {
     background: #006400;
     width: 100%;
 }
+
 .strong .str-box.box4 div {
     background: #006400;
     width: 100%;

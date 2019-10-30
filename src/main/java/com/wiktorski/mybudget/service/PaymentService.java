@@ -4,6 +4,7 @@ import com.wiktorski.mybudget.model.Category;
 import com.wiktorski.mybudget.model.Payment;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
+import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
@@ -69,12 +69,11 @@ public class PaymentService {
         return dt;
     }
 
-    public void deleteCategory(int id) {
-        final List<Payment> payments = paymentRepo.findByCategoryId(id);
+    public void deleteCategory(int categoryId) {
+        final List<Payment> payments = paymentRepo.findByCategoryId(categoryId);
         payments.forEach(payment -> {
             payment.setCategory(null);
         });
-        categoryRepo.deleteById(id);
+        categoryRepo.deleteById(categoryId);
     }
-
 }

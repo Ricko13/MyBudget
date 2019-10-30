@@ -16,7 +16,7 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue/*(strategy = GenerationType.AUTO)*/
     private int id;
     private String name;
     private String surname;
@@ -25,32 +25,30 @@ public class User {
     private String password;
     private String confirmationToken;
     private boolean enabled;
+
+    /**Powinno być w oddzielnym entity w relacji @OneToOne*/
+    private float budget;
+    private float savings;
+    private float toSave;
+    /*@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    private Budget budget;*/
+    /*****************************************************/
+
     @Transient
     private String passwordConfirm;
 
     @Null
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Payment> payments;
     public void addPayment(Payment payment) {
         this.payments.add(payment);
     }       /*???*/
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Category> categories;
 
     @ManyToMany
     private Set<Role> roles;
-
-    @OneToOne(mappedBy = "user")
-    private Budget budget;
-
-
-    /*
-    @OneToMany(mappedBy = "user")
-    private List<BillingPeriod> billingPeriods;
-    private int currentBillingPeriodId;
-    */
-
 
     public User(String name, String surname, String email, String username, String password) {
         this.name = name;

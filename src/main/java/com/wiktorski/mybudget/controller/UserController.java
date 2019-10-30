@@ -3,7 +3,7 @@ package com.wiktorski.mybudget.controller;
 
 import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.service.EmailService;
-import com.wiktorski.mybudget.service.SecurityService;
+import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.service.UserService;
 import com.wiktorski.mybudget.validator.ReCaptcha.RecaptchaService;
 import com.wiktorski.mybudget.validator.UserValidator;
@@ -132,8 +132,18 @@ public class UserController {
 
             securityService.autoLogin(username, password);
             model.addAttribute("loggedIn", "user " + username);
-            return "index";
+
+           /*
+            return "index";*/
+           return "redirect:/";
         }
     }
+
+    @GetMapping("/user/delete")
+    public String deleteUser(){
+        userService.deleteUser();
+        return "redirect:/logout";
+    }
+
 
 }

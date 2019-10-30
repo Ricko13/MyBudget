@@ -8,18 +8,107 @@
 <body>
 
 <div th:replace="template.html::navbar"></div>
-<div class="container">
-    <header><h2>Welcome in MyBudget</h2></header>
+<div class="container-wide">
 
+    <!--
     <div class="button-group" sec:authorize="isAuthenticated()">
-        <!--<p th:if="${loggedIn}"><h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]] !</h1></p>-->
+        &lt;!&ndash;<p th:if="${loggedIn}"><h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]] !</h1></p>&ndash;&gt;
         <div th:if="${loggedIn}" class="alert alert-success" role="alert">
             <h5>Signed in</h5>
             <h5 th:text="${loggedIn}"></h5>
-            <!--<h5>Hello [[${#httpServletRequest.remoteUser}]] !</h5>-->
+            &lt;!&ndash;<h5>Hello [[${#httpServletRequest.remoteUser}]] !</h5>&ndash;&gt;
         </div>
+    </div>
+    -->
 
-        <!--CONTENT-->
+    <div class="indexBudget" >
+        <header><h2>My budget</h2></header>
+    <table class="table">
+        <tr>
+            <td>Budget:</td>
+            <td th:text="${user.budget}"></td>
+        </tr>
+        <tr>
+            <td>Savings:</td>
+            <td th:text="${user.savings}"></td>
+        </tr>
+        <tr>
+            <td>Budget sum:</td>
+            <td th:text="${budgetSum}"></td>
+        </tr>
+        <tr>
+            <td>I'd like to save monthly:</td>
+            <td th:text="${user.toSave}"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><strong>edit</strong></td>
+        </tr>
+    </table>
+    </div>
+
+
+
+    <div class="addPayment">
+        <header><h2>Add payment</h2></header>
+        <form th:action="@{/payment/add}" method="post">
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col">
+                        <label for="name" style="font-weight: bold">Position name *</label>
+                        <input type="text" class="form-control" id="name"
+                               placeholder="Position name" name="name" autofocus="autofocus" required
+                               style="width: 250px; margin-right: auto; margin-left: auto;">
+                    </div>
+
+                    <div class="col">
+                        <label for="price">Value *</label>
+                        <input type="number"
+                               min="0" step="any" class="form-control" id="price" placeholder="Type price"
+                               name="price" required
+                               style="width: 200px; margin-right: auto; margin-left: auto;">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" >
+                <div class="form-row">
+                    <div class="col">
+                        <label for="categories">Category</label>
+                        <select id="categories" name="categories" class="form-control"
+                                style="width: 250px; margin-right: auto; margin-left: auto;">
+                            <option value="-1">None</option>
+                            <option th:each="category : ${categories}"
+                                    th:value="${category.id}"
+                                    th:text="${category.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="date" th:value="${date}">Date</label>
+                        <input class="form-control" type="date" id="date" name="date"
+                               style="width: 160px; margin-right: auto; margin-left: auto;">
+                    </div>
+                    <div class="col">
+                        <label for="time" th:value="${date}">Time</label>
+                        <input class="form-control" type="time" id="time" name="time"
+                               style="width: 100px; margin-right: auto; margin-left: auto;">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col">
+                        <label for="description">Description</label>
+                        <input id="description" name="description" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+            <button id="buttonPaymentCollapse" type="submit" class="btn btn-secondary pull-right">Submit
+            </button>
+        </form>
+    </div>
+
+    <div th:class="indexHistory">
 
     </div>
 

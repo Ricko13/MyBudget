@@ -9,15 +9,10 @@
 
 <div th:replace="template.html::navbar"></div>
 <div class="container">
-    <header><h2>Welcome in MyBudget</h2></header>
+    <header><h2>My account</h2></header>
 
+    <a href="/user/delete">Usuń konto</a>
 
-
-    <!--<div class="button-group" sec:authorize="isAnonymous()">-->
-    <div class="button-group" sec:authorize="!isFullyAuthenticated()">
-        <p><a href="/login">Login</a></p>
-        <p><a href="/registration">Register</a></p>
-    </div>
 
 </div>
 <div th:replace="template.html :: js-include"></div>

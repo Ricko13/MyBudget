@@ -1,4 +1,7 @@
-package com.wiktorski.mybudget.model;
+package com.wiktorski.mybudget.model.demo;
+
+import com.wiktorski.mybudget.model.Payment;
+import com.wiktorski.mybudget.model.User;
 
 import javax.persistence.*;
 import java.util.List;

@@ -4,10 +4,9 @@ package com.wiktorski.mybudget.service;
 import com.wiktorski.mybudget.model.Category;
 import com.wiktorski.mybudget.model.Payment;
 import com.wiktorski.mybudget.model.User;
-import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.repository.UserRepository;
+import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +20,7 @@ public class UserService {
     private final UserRepository userRepo;
     private final BCryptPasswordEncoder encoder;
     private final SecurityService securityService;
+    private final PaymentService paymentService;
 
     public void save(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
@@ -61,6 +61,10 @@ public class UserService {
         };
         payments.sort(comp);
         return payments;
+    }
+
+    public void deleteUser() {
+        userRepo.delete(securityService.getLoggedInUser());
     }
 
     /*@Override
