@@ -33,10 +33,11 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model){
-        User u = securityService.getLoggedInUser();
-        model.addAttribute("user", u);
-        model.addAttribute("budgetSum", u.getBudget()+u.getSavings());
-        model.addAttribute("");
+        User user = securityService.getLoggedInUser();
+        model.addAttribute("user", user);
+        model.addAttribute("budgetSum", user.getBudget()+user.getSavings());
+        model.addAttribute("payments", userService.getUserPaymentsDesc());
+        model.addAttribute("categories", userService.getUserCategories());
         return "index";
     }
 
@@ -50,13 +51,6 @@ public class MainController {
 
     @GetMapping("/history")
     public String history(Model model) {
-        List<Payment> payments=userService.getUserPaymentsDesc();
-            for(Payment p:payments){
-                Date date=p.getDate();
-                p.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(date));
-                p.setJustTime(new SimpleDateFormat("HH:mm").format(date));
-            }
-
         model.addAttribute("payments", userService.getUserPaymentsDesc());
         model.addAttribute("categories", userService.getUserCategories());
         return "/payment/payment";

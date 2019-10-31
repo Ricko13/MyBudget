@@ -4,12 +4,49 @@ body {
     /*background-image: url(../assets/padlock_photo.jpg);
     background-size: auto;*/
     /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
-    background-color: #e6e6e6;
+    /*background-color: #e6e6e6;
+    background-color: #fefefe;*/
     /*disable scroll*/
     margin: 0;
     height: 100%;
     overflow: auto; /* scroll/hidden/auto/visible */
     overflow-y: scroll;
+
+    /*https://www.cssmatic.com/noise-texture*/
+    background-image: url(http://api.thumbr.it/whitenoise-361x370.png?);
+
+}
+
+.container {
+    margin-top: 10px;
+    width: 1000px;
+    /*height: 750px;*/
+    /*height:86vh;                                            !*!!!!!!!!!!!!!!!!!!*!*/
+    border-radius: 8px;
+    overflow: auto;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.indexAddPayment, .indexBudget, .indexHistory {
+    /*margin: 20px;*/
+    padding: 30px;
+    margin-left: auto; margin-right: auto;
+    float: left;
+    display: inline;
+    width: 30%;
+    height: 600px;
+    /*border-style: groove;*/
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.indexAddPayment{
+    margin-left: 50px;
+}
+
+.indexHistory{
+    margin-right: 50px;
 }
 
 .container, .container-small {
@@ -27,15 +64,6 @@ body {
      filter: alpha(opacity=60); !* For IE8 and earlier *!*/
 }
 
-.container {
-    margin-top: 10px;
-    width: 1000px;
-    /*height: 750px;*/
-    /*height:86vh;                                            !*!!!!!!!!!!!!!!!!!!*!*/
-    border-radius: 15px 50px;
-    overflow: auto;
-}
-
 .container-small {
     width: 400px;
     height: auto;
@@ -47,31 +75,11 @@ body {
 }
 
 .container-wide {
-
     margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
-    width: 1300px;
-}
-
-.addPayment, .indexBudget {
-    /*margin: 20px;*/
-    padding: 40px;
-    /*margin-left: auto; margin-right: auto;*/
-    float: left;
-    display: inline;
-    width: 49%;
-    height: 450px;
-    border-style: groove;
-    border-radius: 5px;
-    background-color: white;
-}
-
-.indexHistory {
-    clear: both;
-    width: auto;
-    background-color: white;
+    width: auto; /*100%;*/ /*1300px;*/
 }
 
 .overflow {

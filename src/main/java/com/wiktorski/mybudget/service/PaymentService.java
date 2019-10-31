@@ -2,6 +2,7 @@ package com.wiktorski.mybudget.service;
 
 import com.wiktorski.mybudget.model.Category;
 import com.wiktorski.mybudget.model.Payment;
+import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
@@ -22,6 +23,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepo;
     private final SecurityService securityService;
     private final CategoryRepository categoryRepo;
+    private final UserService userService;
 
     public void addPayment(String name, float price, String idCat, @Nullable Date date, String description) {
         int idCategory = Integer.parseInt(idCat);
@@ -29,7 +31,9 @@ public class PaymentService {
             date = new Date();
         }
 
+        userService.setBudget(price);
         Payment payment = new Payment(name, price, securityService.getLoggedInUser(), date);
+
 
         if (!description.equals("")) {
             payment.setDescription(description);

@@ -7,10 +7,14 @@ import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.repository.UserRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.SessionFactory;
+import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 //public class UserServiceImpl implements UserDetailsService {
@@ -20,7 +24,6 @@ public class UserService {
     private final UserRepository userRepo;
     private final BCryptPasswordEncoder encoder;
     private final SecurityService securityService;
-    private final PaymentService paymentService;
 
     public void save(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
@@ -42,6 +45,11 @@ public class UserService {
 
     public List<Payment> getUserPaymentsDesc() {
         List<Payment> payments=securityService.getLoggedInUser().getPayments();
+        for(Payment p:payments){
+            Date date=p.getDate();
+            p.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(date));
+            p.setJustTime(new SimpleDateFormat("HH:mm").format(date));
+        }
         return sortPayments(payments);
     }
 
@@ -65,6 +73,16 @@ public class UserService {
 
     public void deleteUser() {
         userRepo.delete(securityService.getLoggedInUser());
+    }
+
+    public void setBudget(float price) {
+        User user= securityService.getLoggedInUser();
+        User u2=userRepo.findByUsername(user.getUsername());
+//        u2.setBudget(price);
+//        user.setBudget(user.getBudget()-price);
+//        userRepo.save(user);
+
+
     }
 
     /*@Override
