@@ -10,6 +10,16 @@
 <div th:replace="template.html::navbar"></div>
 <div class="container">
     <header><h2>My budget</h2></header>
+    <hr>
+
+    <div th:class="addToBudget">
+        <form th:action="@{/budget/add}" th:method="post" th:class="form-inline">
+            <div class="form-group" style="margin-right: auto; margin-left: auto;">
+                <input class="form-control" type="number" name="amount" placeholder="Add to budget..." min="0" required>
+                <button type="submit" class="btn btn-secondary pull-right">Add</button>
+            </div>
+        </form>
+    </div>
 
     <table class="table table-budget">
         <tr>
@@ -39,13 +49,14 @@
         </tr>
     </table>
 
-    <form th:action="@{/addToBudget}" method="post" style="width: 100px;">
-        <input type="number" name="amount" class="form-control" min="0">
-        <button type="submit" class="btn btn-secondary pull-right">
+    <!--<form th:action="@{/addToBudget}" method="post" style="width: 100px;" th:class="form-inline">
+        <div class="form-group mb-2">
+            <input type="number" name="amount" class="form-control" min="0">
+        </div>
+        <button type="submit" class="btn btn-secondary mb-2 pull-right">
             add
         </button>
-
-    </form>
+    </form>-->
 
 
 </div>

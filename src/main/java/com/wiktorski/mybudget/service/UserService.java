@@ -44,9 +44,9 @@ public class UserService {
     }
 
     public List<Payment> getUserPaymentsDesc() {
-        List<Payment> payments=securityService.getLoggedInUser().getPayments();
-        for(Payment p:payments){
-            Date date=p.getDate();
+        List<Payment> payments = securityService.getLoggedInUser().getPayments();
+        for (Payment p : payments) {
+            Date date = p.getDate();
             p.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(date));
             p.setJustTime(new SimpleDateFormat("HH:mm").format(date));
         }
@@ -57,13 +57,13 @@ public class UserService {
         return securityService.getLoggedInUser().getCategories();
     }
 
-    private List<Payment> sortPayments(List<Payment> payments){
-        Comparator<Payment> comp= (o1, o2) -> {
-            if(o1.getDate().before(o2.getDate()) ){
+    private List<Payment> sortPayments(List<Payment> payments) {
+        Comparator<Payment> comp = (o1, o2) -> {
+            if (o1.getDate().before(o2.getDate())) {
                 return 1;
-            }else if(o1.getDate().after(o2.getDate()) ){
+            } else if (o1.getDate().after(o2.getDate())) {
                 return -1;
-            }else{
+            } else {
                 return 0;
             }
         };
@@ -75,15 +75,24 @@ public class UserService {
         userRepo.delete(securityService.getLoggedInUser());
     }
 
-    public void setBudget(float price) {
-        User user= securityService.getLoggedInUser();
-        User u2=userRepo.findByUsername(user.getUsername());
-//        u2.setBudget(price);
-//        user.setBudget(user.getBudget()-price);
-//        userRepo.save(user);
-
-
+    public void setBudget(float amount) {
+        User user = securityService.getLoggedInUser();
+        user.setBudget(amount);
     }
+
+    public void addToBudget(float amount){
+        User user = securityService.getLoggedInUser();
+        float tmp=user.getBudget()+amount;
+        user.setBudget(tmp);
+    }
+
+    //decrease budget amount
+    public void addPaymentToBudget(float price){
+        User user = securityService.getLoggedInUser();
+        user.setBudget(user.getBudget()-price);
+    }
+
+
 
     /*@Override
     @Transactional

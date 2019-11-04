@@ -50,6 +50,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
             catRepo.save(cat);
             paymentRepo.save(pmnt2);
 
+
         }
 
 //        nie działą

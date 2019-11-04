@@ -37,7 +37,6 @@ public class User {
     @Transient
     private String passwordConfirm;
 
-    @Null
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Payment> payments;
     public void addPayment(Payment payment) {

@@ -20,6 +20,12 @@ $(window).on('load', function(){
     })
 });
 
+
+//tooltip
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
 /*$("#addPayment").click(function () {
     $("#myModal").modal(); return false;
 });*/

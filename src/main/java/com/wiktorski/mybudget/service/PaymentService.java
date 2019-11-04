@@ -2,7 +2,6 @@ package com.wiktorski.mybudget.service;
 
 import com.wiktorski.mybudget.model.Category;
 import com.wiktorski.mybudget.model.Payment;
-import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
@@ -31,7 +30,8 @@ public class PaymentService {
             date = new Date();
         }
 
-        userService.setBudget(price);
+        userService.addPaymentToBudget(price);
+
         Payment payment = new Payment(name, price, securityService.getLoggedInUser(), date);
 
 

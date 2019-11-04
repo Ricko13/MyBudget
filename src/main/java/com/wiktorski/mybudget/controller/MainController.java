@@ -10,15 +10,14 @@ import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -35,7 +34,7 @@ public class MainController {
     public String index(Model model){
         User user = securityService.getLoggedInUser();
         model.addAttribute("user", user);
-        model.addAttribute("budgetSum", user.getBudget()+user.getSavings());
+        model.addAttribute("budgetSum", (user.getBudget()+user.getSavings()));
         model.addAttribute("payments", userService.getUserPaymentsDesc());
         model.addAttribute("categories", userService.getUserCategories());
         return "index";
@@ -47,6 +46,17 @@ public class MainController {
         model.addAttribute("user", u);
         model.addAttribute("budgetSum", u.getBudget()+u.getSavings());
         return "/user/budget";
+    }
+
+    @Transactional
+    @PostMapping("/budget/add")
+    public String addToBudget(@RequestParam float amount){
+        try{
+        userService.addToBudget(amount);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "redirect:/budget";
     }
 
     @GetMapping("/history")
@@ -62,7 +72,7 @@ public class MainController {
         return "/payment/newPayment";
     }
 
-    //@Transactional
+    @Transactional
     @PostMapping("/payment/add")
     public String paymentAddFinal(@RequestParam String name, @RequestParam float price,
                                   @RequestParam(name = "categories") String idCat,

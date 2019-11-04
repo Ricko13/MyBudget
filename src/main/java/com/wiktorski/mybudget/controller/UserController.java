@@ -144,6 +144,4 @@ public class UserController {
         userService.deleteUser();
         return "redirect:/logout";
     }
-
-
 }
