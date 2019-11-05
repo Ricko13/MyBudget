@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -28,9 +29,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-
-
-
 /*The configure(HttpSecurity) method defines which URL paths should be secured and which should not. Specifically,
  the "/" and "/home" paths are configured to not require any authentication. All other paths must be authenticated.*/
 
@@ -40,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers( "/registration", "/css/**", "/js/**", "/assets/**", "/login", "/confirm", "/loginCheckpoint", "/category/**", "/payment/**").permitAll()
+                .antMatchers( "/registration", "/css/**", "/js/**", "/assets/**", "/login", "/confirm", "/loginCheckpoint").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -48,11 +46,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.permitAll()//permitAll nie jest tutaj konieczne bo mozna wyzej w antMatchers dać
                 .defaultSuccessUrl("/")
                 .and()
-                .logout()
-                .permitAll();
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
+                /*.permitAll();*/
 
         /*DODAJ TO
-        .antMatchers("/", "/home").permitAll()
         .antMatchers("/admin/**").access("hasRole('ADMIN')")*/
     }
     /*When a user successfully logs in, they will be redirected to the previously requested page that required authentication.

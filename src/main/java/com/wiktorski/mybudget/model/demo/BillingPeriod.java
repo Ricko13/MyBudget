@@ -1,4 +1,7 @@
-package com.wiktorski.mybudget.model;
+package com.wiktorski.mybudget.model.demo;
+
+import com.wiktorski.mybudget.model.Payment;
+import com.wiktorski.mybudget.model.User;
 
 import javax.persistence.*;
 import java.util.List;
@@ -57,13 +60,5 @@ public class BillingPeriod {
         this.user = user;
     }
 
-    @Override
-    public String toString() {
-        return "BillingPeriod{" +
-                "id=" + id +
-                ", budget=" + budget +
-                ", savings=" + savings +
-                ", payments=" + payments +
-                '}';
-    }
+
 }

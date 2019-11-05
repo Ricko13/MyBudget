@@ -1,4 +1,4 @@
-package com.wiktorski.mybudget.service;
+package com.wiktorski.mybudget.service.security;
 
 import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.repository.UserRepository;

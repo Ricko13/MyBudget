@@ -10,7 +10,6 @@
 <div th:replace="template.html::navbar"></div>
 <div class="container">
     <div class="content">
-        <br/>
         <header><h2>Categories</h2></header>
         <a href="/category/add" onclick="changeContent('newCategory'); return false;" class="btn btn-secondary button-mid" id="addPayment">
             Add
@@ -51,6 +50,7 @@
                 </div>
                 <div class="modal-body">
                     Do you really want to delete position <span class="name" style="font-weight: bold;"></span>?
+                    <br/><strong style="color: red;">It will remove category from all linked payments</strong>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

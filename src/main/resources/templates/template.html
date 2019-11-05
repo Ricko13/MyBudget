@@ -38,11 +38,18 @@
                 <li class="nav-item">
                     <!--<button class="nav-link" onclick="changeContent('history')" >Payments</button>-->
                     <a class="nav-link" onclick="changeContent('history'); return false;" href="/history">Payments</a>
-                    <!---->
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" onclick="changeContent('category'); return false;"
                        href="/category">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="changeContent('budget'); return false;"
+                       href="/budget">Set budget</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="changeContent('tobuy'); return false;"
+                       href="/">To buy</a>
                 </li>
             </th:block>
         </ul>
@@ -53,7 +60,7 @@
         <!--<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
         <th:block sec:authorize="isAuthenticated()">
-            <a class="nav-link" th:href="@{/user}">My Account</a>
+            <a class="nav-link" th:href="@{/myAccount}">My Account</a>
 
             <!--<a class="nav-link" th:href="@{/logout}">Logout</a>-->
 

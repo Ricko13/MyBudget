@@ -2,12 +2,18 @@ package com.wiktorski.mybudget.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
 
 @Entity
+@NoArgsConstructor
+@Getter
+@Setter
 public class Category {
 
     @Id
@@ -21,32 +27,14 @@ public class Category {
     @JoinColumn(name="user_id")
     private User user;
 
-
-    public Category() {
-    }
-
     public Category(String name, User user) {
         this.name = name;
         this.user = user;
     }
 
-    public User getUser() { return user;}
-
-    public void setUser(User user) { this.user = user;}
-
     public Category(String name) {
         this.name = name;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getId(){ return id;}
 
     @JsonIgnore
     @JsonBackReference

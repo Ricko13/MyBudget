@@ -6,44 +6,61 @@ import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.PaymentService;
-import com.wiktorski.mybudget.service.SecurityService;
+import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
+@AllArgsConstructor
 public class MainController {
 
-    @Autowired
     UserService userService;
-    @Autowired
     PaymentService paymentService;
-    @Autowired
     SecurityService securityService;
-    @Autowired
     PaymentRepository paymentRepository;
-    @Autowired
     CategoryRepository categoryRepository;
+
+    @GetMapping("/")
+    public String index(Model model){
+        User user = securityService.getLoggedInUser();
+        model.addAttribute("user", user);
+        model.addAttribute("budgetSum", (user.getBudget()+user.getSavings()));
+        model.addAttribute("payments", userService.getUserPaymentsDesc());
+        model.addAttribute("categories", userService.getUserCategories());
+        return "index";
+    }
+
+    @GetMapping("/budget")
+    public String budget(Model model){
+        User u = securityService.getLoggedInUser();
+        model.addAttribute("user", u);
+        model.addAttribute("budgetSum", u.getBudget()+u.getSavings());
+        return "/user/budget";
+    }
+
+    @Transactional
+    @PostMapping("/budget/add")
+    public String addToBudget(@RequestParam float amount){
+        try{
+        userService.addToBudget(amount);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "redirect:/budget";
+    }
 
     @GetMapping("/history")
     public String history(Model model) {
-        List<Payment> payments=userService.getUserPaymentsDesc();
-            for(Payment p:payments){
-                Date date=p.getDate();
-                p.setJustDate(new SimpleDateFormat("dd-mm-yyyy").format(date));
-                p.setJustTime(new SimpleDateFormat("hh:mm").format(date));
-            }
-
         model.addAttribute("payments", userService.getUserPaymentsDesc());
         model.addAttribute("categories", userService.getUserCategories());
         return "/payment/payment";
@@ -55,11 +72,16 @@ public class MainController {
         return "/payment/newPayment";
     }
 
-    //@Transactional
+    @Transactional
     @PostMapping("/payment/add")
     public String paymentAddFinal(@RequestParam String name, @RequestParam float price,
-                                  @RequestParam(required = true, name = "categories") String idCat, @RequestParam(required = false, name = "date") String date) {
-        paymentService.addPayment(name, price, idCat, date);
+                                  @RequestParam(name = "categories") String idCat,
+                                  @RequestParam String date, @RequestParam String time, @RequestParam String description) {
+        try {
+            paymentService.addPayment(name, price, idCat, date, time, description);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return "redirect:/history";
     }
 
@@ -88,13 +110,12 @@ public class MainController {
 
     @GetMapping("/category/delete/{id}")
     public String deleteCategory(@PathVariable int id) {
-        categoryRepository.deleteById(id);
+        paymentService.deleteCategory(id);
         return "redirect:/category";
     }
 
     @GetMapping("/category/{name}")
     public String showInCategory(@PathVariable String name, Model model) {
-        User user = securityService.getLoggedInUser();
         List<Payment> payments = userService.getUserPaymentsDesc();
         List<Payment> returnPayments = new ArrayList<>();
         for (Payment payment : payments) {
@@ -106,6 +127,11 @@ public class MainController {
         model.addAttribute("category", name);
         model.addAttribute("payments", returnPayments);
         return "/payment/paymentInCategory";
+    }
+
+    @GetMapping("/myAccount")
+    public String account(){
+        return "/user/account";
     }
 
 }
