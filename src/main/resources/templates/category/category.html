@@ -10,10 +10,15 @@
 <div th:replace="template.html::navbar"></div>
 <div class="container">
     <div class="content">
-        <header><h2>Categories</h2></header>
-        <a href="/category/add" onclick="changeContent('newCategory'); return false;" class="btn btn-secondary button-mid" id="addPayment">
-            Add
-        </a>
+        <header>
+            <h2>Categories
+                <a href="/category/add" onclick="changeContent('newCategory'); return false;"
+                   class="btn btn-secondary button-mid" id="addPayment">
+                    Add
+                </a>
+            </h2>
+        </header>
+
 
         <!--<table class="table">-->
         <table class="table table-sm table-hover">
@@ -30,8 +35,10 @@
                 <tr>
                     <td th:text="${category.name}"></td>
                     <td>edit name</td>
-                    <td><a th:href="${category.payments!=null}?@{'/category/'+${category.name}} : '#'" th:text="${category.payments!=null}?'show payments':''"></a></td>
-                    <td><a data-toggle="modal" href="#deleteCatConfirm" th:attr="data-id=${category.id}, data-name=${category.name}">delete</a>  </td>
+                    <td><a th:href="${category.payments!=null}?@{'/category/'+${category.name}} : '#'"
+                           th:text="${category.payments!=null}?'show payments':''"></a></td>
+                    <td><a data-toggle="modal" href="#deleteCatConfirm"
+                           th:attr="data-id=${category.id}, data-name=${category.name}">delete</a></td>
                 </tr>
             </th:block>
             </tbody>
@@ -39,7 +46,8 @@
 
     </div>
 
-    <div class="modal fade" id="deleteCatConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="deleteCatConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
