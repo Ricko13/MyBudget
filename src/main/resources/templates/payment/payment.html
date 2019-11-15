@@ -10,16 +10,19 @@
 <div th:replace="template.html::navbar"></div>
 <div class="container">
     <div class="content">
-        <header><h2>Payment history</h2></header>
-        <hr>
+        <header>
+            <h2>Payment history
+                <button href="/payment/add" id="addPayment" class="btn btn-secondary button-mid" type="button"
+                        data-toggle="collapse" data-target="#collapseAddPayment" aria-expanded="false"
+                        aria-controls="collapseExample">
+                    Add
+                </button>
+            </h2>
+        </header>
         <!--<a href="/payment/add" onclick="changeContent('newPayment'); return false;" class="btn btn-secondary button-mid" id="addPayment">
             Add
         </a>-->
-        <button href="/payment/add" id="addPayment" class="btn btn-secondary button-mid" type="button"
-                data-toggle="collapse" data-target="#collapseAddPayment" aria-expanded="false"
-                aria-controls="collapseExample">
-            Add
-        </button>
+
 
         <div class="collapse" id="collapseAddPayment" style="margin-top:20px; ">
             <div class="card card-body" style="width: 60%; margin-left: auto; margin-right: auto;">
@@ -82,38 +85,39 @@
             </div>
         </div>
 
-<div class="overflow">
-        <table class="table table-sm table-hover">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Pos name</th>
-                <th scope="col">price</th>
-                <th scope="col">Date</th>
-                <th scope="col">Time</th>
-                <th scope="col">Description</th>
-                <th scope="col">Category</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <th:block th:each="payment: ${payments}">
+        <div class="overflow">
+            <table class="table table-sm table-hover">
+                <thead class="thead-dark">
                 <tr>
-                    <td th:text="${payment.name}"></td>
-                    <td th:text="${payment.price}"></td>
-                    <td th:text="${payment.justDate}"></td>
-                    <td th:text="${payment.justTime}"></td>
-                    <td th:text="${payment.description}" style="width: 220px;"></td>
-                    <!--<td th:text="${payment.category!=null}?${payment.category.name} : ''"></td>-->
-                    <td style="width: 220px;"><a th:href="${payment.category!=null}?@{'/category/'+${payment.category.name}} : '#'"
-                           th:text="${payment.category!=null}?${payment.category.name} : ''"></a></td>
-                    <!--<td><a th:href="@{'/payment/delete/' +${payment.id}}" th:onclick="'deletePos('+${payment.id}+')'">delete</a> </td>-->
-                    <td><a data-toggle="modal" href="#deletePayConfirm"
-                           th:attr="data-id=${payment.id}, data-name=${payment.name}">delete</a></td>
+                    <th scope="col">Pos name</th>
+                    <th scope="col">price</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Category</th>
+                    <th scope="col"></th>
                 </tr>
-            </th:block>
-            </tbody>
-        </table>
-</div>
+                </thead>
+                <tbody>
+                <th:block th:each="payment: ${payments}">
+                    <tr>
+                        <td th:text="${payment.name}"></td>
+                        <td th:text="${payment.price}"></td>
+                        <td th:text="${payment.justDate}"></td>
+                        <td th:text="${payment.justTime}"></td>
+                        <td th:text="${payment.description}" style="width: 220px;"></td>
+                        <!--<td th:text="${payment.category!=null}?${payment.category.name} : ''"></td>-->
+                        <td style="width: 220px;"><a
+                                th:href="${payment.category!=null}?@{'/category/'+${payment.category.name}} : '#'"
+                                th:text="${payment.category!=null}?${payment.category.name} : ''"></a></td>
+                        <!--<td><a th:href="@{'/payment/delete/' +${payment.id}}" th:onclick="'deletePos('+${payment.id}+')'">delete</a> </td>-->
+                        <td><a data-toggle="modal" href="#deletePayConfirm"
+                               th:attr="data-id=${payment.id}, data-name=${payment.name}">delete</a></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
 
     </div>
 

@@ -19,13 +19,27 @@ body {
 }
 
 .container {
-    margin-top: 10px;
+    margin-top: 20px;
     width: 1000px;
     /*height: 750px;*/
     /*height:86vh;                                            !*!!!!!!!!!!!!!!!!!!*!*/
     border-radius: 8px;
     overflow: auto;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.container, .container-small {
+    padding-top: 20px;
+    text-align: center;
+    /*margin-bottom: 60px;*/
+    padding-bottom: 60px;
+    background-color: white;
+    /*background-color: rgba(255, 250, 250, .7);*/
+
+    /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+    /*border: 1px solid black;*/
+    /* opacity: 0.6;
+     filter: alpha(opacity=60); !* For IE8 and earlier *!*/
 }
 
 .indexAddPayment, .indexBudget, .indexHistory {
@@ -50,26 +64,14 @@ body {
     margin-right: 50px;
 }
 
-.container, .container-small {
-    padding-top: 20px;
-    text-align: center;
-    margin-top: 60px;
-    /*margin-bottom: 60px;*/
-    padding-bottom: 60px;
-    background-color: white;
-    /*background-color: rgba(255, 250, 250, .7);*/
 
-    /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
-    /*border: 1px solid black;*/
-    /* opacity: 0.6;
-     filter: alpha(opacity=60); !* For IE8 and earlier *!*/
-}
 
 .container-small {
     width: 400px;
     height: auto;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 60px;
     padding: 20px;
     border-radius: 15px 50px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -111,7 +113,7 @@ header {
 }
 
 .table {
-    margin-top: 40px;
+    margin-top: 15px;
 }
 
 .table-budget {
