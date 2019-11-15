@@ -9,11 +9,13 @@ import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Profile("dev")
 @Component
 @AllArgsConstructor
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
@@ -23,14 +25,8 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
     private CategoryRepository catRepo;
     private SecurityService securityService;
 
-    //    NIE DZIALA
-    //@Value("@{custom.devMode}") //wyrzuca IllegalArgumentExc
-    /*@Value("#{new Boolean('$custom.devMode')}")
-    private boolean isDevMode;*/
-
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        //if (isDevMode)
         init();
     }
 

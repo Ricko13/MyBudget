@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.Set;
 
@@ -65,5 +64,8 @@ public class User {
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public void x(){
     }
 }
