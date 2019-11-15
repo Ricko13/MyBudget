@@ -50,6 +50,7 @@ public class PaymentService {
         paymentRepo.save(payment);
     }
 
+
     public void addPayment(String name, float price, String idCat, String date, String time, String description) throws ParseException {
         addPayment(name, price, idCat, parseStringDate(date, time), description);
     }

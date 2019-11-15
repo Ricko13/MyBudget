@@ -10,15 +10,18 @@ $(window).on('load', function(){
         modal.find('.modal-body .name').text(name)
     })
 
-    $('#deleteCatConfirm').on('show.bs.modal', function (event) {
+
+});
+/* $('#deleteCatConfirm').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var id=button.data('id')
         var name=button.data('name')
         var modal = $(this)
         modal.find('#hiddenForm').attr('action','/category/delete/'+id)
         modal.find('.modal-body .name').text(name)
-    })
-});
+    })*/
+
+
 
 
 //tooltip
