@@ -46,7 +46,7 @@ public class MainController {
         User u = securityService.getLoggedInUser();
         model.addAttribute("user", u);
         model.addAttribute("budgetSum", u.getBudget()+u.getSavings());
-        return "/user/budget";
+        return "user/budget";
     }
 
     @Transactional
@@ -64,13 +64,13 @@ public class MainController {
     public String history(Model model) {
         model.addAttribute("payments", userService.getUserPaymentsDesc());
         model.addAttribute("categories", userService.getUserCategories());
-        return "/payment/payment";
+        return "payment/payment";
     }
 
     @GetMapping("/payment/add")
     public String paymentAdd(Model model) {
         model.addAttribute("categories", userService.getUserCategories());
-        return "/payment/newPayment";
+        return "payment/newPayment";
     }
 
     @Transactional
@@ -95,7 +95,7 @@ public class MainController {
     @GetMapping("/category")
     public String category(Model model) {
         model.addAttribute("categories", userService.getUserCategories());
-        return "/category/category";
+        return "category/category";
     }
 
     @GetMapping("/category/add")
@@ -127,12 +127,12 @@ public class MainController {
         }
         model.addAttribute("category", name);
         model.addAttribute("payments", returnPayments);
-        return "/payment/paymentInCategory";
+        return "payment/paymentInCategory";
     }
 
     @GetMapping("/myAccount")
     public String account(){
-        return "/user/account";
+        return "user/account";
     }
 
 }

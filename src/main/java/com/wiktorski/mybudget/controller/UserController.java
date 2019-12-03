@@ -55,7 +55,7 @@ public class UserController {
 
         userValidator.validate(userForm, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "/user/registration";
+            return "user/registration";
         }
 
         //RECAPTCHA
