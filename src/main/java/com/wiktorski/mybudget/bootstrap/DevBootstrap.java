@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@Profile("dev")
+//@Profile("dev")
 @Component
 @AllArgsConstructor
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
