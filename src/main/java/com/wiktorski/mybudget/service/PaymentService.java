@@ -26,25 +26,17 @@ public class PaymentService {
 
     public void addPayment(String name, float price, String idCat, @Nullable Date date, String description) {
         int idCategory = Integer.parseInt(idCat);
-        if (date == null) {
+        if (date == null)
             date = new Date();
-        }
 
         userService.addPaymentToBudget(price);
-
         Payment payment = new Payment(name, price, securityService.getLoggedInUser(), date);
-
-
         if (!description.equals("")) {
             payment.setDescription(description);
         }
-
         if (idCategory != -1) {
-            Optional cat = categoryRepo.findById(idCategory);
-            cat.ifPresent(
-                    catg -> {
-                        payment.setCategory((Category) catg);
-                    }
+            categoryRepo.findById(idCategory).ifPresent(
+                    catg -> payment.setCategory((Category) catg)
             );
         }
         paymentRepo.save(payment);

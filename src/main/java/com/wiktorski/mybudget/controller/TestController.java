@@ -38,7 +38,7 @@ public class TestController {
     @GetMapping("/category")
     public String showCategories() throws JsonProcessingException {
         //return  objectMapper.writeValueAsString(categoryRepo.findAll());
-        return objectMapper.writeValueAsString(userService.getUserCategories());
+        return objectMapper.writeValueAsString(userService.getCategories());
     }
 
     @GetMapping("/payment/test/{idCat}")
@@ -55,7 +55,7 @@ public class TestController {
     @GetMapping("/payment")
     public String showPayments() throws JsonProcessingException {
        // return objectMapper.writeValueAsString(paymentRepo.findAll());
-        return objectMapper.writeValueAsString(userService.getUserPaymentsDesc());
+        return objectMapper.writeValueAsString(userService.getPaymentsDesc());
     }
 
     @GetMapping("/showCat")

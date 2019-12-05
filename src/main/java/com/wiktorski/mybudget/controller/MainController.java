@@ -9,7 +9,6 @@ import com.wiktorski.mybudget.service.PaymentService;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -36,8 +35,8 @@ public class MainController {
         User user = securityService.getLoggedInUser();
         model.addAttribute("user", user);
         model.addAttribute("budgetSum", (user.getBudget()+user.getSavings()));
-        model.addAttribute("payments", userService.getUserPaymentsDesc());
-        model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("payments", userService.getPaymentsDesc());
+        model.addAttribute("categories", userService.getCategories());
         return "index";
     }
 
@@ -62,14 +61,14 @@ public class MainController {
 
     @GetMapping("/history")
     public String history(Model model) {
-        model.addAttribute("payments", userService.getUserPaymentsDesc());
-        model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("payments", userService.getPaymentsDesc());
+        model.addAttribute("categories", userService.getCategories());
         return "payment/payment";
     }
 
     @GetMapping("/payment/add")
     public String paymentAdd(Model model) {
-        model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("categories", userService.getCategories());
         return "payment/newPayment";
     }
 
@@ -94,7 +93,7 @@ public class MainController {
 
     @GetMapping("/category")
     public String category(Model model) {
-        model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("categories", userService.getCategories());
         return "category/category";
     }
 
@@ -117,7 +116,7 @@ public class MainController {
 
     @GetMapping("/category/{name}")
     public String showInCategory(@PathVariable String name, Model model) {
-        List<Payment> payments = userService.getUserPaymentsDesc();
+        List<Payment> payments = userService.getPaymentsDesc();
         List<Payment> returnPayments = new ArrayList<>();
         for (Payment payment : payments) {
             if (payment.getCategory() != null) {

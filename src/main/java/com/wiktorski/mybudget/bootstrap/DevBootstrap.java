@@ -45,8 +45,6 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
             pmnt2.setCategory(cat);
             catRepo.save(cat);
             paymentRepo.save(pmnt2);
-
-
         }
 
 //        nie działą

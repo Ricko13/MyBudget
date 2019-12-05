@@ -17,7 +17,8 @@ import org.springframework.stereotype.Service;
 public class SecurityServiceImpl implements SecurityService {
     @Autowired
     private AuthenticationManager authenticationManager;
-
+    @Autowired
+    private UserRepository userRepository;
     @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
@@ -34,9 +35,6 @@ public class SecurityServiceImpl implements SecurityService {
         //return userDetails.getClass().toString();
         return null;
     }
-
-    @Autowired
-    UserRepository userRepository;
 
     public User getLoggedInUser() {
         String username = getLoggedInUsername();

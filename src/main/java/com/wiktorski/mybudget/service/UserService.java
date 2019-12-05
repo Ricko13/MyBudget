@@ -17,7 +17,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-//public class UserServiceImpl implements UserDetailsService {
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -43,7 +43,7 @@ public class UserService {
         return userRepo.findByEmail(email);
     }
 
-    public List<Payment> getUserPaymentsDesc() {
+    public List<Payment> getPaymentsDesc() {
         List<Payment> payments = securityService.getLoggedInUser().getPayments();
         for (Payment p : payments) {
             Date date = p.getDate();
@@ -53,7 +53,7 @@ public class UserService {
         return sortPayments(payments);
     }
 
-    public List<Category> getUserCategories() {
+    public List<Category> getCategories() {
         return securityService.getLoggedInUser().getCategories();
     }
 
@@ -91,14 +91,4 @@ public class UserService {
         User user = securityService.getLoggedInUser();
         user.setBudget(user.getBudget()-price);
     }
-
-
-
-    /*@Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user=userRepo.findByLogin(username);
-        if(user==null) throw new UsernameNotFoundException(username);
-        return return new org.springframework.security.core.userdetails.User(user.getName(),user.getPassword(),);;
-    }*/
 }
