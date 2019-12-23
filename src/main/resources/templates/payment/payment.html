@@ -86,13 +86,12 @@
         </div>
 
         <div class="overflow">
-            <table class="table table-sm table-hover">
+            <table id="dataTable" class="table table-sm table-hover">
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Pos name</th>
                     <th scope="col">price</th>
                     <th scope="col">Date</th>
-                    <th scope="col">Time</th>
                     <th scope="col">Description</th>
                     <th scope="col">Category</th>
                     <th scope="col"></th>
@@ -104,7 +103,6 @@
                         <td th:text="${payment.name}"></td>
                         <td th:text="${payment.price}"></td>
                         <td th:text="${payment.justDate}"></td>
-                        <td th:text="${payment.justTime}"></td>
                         <td th:text="${payment.description}" style="width: 220px;"></td>
                         <!--<td th:text="${payment.category!=null}?${payment.category.name} : ''"></td>-->
                         <td style="width: 220px;"><a

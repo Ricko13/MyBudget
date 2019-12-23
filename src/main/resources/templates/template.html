@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
 <head th:fragment="head">
     <meta charset="UTF-8">
     <!--Przy tx:text="${}" nic się nie wyświetla w środku-->
@@ -11,7 +12,7 @@
     <!--for bootstrap 4.3-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <link th:href="@{https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css}" th:rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
 </head>
 
@@ -87,8 +88,18 @@
     <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.js}"></script>
 
 
+    <script th:src="@{http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js}"></script>
+
     <!--    <script th:src="@{/js/contentLoad.js}"></script>-->
        <script th:src="@{/js/modals.js}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                "order": []
+            });
+        });
+    </script>
 
 </div>
 

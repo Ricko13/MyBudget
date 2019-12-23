@@ -13,7 +13,7 @@
         <header><h2 th:text="'Category: '+${category}">Payment history</h2></header>
 
 
-        <table class="table">
+        <table class="table" id="dataTable">
             <thead class="thead-dark">
             <tr>
 
@@ -29,7 +29,7 @@
                 <tr>
                     <td th:text="${payment.name}"></td>
                     <td th:text="${payment.price}"></td>
-                    <td th:text="${payment.date}"></td>
+                    <td th:text="${payment.justDate}"></td>
                     <!--<td th:text="${payment.category!=null}?${payment.category.name} : ''"></td>-->
                     <td th:text="${payment.category!=null}?${payment.category.name} : ''"> </td>
                     <td><a th:href="@{'/payment/delete/' +${payment.id}}" th:onclick="'deletePos('+${payment.id}+')'">delete</a> </td>
