@@ -25,27 +25,13 @@ public class PaymentService {
     private final UserService userService;
 
     public void addPayment(String name, float price, String idCat, @Nullable Date date, String description) {
-        int idCategory = Integer.parseInt(idCat);
-        if (date == null) {
-            date = new Date();
-        }
-
-        userService.addPaymentToBudget(price);
-
+        userService.decreaseBudget(price);
+        //if (date == null) { date = new Date(); }
         Payment payment = new Payment(name, price, securityService.getLoggedInUser(), date);
-
-
-        if (!description.equals("")) {
-            payment.setDescription(description);
-        }
-
+        if (!description.equals("")) { payment.setDescription(description); }
+        int idCategory = Integer.parseInt(idCat);
         if (idCategory != -1) {
-            Optional cat = categoryRepo.findById(idCategory);
-            cat.ifPresent(
-                    catg -> {
-                        payment.setCategory((Category) catg);
-                    }
-            );
+            categoryRepo.findById(idCategory).ifPresent(payment::setCategory);
         }
         paymentRepo.save(payment);
     }
@@ -56,22 +42,21 @@ public class PaymentService {
     }
 
     //    form always sends data but data can be empty like ""
-    private Date parseStringDate(String date, String time) throws ParseException {
-        Date dt;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddHH:mm");
+    private Date parseStringDate(String requestDate, String time) throws ParseException {
+        Date date;
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-ddHH:mm");
 
-        if (date.equals("") && time.equals("")) {
+        if (requestDate.equals("") && time.equals("")) {
             return new Date();
-        } else if (!date.equals("") && time.equals("")) {
-            dt = sdf.parse(date + "00:00");
-        } else if (date.equals("")) {
+        } else if (!requestDate.equals("") && time.equals("")) {
+            date = simpleDate.parse(requestDate + "00:00");
+        } else if (requestDate.equals("")) {
             String[] timeArr = time.split(":");
-            dt = new Date();
-            dt.setHours(Integer.parseInt(timeArr[0]));  /*should use Calendar*/
-            dt.setMinutes(Integer.parseInt(timeArr[1]));
-        } else dt = sdf.parse(date + time);
-
-        return dt;
+            date = new Date();
+            date.setHours(Integer.parseInt(timeArr[0]));  /*should use Calendar*/
+            date.setMinutes(Integer.parseInt(timeArr[1]));
+        } else date = simpleDate.parse(requestDate + time);
+        return date;
     }
 
     public void deleteCategory(int categoryId) {

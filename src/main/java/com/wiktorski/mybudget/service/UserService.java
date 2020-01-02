@@ -86,8 +86,7 @@ public class UserService {
         user.setBudget(tmp);
     }
 
-    //decrease budget amount
-    public void addPaymentToBudget(float price){
+    public void decreaseBudget(float price){
         User user = securityService.getLoggedInUser();
         user.setBudget(user.getBudget()-price);
     }
