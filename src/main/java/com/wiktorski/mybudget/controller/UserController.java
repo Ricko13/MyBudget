@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.UUID;
 
+//TODO too much logic in controller, should be extracted to UserService or smaller methods
 @Controller
 //@RequestMapping("/user")
 public class UserController {

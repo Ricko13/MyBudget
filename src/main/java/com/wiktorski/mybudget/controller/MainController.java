@@ -2,6 +2,7 @@ package com.wiktorski.mybudget.controller;
 
 import com.wiktorski.mybudget.model.Category;
 import com.wiktorski.mybudget.model.Payment;
+import com.wiktorski.mybudget.model.PaymentDTO;
 import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
@@ -9,14 +10,17 @@ import com.wiktorski.mybudget.service.PaymentService;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +94,21 @@ public class MainController {
     public String deletePayment(@PathVariable int id, Model model) {
         paymentRepository.deleteById(id);
         return "redirect:/history";
+    }
+
+    @GetMapping("/payment/edit/{id}")
+    public String editPayment(@PathVariable int id, Model model){
+        model.addAttribute("payment", paymentRepository.findById(id).orElse(null));
+        model.addAttribute("categories", userService.getUserCategories());
+        return "/payment/editPayment";
+    }
+
+    @ResponseBody
+    @PostMapping("/payment/update")
+    public String updatePayment(@ModelAttribute PaymentDTO paymentDTO){
+        paymentService.updatePayment(paymentDTO);
+        return paymentDTO.toString();
+        //return "redirect:/history";
     }
 
     @GetMapping("/category")

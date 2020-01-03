@@ -15,7 +15,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/test")
 public class TestController {
 
     @Autowired
@@ -41,28 +41,28 @@ public class TestController {
         return objectMapper.writeValueAsString(userService.getUserCategories());
     }
 
-    @GetMapping("/payment/test/{idCat}")
-    public void addPaymentToCat(@PathVariable int idCat) throws Exception {
-        Optional<Category> cat=categoryRepo.findById(idCat);
-        if(cat.isPresent()){
-        //paymentRepo.save(new Payment("test",(float)13.40,cat.get()));
-        }else{
-            throw new Exception("Didnt find category with that id");
-        }
-    }
-
-
     @GetMapping("/payment")
     public String showPayments() throws JsonProcessingException {
-       // return objectMapper.writeValueAsString(paymentRepo.findAll());
         return objectMapper.writeValueAsString(userService.getUserPaymentsDesc());
     }
 
     @GetMapping("/showCat")
     public Category showCat(){
-        Optional<Payment> pmt=paymentRepo.findById(6);
-        return pmt.map(Payment::getCategory).orElse(null);
+        return paymentRepo.findById(6).map(Payment::getCategory).orElse(null);
+    }
 
+    @GetMapping("/payment/test/{idCat}")
+    public void addPaymentToCat(@PathVariable int idCat) throws Exception {
+        Optional<Category> category=categoryRepo.findById(idCat);
+        if(category.isPresent()){
+            //paymentRepo.save(new Payment("test",(float)13.40,cat.get()));
+        }else{
+            throw new Exception("Didnt find category with that id");
+        }
+    }
+
+    public String sayHenlo(){
+        return "Henlo there!";
     }
 
 

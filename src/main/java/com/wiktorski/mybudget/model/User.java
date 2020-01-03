@@ -25,7 +25,7 @@ public class User {
     private String confirmationToken;
     private boolean enabled;
 
-    /**Powinno być w oddzielnym entity w relacji @OneToOne*/
+    //TODO Powinno być w oddzielnym entity w relacji @OneToOne*/
     private float budget;
     private float savings;
     private float toSave;
@@ -64,8 +64,5 @@ public class User {
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 '}';
-    }
-
-    public void x(){
     }
 }

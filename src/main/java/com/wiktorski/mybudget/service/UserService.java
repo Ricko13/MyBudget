@@ -43,16 +43,12 @@ public class UserService {
         return userRepo.findByEmail(email);
     }
 
-    public List<Payment> getUserPaymentsDesc() {
-        List<Payment> payments = securityService.getLoggedInUser().getPayments();
-        for (Payment p : payments) {
-            Date date = p.getDate();
-            p.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(date));
-            p.setJustTime(new SimpleDateFormat("HH:mm").format(date));
-        }
-        return sortPayments(payments);
+    public void deleteUser() {
+        userRepo.delete(securityService.getLoggedInUser());
     }
 
+    /******************************************************************************************/
+    //TODO TO OTHER SERVICES???
     public List<Category> getUserCategories() {
         return securityService.getLoggedInUser().getCategories();
     }
@@ -71,13 +67,14 @@ public class UserService {
         return payments;
     }
 
-    public void deleteUser() {
-        userRepo.delete(securityService.getLoggedInUser());
-    }
-
-    public void setBudget(float amount) {
-        User user = securityService.getLoggedInUser();
-        user.setBudget(amount);
+    public List<Payment> getUserPaymentsDesc() {
+        List<Payment> payments = securityService.getLoggedInUser().getPayments();
+        for (Payment p : payments) {
+            Date date = p.getDate();
+            p.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(date));
+            p.setJustTime(new SimpleDateFormat("HH:mm").format(date));
+        }
+        return sortPayments(payments);
     }
 
     public void addToBudget(float amount){
@@ -91,6 +88,10 @@ public class UserService {
         user.setBudget(user.getBudget()-price);
     }
 
+    public void setBudget(float amount) {
+        User user = securityService.getLoggedInUser();
+        user.setBudget(amount);
+    }
 
 
     /*@Override

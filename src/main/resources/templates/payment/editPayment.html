@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="template.html::head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:replace="template.html::navbar"></div>
+<div class="container container-small" style="text-align:left;">
+
+    <header><h2>Payment</h2></header>
+    <form th:action="@{/payment/update}" method="post">
+        <input type="hidden" name="id" th:value="${payment.id}"/>
+
+        <div class="form-group">
+            <label for="name">Position name</label>
+            <input th:value="${payment.name}" type="text" class="form-control" id="name"
+                   placeholder="Position name" name="name" autofocus="autofocus" required>
+            <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+        </div>
+        <div class="form-group">
+            <label for="price">Value</label>
+            <input th:value="${payment.price}" style="width: 150px; " type="number" min="1" step="any" class="form-control" id="price" placeholder="Type price"
+                   name="price" required>
+        </div>
+        <div class="form-group">
+            <!--https://www.thymeleaf.org/doc/tutorials/2.1/thymeleafspring.html#dropdownlist-selectors-->
+            <label for="categories">Category</label>
+            <select id="categories" name="categoryId" class="form-control" style="width: 150px;">
+                <option value="">None</option>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input th:value="${{payment.date}}" class="form-control" type="date" id="date" name="date"
+                   style="width: 160px;">
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input  th:value="${payment.description}" class="form-control" type="text" id="description" name="description">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-secondary" >Submit</button>
+        </div>
+    </form>
+
+</div>
+<div th:replace="template.html :: js-include"></div>
+</body>
+</html>
+</body>
+</html>

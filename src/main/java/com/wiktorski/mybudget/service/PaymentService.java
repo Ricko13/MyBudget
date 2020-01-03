@@ -2,6 +2,8 @@ package com.wiktorski.mybudget.service;
 
 import com.wiktorski.mybudget.model.Category;
 import com.wiktorski.mybudget.model.Payment;
+import com.wiktorski.mybudget.model.PaymentDTO;
+import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
@@ -66,4 +68,22 @@ public class PaymentService {
         });
         categoryRepo.deleteById(categoryId);
     }
+
+    public void updatePayment(PaymentDTO paymentDTO) {
+        Optional<Payment> payment = paymentRepo.findById(paymentDTO.getId());
+    }
+
+    public Payment paymentDTOtoPayment(PaymentDTO paymentDTO) throws ParseException {
+        Payment payment = Payment.builder()
+                .id(paymentDTO.getId())
+                .name(paymentDTO.getName())
+                .price(paymentDTO.getPrice())
+                .date( new SimpleDateFormat("dd-MM-yyyy").parse(paymentDTO.getDate()) )
+                .description(paymentDTO.getDescription())
+                .category(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null))
+                .build();
+        return payment;
+    }
 }
+
+
