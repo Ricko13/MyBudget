@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,9 +82,9 @@ public class MainController {
     @PostMapping("/payment/add")
     public String paymentAddFinal(@RequestParam String name, @RequestParam float price,
                                   @RequestParam(name = "categories") String idCat,
-                                  @RequestParam String date, @RequestParam String time, @RequestParam String description) {
+                                  @RequestParam String date, @RequestParam String description) {
         try {
-            paymentService.addPayment(name, price, idCat, date, time, description);
+            paymentService.addPayment(name, price, idCat, date, "", description);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -98,8 +99,15 @@ public class MainController {
 
     @GetMapping("/payment/edit/{id}")
     public String editPayment(@PathVariable int id, Model model){
-        model.addAttribute("payment", paymentRepository.findById(id).orElse(null));
+        Payment payment =  paymentRepository.findById(id).orElse(null);
+        model.addAttribute("payment",payment);
         model.addAttribute("categories", userService.getUserCategories());
+        assert payment != null;         //TODO co
+        model.addAttribute("date", new SimpleDateFormat("yyyy-MM-dd").format(payment.getDate()));
+        if(payment.getCategory()!=null)
+            model.addAttribute("paymentCategoryId", payment.getCategory().getId());
+        else
+            model.addAttribute("paymentCategoryId", -1);
         return "/payment/editPayment";
     }
 
@@ -107,8 +115,7 @@ public class MainController {
     @PostMapping("/payment/update")
     public String updatePayment(@ModelAttribute PaymentDTO paymentDTO){
         paymentService.updatePayment(paymentDTO);
-        return paymentDTO.toString();
-        //return "redirect:/history";
+        return "redirect:/history";
     }
 
     @GetMapping("/category")

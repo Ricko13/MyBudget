@@ -7,7 +7,7 @@ import org.junit.Test;
 
 //TODO żeby zrobić ten test potrzebny będzie mock
 public class PaymentServiceTest {
-    PaymentService paymentService;
+    //PaymentService paymentService;
 
     @Before
     void init(){

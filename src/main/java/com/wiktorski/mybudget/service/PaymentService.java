@@ -28,7 +28,7 @@ public class PaymentService {
 
     public void addPayment(String name, float price, String idCat, @Nullable Date date, String description) {
         userService.decreaseBudget(price);
-        //if (date == null) { date = new Date(); }
+        //if (date == null) { date = new Date(); }  //TODO dlaczego data sama się tworzy?
         Payment payment = new Payment(name, price, securityService.getLoggedInUser(), date);
         if (!description.equals("")) { payment.setDescription(description); }
         int idCategory = Integer.parseInt(idCat);

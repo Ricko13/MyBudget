@@ -17,6 +17,12 @@
 <div th:replace="template.html::navbar"></div>
 <div class="container container-small" style="text-align:left;">
 
+    <a href="#" id="backPage" class="">TEST
+        <span class="glyphicon glyphicon-arrow-left"></span>
+    </a>
+    <script>
+
+    </script>
     <header><h2>Payment</h2></header>
     <form th:action="@{/payment/update}" method="post">
         <input type="hidden" name="id" th:value="${payment.id}"/>
@@ -39,12 +45,14 @@
                 <option value="">None</option>
                 <option th:each="category : ${categories}"
                         th:value="${category.id}"
-                        th:text="${category.name}"></option>
+                        th:text="${category.name }"
+                        th:selected="${category.id==paymentCategoryId}"
+                        ></option>
             </select>
         </div>
         <div class="form-group">
             <label for="date">Date</label>
-            <input th:value="${{payment.date}}" class="form-control" type="date" id="date" name="date"
+            <input th:value="${{date}}" class="form-control" type="date" id="date" name="date"
                    style="width: 160px;">
         </div>
         <div class="form-group">
