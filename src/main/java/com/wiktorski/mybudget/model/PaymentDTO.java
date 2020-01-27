@@ -19,7 +19,7 @@ public class PaymentDTO implements Serializable {
     private int id;
     private String name;
     private float price;
-    private String date;
+    private String date;    //nie może być Date?
     private String description;
     private int categoryId;
 }

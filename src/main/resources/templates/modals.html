@@ -1,0 +1,86 @@
+<div id="modals" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="modals">
+
+    <div class="modal fade" id="deletePayConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmTitle">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Do you really want to delete position <span class="name" style="font-weight: bold;"></span>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <form action="" method="get" id="hiddenForm">
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editPaymentModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPaymentTitle">Edit payment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="text-align:left;">
+
+                    <form th:action="@{/payment/update}" method="post" id="editPaymentForm">
+                        <input id="id" type="hidden" name="id" value=""/>
+
+                        <div class="form-group">
+                            <label for="nameEdit">Position name</label>
+                            <input type="text" class="form-control" id="nameEdit"
+                                   placeholder="Position name" name="name" autofocus="autofocus" required>
+                            <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                        </div>
+                        <div class="form-group">
+                            <label for="priceEdit">Value</label>
+                            <input style="width: 150px; " type="number" min="1" step="any" class="form-control" id="priceEdit" placeholder="Type price"
+                                   name="price" required>
+                        </div>
+                        <div class="form-group">
+                            <!--https://www.thymeleaf.org/doc/tutorials/2.1/thymeleafspring.html#dropdownlist-selectors-->
+                            <label for="categoriesEdit">Category</label>
+                            <select id="categoriesEdit" name="categoryId" class="form-control" style="width: 230px;">
+                                <option value="-1">None</option>
+                                <option th:each="category : ${categories}"
+                                        th:value="${category.id}"
+                                        th:text="${category.name }"
+                                ></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateEdit">Date</label>
+                            <input class="form-control" type="date" id="dateEdit" name="date"
+                                   style="width: 160px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="descriptionEdit">Description</label>
+                            <input class="form-control" type="text" id="descriptionEdit" name="description">
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="form-group">
+                                <button id="editSubmit" type="submit" class="btn btn-secondary">Submit</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

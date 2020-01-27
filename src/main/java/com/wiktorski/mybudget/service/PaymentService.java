@@ -1,9 +1,7 @@
 package com.wiktorski.mybudget.service;
 
-import com.wiktorski.mybudget.model.Category;
 import com.wiktorski.mybudget.model.Payment;
 import com.wiktorski.mybudget.model.PaymentDTO;
-import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,7 +34,6 @@ public class PaymentService {
         }
         paymentRepo.save(payment);
     }
-
 
     public void addPayment(String name, float price, String idCat, String date, String time, String description) throws ParseException {
         addPayment(name, price, idCat, parseStringDate(date, time), description);
@@ -62,10 +58,7 @@ public class PaymentService {
     }
 
     public void deleteCategory(int categoryId) {
-        final List<Payment> payments = paymentRepo.findByCategoryId(categoryId);
-        payments.forEach(payment -> {
-            payment.setCategory(null);
-        });
+        paymentRepo.findByCategoryId(categoryId).forEach(payment -> payment.setCategory(null));
         categoryRepo.deleteById(categoryId);
     }
 
@@ -74,7 +67,7 @@ public class PaymentService {
     }
 
     public Payment paymentDTOtoPayment(PaymentDTO paymentDTO) throws ParseException {
-        Payment payment = Payment.builder()
+        return Payment.builder()
                 .id(paymentDTO.getId())
                 .name(paymentDTO.getName())
                 .price(paymentDTO.getPrice())
@@ -82,7 +75,6 @@ public class PaymentService {
                 .description(paymentDTO.getDescription())
                 .category(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null))
                 .build();
-        return payment;
     }
 }
 

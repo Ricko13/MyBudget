@@ -7,8 +7,6 @@ import com.wiktorski.mybudget.model.User;
 import com.wiktorski.mybudget.repository.UserRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.SessionFactory;
-import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +15,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-//public class UserServiceImpl implements UserDetailsService {
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -74,7 +71,7 @@ public class UserService {
             p.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(date));
             p.setJustTime(new SimpleDateFormat("HH:mm").format(date));
         }
-        return sortPayments(payments);
+        return sortPayments(payments);  //TODO czy nie da się z repo wyciągnąć posortowanego?
     }
 
     public void addToBudget(float amount){

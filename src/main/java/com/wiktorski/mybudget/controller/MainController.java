@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -143,14 +142,11 @@ public class MainController {
 
     @GetMapping("/category/{name}")
     public String showInCategory(@PathVariable String name, Model model) {
-        List<Payment> payments = userService.getUserPaymentsDesc();
         List<Payment> returnPayments = new ArrayList<>();
-        for (Payment payment : payments) {
-            if (payment.getCategory() != null) {
-                if (payment.getCategory().getName().equals(name))
-                    returnPayments.add(payment);
-            }
-        }
+        userService.getUserPaymentsDesc().forEach(payment -> {
+            if (payment.getCategory() != null && payment.getCategory().getName().equals(name))
+                returnPayments.add(payment);
+        });
         model.addAttribute("category", name);
         model.addAttribute("payments", returnPayments);
         return "/payment/paymentInCategory";

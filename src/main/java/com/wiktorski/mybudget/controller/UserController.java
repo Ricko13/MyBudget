@@ -25,7 +25,6 @@ import java.util.UUID;
 
 //TODO too much logic in controller, should be extracted to UserService or smaller methods
 @Controller
-//@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -93,7 +92,7 @@ public class UserController {
         } else {
             user.setEnabled(true);
             user.setConfirmationToken(null);
-            if (user.isEnabled() == true)
+            if (user.isEnabled())
                 model.addAttribute("confirmed", "Your account has been activated seccessfully, you can sign in now.");
             else
                 model.addAttribute("confirmed", "gówno");
@@ -113,7 +112,7 @@ public class UserController {
 
     @PostMapping("/loginCheckpoint")
     public String check(@RequestParam String username, @RequestParam String password, Model model, HttpServletRequest request) {
-        if (username == null || username == "" || password == null || password == "") return "/user/login";
+        if (username == null || username.equals("") || password == null || password.equals("")) return "/user/login";
 
         User user = userService.findByUsername(username);
 
@@ -124,7 +123,7 @@ public class UserController {
             emailService.sendEmail(emailService.createFailedLoginEmail(user, request));
             model.addAttribute("messageError", "Invalid username or password");
             return "user/login";
-        } else if (user.isEnabled() == false) {
+        } else if (!user.isEnabled()) {
             model.addAttribute("messageWarning", "You have to confirm your email address before signing in");
             return "user/login";
         } else {
