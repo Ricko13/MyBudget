@@ -1,7 +1,7 @@
 package com.wiktorski.mybudget.controller;
 
 
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.service.EmailService;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.service.UserService;

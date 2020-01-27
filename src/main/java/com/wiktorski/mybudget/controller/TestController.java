@@ -2,8 +2,8 @@ package com.wiktorski.mybudget.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wiktorski.mybudget.model.Category;
-import com.wiktorski.mybudget.model.Payment;
+import com.wiktorski.mybudget.model.entity.Category;
+import com.wiktorski.mybudget.model.entity.Payment;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.UserService;

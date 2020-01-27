@@ -1,7 +1,7 @@
 package com.wiktorski.mybudget.validator;
 
 
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,6 @@
-
+//TODO not used but can be optimalised for exercise
 function changeContent(content){
  switch (content) {
-
      case "history":
           $('.container').fadeOut(150, function(){
               $('.container').load("/history .container > *", function () {

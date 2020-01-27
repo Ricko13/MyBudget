@@ -5,7 +5,7 @@ package com.wiktorski.mybudget.repository;
 // CRUD refers Create, Read, Update, Delete
 
 
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

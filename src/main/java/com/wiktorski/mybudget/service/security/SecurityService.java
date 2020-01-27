@@ -1,6 +1,6 @@
 package com.wiktorski.mybudget.service.security;
 
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.User;
 
 public interface SecurityService {
     String getLoggedInUsername();

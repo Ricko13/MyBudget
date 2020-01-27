@@ -1,7 +1,7 @@
 package com.wiktorski.mybudget.service;
 
-import com.wiktorski.mybudget.model.Payment;
-import com.wiktorski.mybudget.model.PaymentDTO;
+import com.wiktorski.mybudget.model.entity.Payment;
+import com.wiktorski.mybudget.model.entity.PaymentDTO;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;

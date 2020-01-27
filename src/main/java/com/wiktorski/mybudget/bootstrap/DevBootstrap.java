@@ -1,22 +1,19 @@
 package com.wiktorski.mybudget.bootstrap;
 
-import com.wiktorski.mybudget.model.Category;
-import com.wiktorski.mybudget.model.Payment;
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.Category;
+import com.wiktorski.mybudget.model.entity.Payment;
+import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.repository.UserRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
 
 //@Profile("dev")
 @Component

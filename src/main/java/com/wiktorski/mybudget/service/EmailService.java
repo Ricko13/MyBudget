@@ -1,6 +1,6 @@
 package com.wiktorski.mybudget.service;
 
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.User;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;

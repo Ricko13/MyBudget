@@ -1,9 +1,9 @@
 package com.wiktorski.mybudget.service;
 
 
-import com.wiktorski.mybudget.model.Category;
-import com.wiktorski.mybudget.model.Payment;
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.Category;
+import com.wiktorski.mybudget.model.entity.Payment;
+import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.repository.UserRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,6 @@ public class UserService {
 
     public void save(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
-        //user.setRoles(new HashSet<>(roleRepository.findAll())); // daje tu wszystkie role z bazy
         userRepo.save(user);
     }
 
@@ -71,7 +70,7 @@ public class UserService {
             p.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(date));
             p.setJustTime(new SimpleDateFormat("HH:mm").format(date));
         }
-        return sortPayments(payments);  //TODO czy nie da się z repo wyciągnąć posortowanego?
+        return sortPayments(payments);  //TODO get from db sorted or leave it for comparator usage example?
     }
 
     public void addToBudget(float amount){

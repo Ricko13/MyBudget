@@ -1,4 +1,4 @@
-package com.wiktorski.mybudget.model;
+package com.wiktorski.mybudget.model.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

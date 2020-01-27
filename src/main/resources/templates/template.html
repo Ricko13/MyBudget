@@ -3,7 +3,9 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 <head th:fragment="head">
-    <meta charset="UTF-8">
+<!--    <meta charset="UTF-8">-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
     <!--Przy tx:text="${}" nic się nie wyświetla w środku-->
     <!--<title th:text="${title}">Password manager</title>-->
     <title>MyBudget</title>
@@ -14,6 +16,7 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link th:href="@{https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css}" th:rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css}" th:rel="stylesheet"/>
 </head>
 
 
@@ -80,15 +83,14 @@
 
 
 <div th:fragment="js-include" class="js-include">
-    <!--for bootstrap 4.3-->
+    <!--BOOTSTRAP 4.3-->
     <script th:src="@{https://code.jquery.com/jquery-3.3.1.min.js}"></script>
     <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js}"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
     <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.js}"></script>
-    <!--    <script th:src="@{/js/contentLoad.js}"></script>-->
        <script th:src="@{/js/modals.js}"></script>
-    <!--datatables-->
+    <!--DATATABLES-->
     <script th:src="@{http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -97,7 +99,18 @@
             });
         });
     </script>
-<!--    <script th:src="@{https://unpkg.com/axios/dist/axios.min.js}"></script>-->
+    <!--TOASTR js-->
+        <!--debug-->
+<!--    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.js}"></script>-->
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js}"></script>
+
+
+    <!--minified-->
+        <!--//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js
+        //cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css        css not here-->
+
+    <!--AXIOS-->
+    <script th:src="@{https://unpkg.com/axios/dist/axios.min.js}"></script>
 
 </div>
 

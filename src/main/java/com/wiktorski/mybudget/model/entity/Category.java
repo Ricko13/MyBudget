@@ -1,4 +1,4 @@
-package com.wiktorski.mybudget.model;
+package com.wiktorski.mybudget.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;

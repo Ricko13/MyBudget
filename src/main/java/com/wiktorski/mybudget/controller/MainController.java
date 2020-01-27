@@ -1,9 +1,9 @@
 package com.wiktorski.mybudget.controller;
 
-import com.wiktorski.mybudget.model.Category;
-import com.wiktorski.mybudget.model.Payment;
-import com.wiktorski.mybudget.model.PaymentDTO;
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.Category;
+import com.wiktorski.mybudget.model.entity.Payment;
+import com.wiktorski.mybudget.model.entity.PaymentDTO;
+import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.PaymentService;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -108,13 +107,6 @@ public class MainController {
         else
             model.addAttribute("paymentCategoryId", -1);
         return "/payment/editPayment";
-    }
-
-    @ResponseBody
-    @PostMapping("/payment/update")
-    public String updatePayment(@ModelAttribute PaymentDTO paymentDTO){
-        paymentService.updatePayment(paymentDTO);
-        return "redirect:/history";
     }
 
     @GetMapping("/category")

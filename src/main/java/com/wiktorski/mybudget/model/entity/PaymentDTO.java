@@ -1,4 +1,4 @@
-package com.wiktorski.mybudget.model;
+package com.wiktorski.mybudget.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ public class PaymentDTO implements Serializable {
     private int id;
     private String name;
     private float price;
-    private String date;    //nie może być Date?
+    private String date;
     private String description;
     private int categoryId;
 }
