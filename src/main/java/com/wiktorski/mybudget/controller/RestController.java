@@ -4,7 +4,10 @@ import com.wiktorski.mybudget.model.entity.Payment;
 import com.wiktorski.mybudget.model.entity.PaymentDTO;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.PaymentService;
+import com.wiktorski.mybudget.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api")
@@ -20,24 +26,30 @@ public class RestController {
 
     private final PaymentRepository paymentRepository;
     private final PaymentService paymentService;
+    private final UserService userService;
 
+    @GetMapping
     public String henlo(){
-        return "henlo there";
+        return "Henlo there";
     }
 
-    @PostMapping
-    public String updatePayment(@ModelAttribute PaymentDTO paymentDTO){
-        paymentService.updatePayment(paymentDTO);
-        return "update request";
+    @GetMapping("/payment")
+    public ResponseEntity<List<PaymentDTO>> getPayments(){
+        return new ResponseEntity<>(
+                userService.getUserPaymentsDesc().stream()
+                        .map(paymentService::paymentToPaymentDTO).collect(Collectors.toList())
+                , HttpStatus.OK);
     }
 
-    @GetMapping("/payment/edit/{id}")
-    public Payment getPaymentDataToEdit(@PathVariable int id){
-        return paymentRepository.findById(id).orElse(null);
+    @PostMapping("/payment/update")
+    public ResponseEntity updatePayment(@RequestBody PaymentDTO paymentDTO){
+       if( paymentService.updatePayment(paymentDTO) )
+           return ResponseEntity.ok(HttpStatus.OK);
+       else
+           return ResponseEntity.badRequest().body("Bad request");
+
     }
 
-    @PostMapping("/payment/edit/{id}")
-    public PaymentDTO editPayment(@RequestBody PaymentDTO request){
-        return request;
-    }
+
+
 }

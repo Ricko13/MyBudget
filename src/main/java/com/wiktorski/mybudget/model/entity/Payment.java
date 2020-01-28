@@ -42,10 +42,6 @@ public class Payment {
     @Transient
     private String justTime;
 
-   /* @ManyToOne
-    @JoinColumn(name="billingPeriod_id")
-    private BillingPeriod billingPeriod;*/
-
     public Payment(String name, float price, User user, Date date) {
         this.name = name;
         this.price = price;
@@ -57,16 +53,6 @@ public class Payment {
     public Category getCategory() {
         return category;
     }
-
-    /*
-        @JsonIgnore
-        public BillingPeriod getBillingPeriod() {
-            return billingPeriod;
-        }
-        public void setBillingPeriod(BillingPeriod billingPeriod) {
-            this.billingPeriod = billingPeriod;
-        }
-    */
 
     @Override
     public String toString() {

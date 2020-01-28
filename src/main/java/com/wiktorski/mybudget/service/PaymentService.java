@@ -6,6 +6,7 @@ import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -62,8 +63,21 @@ public class PaymentService {
         categoryRepo.deleteById(categoryId);
     }
 
-    public void updatePayment(PaymentDTO paymentDTO) {
-        Optional<Payment> payment = paymentRepo.findById(paymentDTO.getId());
+    public boolean updatePayment(PaymentDTO paymentDTO)  {
+        Payment payment = paymentRepo.findById(paymentDTO.getId()).orElse(null);
+        if(payment==null) return false;
+        try {
+            payment.setCategory(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null));
+            payment.setDescription(paymentDTO.getDescription());
+            payment.setDate(parseStringDate(paymentDTO.getDate(), ""));
+            payment.setName(paymentDTO.getName());
+            payment.setPrice(paymentDTO.getPrice());
+            paymentRepo.save(payment);
+        }catch (Exception e){
+            //TODO exception logging
+            return false;
+        }
+        return true;
     }
 
     public Payment paymentDTOtoPayment(PaymentDTO paymentDTO) throws ParseException {
@@ -74,6 +88,17 @@ public class PaymentService {
                 .date( new SimpleDateFormat("dd-MM-yyyy").parse(paymentDTO.getDate()) )
                 .description(paymentDTO.getDescription())
                 .category(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null))
+                .build();
+    }
+
+    public PaymentDTO paymentToPaymentDTO(Payment payment){
+        return PaymentDTO.builder()
+                .id(payment.getId())
+                .categoryId(payment.getId())
+                .date(payment.getJustDate())
+                .description(payment.getDescription())
+                .name(payment.getName())
+                .price(payment.getPrice())
                 .build();
     }
 }
