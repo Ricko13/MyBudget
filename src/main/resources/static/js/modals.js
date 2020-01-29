@@ -1,4 +1,4 @@
-var isModalActive = false;
+
 
 //trigger handling without ajaxStop cause handling wont work with reload then
 $(window).on('load', function(){

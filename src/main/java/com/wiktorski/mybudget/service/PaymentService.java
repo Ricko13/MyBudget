@@ -74,6 +74,7 @@ public class PaymentService {
             payment.setPrice(paymentDTO.getPrice());
             paymentRepo.save(payment);
         }catch (Exception e){
+            System.out.println("test");
             //TODO exception logging
             return false;
         }
