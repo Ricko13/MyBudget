@@ -64,8 +64,27 @@ public class MainController {
 
     @GetMapping("/history")
     public String history(Model model) {
-        model.addAttribute("payments", userService.getUserPaymentsDesc());
+       // model.addAttribute("payments", userService.getUserPaymentsDesc());  //TODO no longer needed
         model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("dataURL", "/api/paymentsDT");
+//        model.addAttribute("inCategory", false);
+        return "/payment/payment";
+    }
+
+    @GetMapping("/category/{name}")
+    public String showInCategory(@PathVariable String name, Model model) {
+        List<Payment> returnPayments = new ArrayList<>();
+        //TODO should be already fetched from db in this form && or use stream filter
+        userService.getUserPaymentsDesc().forEach(payment -> {
+            if (payment.getCategory() != null && payment.getCategory().getName().equals(name))
+                returnPayments.add(payment);
+        });
+        model.addAttribute("category", name);
+        model.addAttribute("dataURL", "/api/categoryDT/"+name);
+        model.addAttribute("categories", userService.getUserCategories());
+//        model.addAttribute("inCategory", true);
+        //model.addAttribute("payments", returnPayments);
+        //return "/payment/paymentInCategory";
         return "/payment/payment";
     }
 
@@ -129,18 +148,6 @@ public class MainController {
     public String deleteCategory(@PathVariable int id) {
         paymentService.deleteCategory(id);
         return "redirect:/category";
-    }
-
-    @GetMapping("/category/{name}")
-    public String showInCategory(@PathVariable String name, Model model) {
-        List<Payment> returnPayments = new ArrayList<>();
-        userService.getUserPaymentsDesc().forEach(payment -> {
-            if (payment.getCategory() != null && payment.getCategory().getName().equals(name))
-                returnPayments.add(payment);
-        });
-        model.addAttribute("category", name);
-        model.addAttribute("payments", returnPayments);
-        return "/payment/paymentInCategory";
     }
 
     @GetMapping("/myAccount")

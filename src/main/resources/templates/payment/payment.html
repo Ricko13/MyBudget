@@ -9,8 +9,9 @@
 
 <div th:replace="template.html::navbar"></div>
 <div class="container">
+    <input id="paymentURL" type="hidden" th:value="${dataURL}">
     <div class="content">
-        <header>
+        <header th:if="!${category}">
             <h2>Payment history
                 <button href="/payment/add" id="addPaymentButton" class="btn btn-secondary button-mid" type="button"
                         data-toggle="collapse" data-target="#collapseAddPayment" aria-expanded="false"
@@ -19,6 +20,7 @@
                 </button>
             </h2>
         </header>
+        <header th:if="${category}"><h2 th:text="'Category: '+${category}">Payment history</h2></header>
         <!--<a href="/payment/add" onclick="changeContent('newPayment'); return false;" class="btn btn-secondary button-mid" id="addPayment">
             Add
         </a>-->

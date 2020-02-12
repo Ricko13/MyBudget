@@ -1,6 +1,7 @@
 package com.wiktorski.mybudget.controller;
 
 import com.wiktorski.mybudget.model.MBResponse;
+import com.wiktorski.mybudget.model.entity.Payment;
 import com.wiktorski.mybudget.model.entity.PaymentDTO;
 import com.wiktorski.mybudget.service.PaymentService;
 import com.wiktorski.mybudget.service.UserService;
@@ -9,10 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -77,6 +80,17 @@ public class RestController {
 
     }
 
-
+    @GetMapping("/categoryDT/{name}")
+    public MBResponse<List<PaymentDTO>> getPaymentsInCategoryDT(@PathVariable String name, Map<String, String> params){
+        List<Payment> returnPayments = new ArrayList<>();
+        //TODO should be already fetched from db in this form && or use stream filter
+        userService.getUserPaymentsDesc().forEach(payment -> {
+            if (payment.getCategory() != null && payment.getCategory().getName().equals(name))
+                returnPayments.add(payment);
+        });
+        MBResponse<List<PaymentDTO>> response = new MBResponse<>();
+        response.setData(returnPayments.stream().map(paymentService::paymentToPaymentDTO).collect(Collectors.toList()));
+        return response;
+    }
 
 }

@@ -10,7 +10,8 @@ $(document).ready(function () {
     /****************** DATATABLES */
     table.destroy();
     paymentsDataTable = $("#dataTable").DataTable({
-        ajax: '/api/paymentsDT',
+        // ajax: '/api/paymentsDT',
+        ajax: $('#paymentURL').val(),
         order: [],
         columnDefs: [
             {"orderable": false, "targets": 5}
@@ -127,6 +128,21 @@ function reloadDataTables() {
         this.paymentsDataTable.ajax.reload();
     }, 500);
 }
+
+
+//trigger handling without ajaxStop cause handling wont work with reload then
+$(window).on('load', function () {
+//modal delete confirm
+    $('#deletePayConfirm').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id')
+        var name = button.data('name')
+        var modal = $(this)
+        modal.find('#hiddenForm').attr('action', '/payment/delete/' + id)
+        modal.find('.modal-body .name').text(name)
+    });
+});
+
 
 /*
 function initPaymentEditVue(){
