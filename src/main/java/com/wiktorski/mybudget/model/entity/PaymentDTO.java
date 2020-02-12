@@ -21,6 +21,7 @@ public class PaymentDTO implements Serializable {
     private float price;
     private String date;
     private String description;
+    private String categoryName;
     private int categoryId;
 
     public PaymentDTO of(Payment payment){

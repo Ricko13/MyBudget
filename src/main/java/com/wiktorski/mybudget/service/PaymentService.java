@@ -93,14 +93,18 @@ public class PaymentService {
     }
 
     public PaymentDTO paymentToPaymentDTO(Payment payment){
-        return PaymentDTO.builder()
+        PaymentDTO dto = PaymentDTO.builder()
                 .id(payment.getId())
-                .categoryId(payment.getId())
                 .date(payment.getJustDate())
                 .description(payment.getDescription())
                 .name(payment.getName())
                 .price(payment.getPrice())
                 .build();
+        if(payment.getCategory()!=null){
+            dto.setCategoryId(payment.getCategory().getId());
+            dto.setCategoryName(payment.getCategory().getName());
+        }
+        return dto;
     }
 }
 

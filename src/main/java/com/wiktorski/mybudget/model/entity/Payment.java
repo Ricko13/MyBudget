@@ -25,6 +25,7 @@ public class Payment {
     private int id;
     private String name;
     private float price;
+    @Deprecated //TODO change to LocalDate or LocalDateTime
     @NotNull
     private Date date;
     private String description;

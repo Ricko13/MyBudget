@@ -10,17 +10,18 @@ $(document).ready(function(){
     /****************** DATATABLES */
     table.destroy();
     paymentsDataTable = $("#dataTable").DataTable({
-        ajax: '/api/paymentsDT',
+//        ajax: '/api/paymentsDT',
         order: [],
         columnDefs: [
             { "orderable": false, "targets": 5}
         ],
-        columns: [
+/*        columns: [
             { data: "name"},
             { data: "price"},
             { data: "date"},
             { data: "description"},
             { render: function(data, type, row){
+                    console.log(row.categoryName);
                     if(row.categoryName!==null){
                         return '<a href="/category/'+row.categoryName+'">'+row.categoryName+'</a>';
                     }else{
@@ -28,16 +29,17 @@ $(document).ready(function(){
                     }
             }},
            { render: function(data, type, row){
-               tmp = '<div style="width:80px;">'
-                tmp+= '<a data-toggle="modal" href="#deletePayConfirm" class="icon-block" data-id="'+row.id+'" data-name="'+row.name+'">';
+               // tmp = '<td style="width:80px;">';
+                tmp= '<a data-toggle="modal" href="#deletePayConfirm" class="icon-block" data-id="'+row.id+'" data-name="'+row.name+'">';
                 tmp+= '<img src="/assets/delete-button.png" style="width:26%; height:5%; float:right; margin-left:10px;" data-toggle="tooltip" title="DELETE"/>';
                 tmp+= '</a>';
                 tmp+= '<a  data-toggle="modal" href="#editPaymentModal" class="icon-block" data-id="'+row.id+'">';
                 tmp+= '<img src="/assets/edit-button.png" style="width:23%; height:5%; float:right;" data-toggle="tooltip" title="EDIT"/></a>';
-                tmp+= '</div>'
+*//*                    tmp+= '<a href="@{/payment/edit/'+${payment.id}'}" class="icon-block">';
+                tmp+= '<img src="@{/assets/edit-button.png}" style="width:23%; height:5%; float:right;" data-toggle="tooltip" title="EDIT"/></a>';*//*
                           return tmp;
             }}
-        ]
+        ]*/
     });
 
     /***************** UPDATE SUBMIT */
@@ -53,38 +55,39 @@ $("#editPaymentForm").submit(function(e) {
         };
         axios.post('/api/payment/update', updatedData)
         .then(function (response) {
-            toastr.success('Payment updated');
+            toastr.success('Payment updated');   // location.reload();  console.log(response);
         })
         .catch(function (error) {
             toastr.error('Payment update error');
         });
-        $('#editPaymentModal').modal('toggle');
         reloadDataTables();
+        $('#editPaymentModal').modal('toggle');
         //return false;
     });
 
     /**************** UPDATE MODAL */
 $('#editPaymentModal').on('show.bs.modal', function(event){
         var paymentId = $(event.relatedTarget).data('id');
-//        var data = paymentsDataTable.data();
-        let data = paymentsDataTable.data().toArray();
-        data.forEach(function(el){
-            if(el.id == paymentId){
-                 let date = el.date.split('-');
-                $('#idEdit').val(el.id);
-                $('#nameEdit').val(el.name);
-                $('#priceEdit').val(el.price);
-                $('#dateEdit').val(date[2]+'-'+date[1]+'-'+date[0]);
-                $('#descriptionEdit').val(el.description);
-                $('[name=categoryId] option').filter(function() {   /** setting category in modal */
-                            if($(this).text() === el.categoryName){ return true;}
-                            else{$('select[name=categoryId]').val(-1);}
-                        }).prop('selected', true);
-            }
-        });
+        let date = $('#date'+paymentId).text().split('-');
+        originalData = {
+            id: paymentId,
+            name: $('#name'+paymentId).text(),
+            price: $('#price'+paymentId).text(),
+            date: date[2]+'-'+date[1]+'-'+date[0],
+            description: $('#description'+paymentId).text(),
+            category: $('#categoryId'+paymentId).text()  //its name, not ID
+        };
 
-});
+        for(var key in originalData){   /** assigned modal inputs with originalData values */
+            $('#'+key+'Edit').val(originalData[key]);
+        }
+        /**powyższe nie ustawi category*/
+        $('[name=categoryId] option').filter(function() {   /** setting category in modal */
+            if($(this).text() === originalData.category){ return true;}
+            else{$('select[name=categoryId]').val(-1);}
+        }).prop('selected', true);
 
+    });
 });
 
 function changeAddButton(){
@@ -98,9 +101,9 @@ function changeAddButton(){
 }
 
 function reloadDataTables(){
-    setTimeout(function(){
-        this.paymentsDataTable.ajax.reload();
-    }, 500);
+    for(var key in updatedData){   /** assigned modal inputs with originalData values */
+        $('#'+key+updatedData.id).html(updatedData[key]);
+    }
 }
 
 /*
