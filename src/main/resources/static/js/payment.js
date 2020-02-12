@@ -41,7 +41,7 @@ $(document).ready(function(){
     });
 
     /***************** UPDATE SUBMIT */
-$("#editPaymentForm").submit(function(e) {
+    $("#editPaymentForm").submit(function(e) {
        e.preventDefault();
         updatedData = {
             id: $('#idEdit').val(),
@@ -64,26 +64,44 @@ $("#editPaymentForm").submit(function(e) {
     });
 
     /**************** UPDATE MODAL */
-$('#editPaymentModal').on('show.bs.modal', function(event){
-        var paymentId = $(event.relatedTarget).data('id');
-//        var data = paymentsDataTable.data();
-        let data = paymentsDataTable.data().toArray();
-        data.forEach(function(el){
-            if(el.id == paymentId){
-                 let date = el.date.split('-');
-                $('#idEdit').val(el.id);
-                $('#nameEdit').val(el.name);
-                $('#priceEdit').val(el.price);
-                $('#dateEdit').val(date[2]+'-'+date[1]+'-'+date[0]);
-                $('#descriptionEdit').val(el.description);
-                $('[name=categoryId] option').filter(function() {   /** setting category in modal */
-                            if($(this).text() === el.categoryName){ return true;}
-                            else{$('select[name=categoryId]').val(-1);}
-                        }).prop('selected', true);
-            }
-        });
+    $('#editPaymentModal').on('show.bs.modal', function(event){
+            var paymentId = $(event.relatedTarget).data('id');
+    //        var data = paymentsDataTable.data();
+            let data = paymentsDataTable.data().toArray();
+            data.forEach(function(el){
+                if(el.id == paymentId){
+                     let date = el.date.split('-');
+                    $('#idEdit').val(el.id);
+                    $('#nameEdit').val(el.name);
+                    $('#priceEdit').val(el.price);
+                    $('#dateEdit').val(date[2]+'-'+date[1]+'-'+date[0]);
+                    $('#descriptionEdit').val(el.description);
+                    $('[name=categoryId] option').filter(function() {   /** setting category in modal */
+                                if($(this).text() === el.categoryName){ return true;}
+                                else{$('select[name=categoryId]').val(-1);}
+                            }).prop('selected', true);
+                }
+            });
 
-});
+    });
+
+  /***************** ADD PAYMENT SUBMIT */
+    $('#addPaymentForm').submit(function(e){
+        e.preventDefault();
+         axios.post('/api/payment/add', {
+            name: $('#name').val(),
+            price: $('#price').val(),
+            date: $('#date').val(),
+            description: $('#description').val(),
+            categoryId: $('#categories').val()
+         }).then(function(response){
+            toastr.success("Payment added succesfuly");
+         }).catch(function(errer){
+            toastr.error("Error while adding payment");
+         })
+         $('#addPaymentButton').click();
+         reloadDataTables();
+    });
 
 });
 

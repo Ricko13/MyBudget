@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class RestController {
 
-    private final PaymentRepository paymentRepository;
     private final PaymentService paymentService;
     private final UserService userService;
 
@@ -59,6 +58,14 @@ public class RestController {
                         .map(paymentService::paymentToPaymentDTO).collect(Collectors.toList())
         );
         return response;
+    }
+
+    @PostMapping("/payment/add")
+    public ResponseEntity addPayment(@RequestBody PaymentDTO paymentDTO){
+        if(paymentService.addPayment(paymentDTO))
+            return ResponseEntity.ok(HttpStatus.OK);
+        else
+            return ResponseEntity.badRequest().body("Bad request");
     }
 
     @PostMapping("/payment/update")

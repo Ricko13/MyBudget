@@ -40,6 +40,15 @@ public class PaymentService {
         addPayment(name, price, idCat, parseStringDate(date, time), description);
     }
 
+    public boolean addPayment(PaymentDTO paymentDTO) {
+        try{
+            paymentRepo.save(paymentDTOtoPayment(paymentDTO));
+            return true;
+        }catch (Exception e ){
+            return false;
+        }
+    }
+
     //    form always sends data but data can be empty like ""
     private Date parseStringDate(String requestDate, String time) throws ParseException {
         Date date;
