@@ -4,7 +4,7 @@ var isModalActive = false;
 var originalData;
 var updatedData;
 
-$(document).ready(function(){
+$(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
     /****************** DATATABLES */
@@ -13,36 +13,40 @@ $(document).ready(function(){
         ajax: '/api/paymentsDT',
         order: [],
         columnDefs: [
-            { "orderable": false, "targets": 5}
+            {"orderable": false, "targets": 5}
         ],
         columns: [
-            { data: "name"},
-            { data: "price"},
-            { data: "date"},
-            { data: "description"},
-            { render: function(data, type, row){
-                    if(row.categoryName!==null){
-                        return '<a href="/category/'+row.categoryName+'">'+row.categoryName+'</a>';
-                    }else{
+            {data: "name"},
+            {data: "price"},
+            {data: "date"},
+            {data: "description"},
+            {
+                render: function (data, type, row) {
+                    if (row.categoryName !== null) {
+                        return '<a href="/category/' + row.categoryName + '">' + row.categoryName + '</a>';
+                    } else {
                         return "";
                     }
-            }},
-           { render: function(data, type, row){
-               tmp = '<div style="width:80px;">'
-                tmp+= '<a data-toggle="modal" href="#deletePayConfirm" class="icon-block" data-id="'+row.id+'" data-name="'+row.name+'">';
-                tmp+= '<img src="/assets/delete-button.png" style="width:26%; height:5%; float:right; margin-left:10px;" data-toggle="tooltip" title="DELETE"/>';
-                tmp+= '</a>';
-                tmp+= '<a  data-toggle="modal" href="#editPaymentModal" class="icon-block" data-id="'+row.id+'">';
-                tmp+= '<img src="/assets/edit-button.png" style="width:23%; height:5%; float:right;" data-toggle="tooltip" title="EDIT"/></a>';
-                tmp+= '</div>'
-                          return tmp;
-            }}
+                }
+            },
+            {
+                render: function (data, type, row) {
+                    tmp = '<div style="width:80px;">';
+                    tmp += '<a data-toggle="modal" href="#deletePayConfirm" class="icon-block" data-id="' + row.id + '" data-name="' + row.name + '">';
+                    tmp += '<img src="/assets/delete-button.png" style="width:26%; height:5%; float:right; margin-left:10px;" data-toggle="tooltip" title="DELETE"/>';
+                    tmp += '</a>';
+                    tmp += '<a  data-toggle="modal" href="#editPaymentModal" class="icon-block" data-id="' + row.id + '">';
+                    tmp += '<img src="/assets/edit-button.png" style="width:23%; height:5%; float:right;" data-toggle="tooltip" title="EDIT"/></a>';
+                    tmp += '</div>';
+                    return tmp;
+                }
+            }
         ]
     });
 
     /***************** UPDATE SUBMIT */
-    $("#editPaymentForm").submit(function(e) {
-       e.preventDefault();
+    $("#editPaymentForm").submit(function (e) {
+        e.preventDefault();
         updatedData = {
             id: $('#idEdit').val(),
             name: $('#nameEdit').val(),
@@ -52,71 +56,74 @@ $(document).ready(function(){
             categoryId: $('#categoriesEdit').children("option:selected").val()
         };
         axios.post('/api/payment/update', updatedData)
-        .then(function (response) {
-            toastr.success('Payment updated');
-        })
-        .catch(function (error) {
-            toastr.error('Payment update error');
-        });
+            .then(function (response) {
+                toastr.success('Payment updated');
+            })
+            .catch(function (error) {
+                toastr.error('Payment update error');
+            });
         $('#editPaymentModal').modal('toggle');
         reloadDataTables();
         //return false;
     });
 
     /**************** UPDATE MODAL */
-    $('#editPaymentModal').on('show.bs.modal', function(event){
-            var paymentId = $(event.relatedTarget).data('id');
-    //        var data = paymentsDataTable.data();
-            let data = paymentsDataTable.data().toArray();
-            data.forEach(function(el){
-                if(el.id == paymentId){
-                     let date = el.date.split('-');
-                    $('#idEdit').val(el.id);
-                    $('#nameEdit').val(el.name);
-                    $('#priceEdit').val(el.price);
-                    $('#dateEdit').val(date[2]+'-'+date[1]+'-'+date[0]);
-                    $('#descriptionEdit').val(el.description);
-                    $('[name=categoryId] option').filter(function() {   /** setting category in modal */
-                                if($(this).text() === el.categoryName){ return true;}
-                                else{$('select[name=categoryId]').val(-1);}
-                            }).prop('selected', true);
-                }
-            });
+    $('#editPaymentModal').on('show.bs.modal', function (event) {
+        var paymentId = $(event.relatedTarget).data('id');
+        //        var data = paymentsDataTable.data();
+        let data = paymentsDataTable.data().toArray();
+        data.forEach(function (el) {
+            if (el.id == paymentId) {
+                let date = el.date.split('-');
+                $('#idEdit').val(el.id);
+                $('#nameEdit').val(el.name);
+                $('#priceEdit').val(el.price);
+                $('#dateEdit').val(date[2] + '-' + date[1] + '-' + date[0]);
+                $('#descriptionEdit').val(el.description);
+                $('[name=categoryId] option').filter(function () {   /** setting category in modal */
+                    if ($(this).text() === el.categoryName) {
+                        return true;
+                    } else {
+                        $('select[name=categoryId]').val(-1);
+                    }
+                }).prop('selected', true);
+            }
+        });
 
     });
 
-  /***************** ADD PAYMENT SUBMIT */
-    $('#addPaymentForm').submit(function(e){
+    /***************** ADD PAYMENT SUBMIT */
+    $('#addPaymentForm').submit(function (e) {
         e.preventDefault();
-         axios.post('/api/payment/add', {
+        axios.post('/api/payment/add', {
+            id: -1,
             name: $('#name').val(),
             price: $('#price').val(),
             date: $('#date').val(),
             description: $('#description').val(),
             categoryId: $('#categories').val()
-         }).then(function(response){
+        }).then(function (response) {
             toastr.success("Payment added succesfuly");
-         }).catch(function(errer){
+        }).catch(function (error) {
             toastr.error("Error while adding payment");
-         })
-         $('#addPaymentButton').click();
-         reloadDataTables();
+        })
+        $('#addPaymentButton').click();
+        reloadDataTables();
     });
-
 });
 
-function changeAddButton(){
-    if(!isModalActive){
+function changeAddButton() {
+    if (!isModalActive) {
         $("#addPaymentButton").text('Close');
         isModalActive = true;
-    }else{
+    } else {
         $("#addPaymentButton").text('Add');
         isModalActive = false;
-    };
+    }
 }
 
-function reloadDataTables(){
-    setTimeout(function(){
+function reloadDataTables() {
+    setTimeout(function () {
         this.paymentsDataTable.ajax.reload();
     }, 500);
 }

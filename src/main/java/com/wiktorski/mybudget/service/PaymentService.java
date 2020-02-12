@@ -6,14 +6,12 @@ import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,32 +22,33 @@ public class PaymentService {
     private final CategoryRepository categoryRepo;
     private final UserService userService;
 
-    public void addPayment(String name, float price, String idCat, @Nullable Date date, String description) {
-        userService.decreaseBudget(price);
-        //if (date == null) { date = new Date(); }  //TODO dlaczego data sama się tworzy?
-        Payment payment = new Payment(name, price, securityService.getLoggedInUser(), date);
-        if (!description.equals("")) { payment.setDescription(description); }
-        int idCategory = Integer.parseInt(idCat);
-        if (idCategory != -1) {
-            categoryRepo.findById(idCategory).ifPresent(payment::setCategory);
-        }
-        paymentRepo.save(payment);
+    public boolean addPayment(String name, float price, int idCat, @Nullable Date date, String description) {
+            //TODO trycatch i w catchu false
+            userService.decreaseBudget(price);
+            //if (date == null) { date = new Date(); }  //TODO dlaczego data sama się tworzy? coś z @Nullable?
+            Payment payment = new Payment(name, price, securityService.getLoggedInUser(), date);
+            if (!description.equals(""))
+                payment.setDescription(description);
+            if (idCat != -1)
+                categoryRepo.findById(idCat).ifPresent(payment::setCategory);
+            paymentRepo.save(payment);
+            return true;
     }
 
-    public void addPayment(String name, float price, String idCat, String date, String time, String description) throws ParseException {
-        addPayment(name, price, idCat, parseStringDate(date, time), description);
+    public boolean addPayment(String name, float price, int idCat, String date, String time, String description) throws ParseException {
+        return addPayment(name, price, idCat, parseStringDate(date, time), description);
     }
 
     public boolean addPayment(PaymentDTO paymentDTO) {
-        try{
-            paymentRepo.save(paymentDTOtoPayment(paymentDTO));
-            return true;
-        }catch (Exception e ){
+        try {
+            return addPayment(paymentDTO.getName(), paymentDTO.getPrice(), paymentDTO.getCategoryId(),
+                   parseStringDate(paymentDTO.getDate(),""),paymentDTO.getDescription());
+        } catch (ParseException e) {
             return false;
         }
     }
 
-    //    form always sends data but data can be empty like ""
+    /**    form always sends data but data can be empty like "" */
     private Date parseStringDate(String requestDate, String time) throws ParseException {
         Date date;
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-ddHH:mm");
@@ -72,9 +71,9 @@ public class PaymentService {
         categoryRepo.deleteById(categoryId);
     }
 
-    public boolean updatePayment(PaymentDTO paymentDTO)  {
+    public boolean updatePayment(PaymentDTO paymentDTO) {
         Payment payment = paymentRepo.findById(paymentDTO.getId()).orElse(null);
-        if(payment==null) return false;
+        if (payment == null) return false;
         try {
             payment.setCategory(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null));
             payment.setDescription(paymentDTO.getDescription());
@@ -82,7 +81,7 @@ public class PaymentService {
             payment.setName(paymentDTO.getName());
             payment.setPrice(paymentDTO.getPrice());
             paymentRepo.save(payment);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("test");
             //TODO exception logging
             return false;
@@ -91,17 +90,20 @@ public class PaymentService {
     }
 
     public Payment paymentDTOtoPayment(PaymentDTO paymentDTO) throws ParseException {
-        return Payment.builder()
+        Payment payment = Payment.builder()
                 .id(paymentDTO.getId())
                 .name(paymentDTO.getName())
                 .price(paymentDTO.getPrice())
-                .date( new SimpleDateFormat("dd-MM-yyyy").parse(paymentDTO.getDate()) )
                 .description(paymentDTO.getDescription())
                 .category(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null))
                 .build();
+        if (!paymentDTO.getDate().equals(""))
+            payment.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(paymentDTO.getDate()));
+
+        return payment;
     }
 
-    public PaymentDTO paymentToPaymentDTO(Payment payment){
+    public PaymentDTO paymentToPaymentDTO(Payment payment) {
         PaymentDTO dto = PaymentDTO.builder()
                 .id(payment.getId())
                 .date(payment.getJustDate())
@@ -109,7 +111,7 @@ public class PaymentService {
                 .name(payment.getName())
                 .price(payment.getPrice())
                 .build();
-        if(payment.getCategory()!=null){
+        if (payment.getCategory() != null) {
             dto.setCategoryId(payment.getCategory().getId());
             dto.setCategoryName(payment.getCategory().getName());
         }

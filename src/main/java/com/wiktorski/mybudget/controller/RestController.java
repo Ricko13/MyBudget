@@ -2,12 +2,12 @@ package com.wiktorski.mybudget.controller;
 
 import com.wiktorski.mybudget.model.MBResponse;
 import com.wiktorski.mybudget.model.entity.PaymentDTO;
-import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.PaymentService;
 import com.wiktorski.mybudget.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,7 +59,7 @@ public class RestController {
         );
         return response;
     }
-
+    @Transactional
     @PostMapping("/payment/add")
     public ResponseEntity addPayment(@RequestBody PaymentDTO paymentDTO){
         if(paymentService.addPayment(paymentDTO))

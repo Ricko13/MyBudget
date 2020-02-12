@@ -78,7 +78,7 @@ public class MainController {
     @Transactional
     @PostMapping("/payment/add")
     public String paymentAddFinal(@RequestParam String name, @RequestParam float price,
-                                  @RequestParam(name = "categories") String idCat,
+                                  @RequestParam(name = "categories") int idCat,
                                   @RequestParam String date, @RequestParam String description) {
         try {
             paymentService.addPayment(name, price, idCat, date, "", description);
