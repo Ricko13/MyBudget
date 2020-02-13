@@ -141,9 +141,14 @@ public class PaymentService {
     public boolean updateCategory(CategoryDTO categoryDTO){
         Category cat = categoryRepo.findById(categoryDTO.getId()).orElse(null);
         if(cat!=null){
-            cat.setName(categoryDTO.getName());
-            categoryRepo.save(cat);
-            return true;
+            try {
+                cat.setName(categoryDTO.getName());
+                categoryRepo.save(cat);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
         }else
             return false;
     }

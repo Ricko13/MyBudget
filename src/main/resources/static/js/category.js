@@ -7,27 +7,26 @@ function reloadDataTables(){
         setTimeout(function () {
             this.categoryTable.ajax.reload();
         }, 500);
-};
+}
 
 function editCategory(id, name){
         this.editCategoryId = id;
         this.editCategoryName = name;
         input = '<input id="catNameEdit" type="text" class="d-inline form-control" style="width:150px;"/>';
-        input+='<button class="d-inline btn btn-secondary" onClick="submitEdit()">ok</button>';
+        input+='<button class="d-inline btn btn-link" onClick="submitEdit()">ok</button>';
         $('#catName'+id).html(input);
         $('#catNameEdit').val(name);
 
-};
+}
 
 function submitEdit(){
-    console.log("XD");
     axios.post('/api/category/update', {
         id: editCategoryId,
-        name: editCategoryName
+        name: $('#catNameEdit').val()
     }).then(function(response){
         console.log(response);
         //$('#catName'+id).html(editCategoryName);
-        //reloadDataTables();
+        reloadDataTables();
         toastr.success("Category edited");
     }).catch(function(error){
         console.log("XDDDD");
