@@ -54,6 +54,6 @@
     <!--<div th:replace="template.html::footer"/>-->
 </div>
 <div th:replace="template.html :: js-include"></div>
-<script src="/js/autologin.js"></script>
+<script th:src="@{/js/common/autologin.js}"></script>
 </body>
 </html>

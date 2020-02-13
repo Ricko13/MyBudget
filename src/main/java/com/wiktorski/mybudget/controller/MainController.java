@@ -36,7 +36,7 @@ public class MainController {
     public String index(Model model){
         User user = securityService.getLoggedInUser();
         model.addAttribute("user", user);
-        model.addAttribute("budgetSum", (user.getBudget()+user.getSavings()));
+       // model.addAttribute("budgetSum", (user.getBudget()+user.getSavings()));
         model.addAttribute("payments", userService.getUserPaymentsDesc());
         model.addAttribute("categories", userService.getUserCategories());
         return "index";
@@ -44,9 +44,9 @@ public class MainController {
 
     @GetMapping("/budget")
     public String budget(Model model){
-        User u = securityService.getLoggedInUser();
-        model.addAttribute("user", u);
-        model.addAttribute("budgetSum", u.getBudget()+u.getSavings());
+        User user = securityService.getLoggedInUser();
+        model.addAttribute("user", user);
+       // model.addAttribute("budgetSum", user.getBudget()+user.getSavings());
         return "/user/budget";
     }
 

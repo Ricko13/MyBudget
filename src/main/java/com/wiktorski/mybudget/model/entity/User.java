@@ -27,8 +27,8 @@ public class User {
 
     //TODO Powinno być w oddzielnym entity w relacji @OneToOne*/
     private float budget;
-    private float savings;
-    private float toSave;
+//    private float savings;
+//    private float toSave;
     /*@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private Budget budget;*/
     /*****************************************************/
