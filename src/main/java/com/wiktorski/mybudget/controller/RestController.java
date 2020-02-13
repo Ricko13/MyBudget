@@ -1,8 +1,9 @@
 package com.wiktorski.mybudget.controller;
 
+import com.wiktorski.mybudget.model.DTO.CategoryDTO;
+import com.wiktorski.mybudget.model.DTO.PaymentDTO;
 import com.wiktorski.mybudget.model.MBResponse;
 import com.wiktorski.mybudget.model.entity.Payment;
-import com.wiktorski.mybudget.model.entity.PaymentDTO;
 import com.wiktorski.mybudget.service.PaymentService;
 import com.wiktorski.mybudget.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -80,6 +81,14 @@ public class RestController {
 
     }
 
+    @GetMapping("/payment/delete/{paymentId}")
+    public ResponseEntity deletePayment(@PathVariable int paymentId){
+        if(paymentService.deleteById(paymentId))
+            return ResponseEntity.ok(HttpStatus.OK);
+        else
+            return ResponseEntity.badRequest().body("Bad request");
+    }
+
     @GetMapping("/categoryDT/{name}")
     public MBResponse<List<PaymentDTO>> getPaymentsInCategoryDT(@PathVariable String name, Map<String, String> params){
         List<Payment> returnPayments = new ArrayList<>();
@@ -93,4 +102,27 @@ public class RestController {
         return response;
     }
 
+    @GetMapping("/categoryDT")
+    public MBResponse<List<CategoryDTO>> getCategories(Map<String, String> params){
+        MBResponse<List<CategoryDTO>> response = new MBResponse<>();
+        response.setData(userService.getUserCategories().stream().map(CategoryDTO::of).collect(Collectors.toList()));
+        return response;
+    }
+
+    @GetMapping("/category/delete/{categoryId}")
+    public ResponseEntity deleteCategory(@PathVariable int categoryId){
+        if(paymentService.deleteCategory(categoryId))
+            return ResponseEntity.ok(HttpStatus.OK);
+        else
+            return ResponseEntity.badRequest().body("Bad Request");
+    }
+
+    @Transactional
+    @PostMapping("/category/update")
+    public ResponseEntity updateCategory(@RequestBody CategoryDTO categoryDTO){
+        if(paymentService.updateCategory(categoryDTO))
+            return ResponseEntity.ok(HttpStatus.OK);
+        else
+            return ResponseEntity.badRequest().body("Bad request");
+    }
 }

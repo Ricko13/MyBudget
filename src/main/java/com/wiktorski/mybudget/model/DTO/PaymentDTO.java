@@ -1,5 +1,6 @@
-package com.wiktorski.mybudget.model.entity;
+package com.wiktorski.mybudget.model.DTO;
 
+import com.wiktorski.mybudget.model.entity.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

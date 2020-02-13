@@ -1,7 +1,9 @@
 package com.wiktorski.mybudget.service;
 
+import com.wiktorski.mybudget.model.DTO.CategoryDTO;
+import com.wiktorski.mybudget.model.entity.Category;
 import com.wiktorski.mybudget.model.entity.Payment;
-import com.wiktorski.mybudget.model.entity.PaymentDTO;
+import com.wiktorski.mybudget.model.DTO.PaymentDTO;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
@@ -23,16 +25,16 @@ public class PaymentService {
     private final UserService userService;
 
     public boolean addPayment(String name, float price, int idCat, @Nullable Date date, String description) {
-            //TODO trycatch i w catchu false
-            userService.decreaseBudget(price);
-            //if (date == null) { date = new Date(); }  //TODO dlaczego data sama się tworzy? coś z @Nullable?
-            Payment payment = new Payment(name, price, securityService.getLoggedInUser(), date);
-            if (!description.equals(""))
-                payment.setDescription(description);
-            if (idCat != -1)
-                categoryRepo.findById(idCat).ifPresent(payment::setCategory);
-            paymentRepo.save(payment);
-            return true;
+        //TODO trycatch i w catchu false
+        userService.decreaseBudget(price);
+        //if (date == null) { date = new Date(); }  //TODO dlaczego data sama się tworzy? coś z @Nullable?
+        Payment payment = new Payment(name, price, securityService.getLoggedInUser(), date);
+        if (!description.equals(""))
+            payment.setDescription(description);
+        if (idCat != -1)
+            categoryRepo.findById(idCat).ifPresent(payment::setCategory);
+        paymentRepo.save(payment);
+        return true;
     }
 
     public boolean addPayment(String name, float price, int idCat, String date, String time, String description) throws ParseException {
@@ -42,13 +44,15 @@ public class PaymentService {
     public boolean addPayment(PaymentDTO paymentDTO) {
         try {
             return addPayment(paymentDTO.getName(), paymentDTO.getPrice(), paymentDTO.getCategoryId(),
-                   parseStringDate(paymentDTO.getDate(),""),paymentDTO.getDescription());
+                    parseStringDate(paymentDTO.getDate(), ""), paymentDTO.getDescription());
         } catch (ParseException e) {
             return false;
         }
     }
 
-    /**    form always sends data but data can be empty like "" */
+    /**
+     * form always sends data but data can be empty like ""
+     */
     private Date parseStringDate(String requestDate, String time) throws ParseException {
         Date date;
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-ddHH:mm");
@@ -66,10 +70,7 @@ public class PaymentService {
         return date;
     }
 
-    public void deleteCategory(int categoryId) {
-        paymentRepo.findByCategoryId(categoryId).forEach(payment -> payment.setCategory(null));
-        categoryRepo.deleteById(categoryId);
-    }
+
 
     public boolean updatePayment(PaymentDTO paymentDTO) {
         Payment payment = paymentRepo.findById(paymentDTO.getId()).orElse(null);
@@ -117,6 +118,36 @@ public class PaymentService {
         }
         return dto;
     }
+
+    public boolean deleteById(int paymentId) {
+        try {
+            paymentRepo.deleteById(paymentId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean deleteCategory(int categoryId) {
+        try {
+            paymentRepo.findByCategoryId(categoryId).forEach(payment -> payment.setCategory(null));
+            categoryRepo.deleteById(categoryId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean updateCategory(CategoryDTO categoryDTO){
+        Category cat = categoryRepo.findById(categoryDTO.getId()).orElse(null);
+        if(cat!=null){
+            cat.setName(categoryDTO.getName());
+            categoryRepo.save(cat);
+            return true;
+        }else
+            return false;
+    }
+
 }
 
 

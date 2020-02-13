@@ -133,15 +133,32 @@ function reloadDataTables() {
 //trigger handling without ajaxStop cause handling wont work with reload then
 $(window).on('load', function () {
 //modal delete confirm
+var id;
+
     $('#deletePayConfirm').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
-        var id = button.data('id')
+        id = button.data('id')
         var name = button.data('name')
         var modal = $(this)
         modal.find('#hiddenForm').attr('action', '/payment/delete/' + id)
         modal.find('.modal-body .name').text(name)
     });
+
+     $('#hiddenForm').submit(function(e){
+            e.preventDefault();
+            axios.get('/api/payment/delete/'+id)
+            .then(function(response){
+                toastr.success("Payment deleted");
+                reloadDataTables();
+            }).catch(function(error){
+                toastr.error("Error while deletin payment");
+            })
+        $('#deletePayConfirm').modal('toggle');
+     });
+
+
 });
+
 
 
 /*

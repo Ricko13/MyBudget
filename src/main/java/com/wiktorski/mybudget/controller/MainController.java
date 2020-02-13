@@ -2,7 +2,6 @@ package com.wiktorski.mybudget.controller;
 
 import com.wiktorski.mybudget.model.entity.Category;
 import com.wiktorski.mybudget.model.entity.Payment;
-import com.wiktorski.mybudget.model.entity.PaymentDTO;
 import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
