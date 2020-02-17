@@ -3,9 +3,13 @@ var paymentsDataTable;
 var isModalActive = false;
 var originalData;
 var updatedData;
+var paymentsURL = '/api/payment';
+
 
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
+
+    if($('#isFuture').val() == 'true'){ paymentsURL = '/api/futurePayment' }
 
     /****************** DATATABLES */
     table.destroy();
@@ -56,7 +60,7 @@ $(document).ready(function () {
             description: $('#descriptionEdit').val(),
             categoryId: $('#categoriesEdit').children("option:selected").val()
         };
-        axios.post('/api/payment/update', updatedData)
+        axios.post(paymentsURL+'/update', updatedData)
             .then(function (response) {
                 toastr.success('Payment updated');
             })
@@ -96,7 +100,7 @@ $(document).ready(function () {
     /***************** ADD PAYMENT SUBMIT */
     $('#addPaymentForm').submit(function (e) {
         e.preventDefault();
-        axios.post('/api/payment/add', {
+        axios.post( paymentsURL+'/add' , {
             id: -1,
             name: $('#name').val(),
             price: $('#price').val(),

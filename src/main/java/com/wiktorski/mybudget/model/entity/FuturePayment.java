@@ -2,6 +2,7 @@ package com.wiktorski.mybudget.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.wiktorski.mybudget.model.DTO.PaymentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 //@Inheritance(strategy = InheritanceType.JOINED)
-public class Payment {
+public class FuturePayment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,7 +28,6 @@ public class Payment {
     private String name;
     private float price;
     @Deprecated //TODO change to LocalDate or LocalDateTime
-    @NotNull
     //@Temporal(TemporalType.DATE)
     private Date date;
     private String description;
@@ -45,7 +45,7 @@ public class Payment {
     @Transient
     private String justTime;
 
-    public Payment(String name, float price, User user, Date date) {
+    public FuturePayment(String name, float price, User user, Date date) {
         this.name = name;
         this.price = price;
         this.date = date;

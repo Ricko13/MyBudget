@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
     List<Payment> findByCategoryId(int id);
-    //   List<Payment> findAllByOrderByDateAsc();
-
 }

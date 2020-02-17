@@ -10,9 +10,13 @@
 <div th:replace="template.html::navbar"></div>
 <div class="container">
     <input id="paymentURL" type="hidden" th:value="${dataURL}">
+    <input id="isFuture" type="hidden" th:value="${isFuture}">
     <div class="content">
         <header th:if="!${category}">
-            <h2>Payment history
+            <h2>
+<!--                <span th:if="${isFuture}">Future payments</span>-->
+<!--                <span th:unless="${isFuture}">Payment history</span>-->
+                <span th:text="${isFuture} ? 'Future payments' : 'Payment history'"></span>
                 <button href="/payment/add" id="addPaymentButton" class="btn btn-secondary button-mid" type="button"
                         data-toggle="collapse" data-target="#collapseAddPayment" aria-expanded="false"
                         aria-controls="collapseExample" onclick="changeAddButton()">
@@ -41,9 +45,10 @@
 
                             <div class="col">
                                 <label for="price">Value *</label>
-                                <input type="number"
+                                <input  th:required="${!isFuture}"
+                                        type="number"
                                        min="0" step="any" class="form-control" id="price" placeholder="Type price"
-                                       name="price" required
+                                       name="price"
                                        style="width: 200px; margin-right: auto; margin-left: auto;">
                             </div>
                         </div>

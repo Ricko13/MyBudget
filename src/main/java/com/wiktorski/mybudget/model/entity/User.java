@@ -3,6 +3,7 @@ package com.wiktorski.mybudget.model.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -40,7 +41,9 @@ public class User {
     private List<Payment> payments;
     public void addPayment(Payment payment) {
         this.payments.add(payment);
-    }       /*???*/
+    }       //TODO NIE UŻYWANE
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<FuturePayment> futurePayments;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Category> categories;

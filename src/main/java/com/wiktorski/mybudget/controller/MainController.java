@@ -37,8 +37,8 @@ public class MainController {
         User user = securityService.getLoggedInUser();
         model.addAttribute("user", user);
        // model.addAttribute("budgetSum", (user.getBudget()+user.getSavings()));
-        model.addAttribute("payments", userService.getUserPaymentsDesc());
-        model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("payments", paymentService.getUserPaymentsDesc());
+        model.addAttribute("categories", paymentService.getUserCategories());
         return "index";
     }
 
@@ -63,9 +63,10 @@ public class MainController {
 
     @GetMapping("/history")
     public String history(Model model) {
-       // model.addAttribute("payments", userService.getUserPaymentsDesc());  //TODO no longer needed
-        model.addAttribute("categories", userService.getUserCategories());
+       // model.addAttribute("payments", paymentService.getUserPaymentsDesc());  //TODO no longer needed
+        model.addAttribute("categories", paymentService.getUserCategories());
         model.addAttribute("dataURL", "/api/paymentsDT");
+        model.addAttribute("isFuture", false);
 //        model.addAttribute("inCategory", false);
         return "/payment/payment";
     }
@@ -74,22 +75,29 @@ public class MainController {
     public String showInCategory(@PathVariable String name, Model model) {
         List<Payment> returnPayments = new ArrayList<>();
         //TODO should be already fetched from db in this form && or use stream filter
-        userService.getUserPaymentsDesc().forEach(payment -> {
+        paymentService.getUserPaymentsDesc().forEach(payment -> {
             if (payment.getCategory() != null && payment.getCategory().getName().equals(name))
                 returnPayments.add(payment);
         });
         model.addAttribute("category", name);
         model.addAttribute("dataURL", "/api/categoryDT/"+name);
-        model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("categories", paymentService.getUserCategories());
 //        model.addAttribute("inCategory", true);
         //model.addAttribute("payments", returnPayments);
         //return "/payment/paymentInCategory";
         return "/payment/payment";
     }
 
+    @GetMapping("/futurePayments")
+    public String futurePayments(Model model){
+        model.addAttribute("dataURL", "/api/futurePaymentsDT");
+        model.addAttribute("isFuture", true);
+        return "/payment/payment";
+    }
+
     @GetMapping("/payment/add")
     public String paymentAdd(Model model) {
-        model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("categories", paymentService.getUserCategories());
         return "/payment/newPayment";
     }
 
@@ -116,7 +124,7 @@ public class MainController {
     public String editPayment(@PathVariable int id, Model model){
         Payment payment =  paymentRepository.findById(id).orElse(null);
         model.addAttribute("payment",payment);
-        model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("categories", paymentService.getUserCategories());
         assert payment != null;         //TODO co
         model.addAttribute("date", new SimpleDateFormat("yyyy-MM-dd").format(payment.getDate()));
         if(payment.getCategory()!=null)
@@ -128,7 +136,7 @@ public class MainController {
 
     @GetMapping("/category")
     public String category(Model model) {
-        model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("categories", paymentService.getUserCategories());
         return "/category/category";
     }
 

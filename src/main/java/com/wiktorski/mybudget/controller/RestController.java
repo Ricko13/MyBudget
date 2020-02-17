@@ -6,7 +6,6 @@ import com.wiktorski.mybudget.model.MBResponse;
 import com.wiktorski.mybudget.model.entity.Payment;
 import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.service.PaymentService;
-import com.wiktorski.mybudget.service.UserService;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +29,6 @@ import java.util.stream.Collectors;
 public class RestController {
 
     private final PaymentService paymentService;
-    private final UserService userService;
     private final SecurityService securityService;
 
     @GetMapping
@@ -39,33 +37,52 @@ public class RestController {
     }
 
 
-    //TODO no usage
+/*    //TODO no usage
     @GetMapping("/paymentt")
     public ResponseEntity<List<PaymentDTO>> getPaymentss() {
         return new ResponseEntity<>(
-                userService.getUserPaymentsDesc().stream()
+                paymentService.getUserPaymentsDesc().stream()
                         .map(paymentService::paymentToPaymentDTO).collect(Collectors.toList())
                 , HttpStatus.OK);
-    }
+    }*/
 
     @GetMapping("/paymentsDT")
     public MBResponse<List<PaymentDTO>> getPaymentsForDataTables(Map<String, String> params) {
         MBResponse<List<PaymentDTO>> response = new MBResponse<>();
         response.setData(
-                userService.getUserPaymentsDesc().stream()
+                paymentService.getUserPaymentsDesc().stream()
                         .map(paymentService::paymentToPaymentDTO).collect(Collectors.toList())
         );
         return response;
     }
 
+    /**without params map for DT*/
     @GetMapping("/payments")
     public MBResponse<List<PaymentDTO>> getPayments() {
         MBResponse<List<PaymentDTO>> response = new MBResponse<>();
         response.setData(
-                userService.getUserPaymentsDesc().stream()
+                paymentService.getUserPaymentsDesc().stream()
                         .map(paymentService::paymentToPaymentDTO).collect(Collectors.toList())
         );
         return response;
+    }
+
+    @GetMapping("/futurePaymentsDT")
+    public MBResponse<List<PaymentDTO>> getFuturePaymentsDT(Map<String, String> params){
+        MBResponse<List<PaymentDTO>> response = new MBResponse<>();
+        response.setData(
+                paymentService.getFuturePayments()
+        );
+        return response;
+    }
+
+    @Transactional
+    @PostMapping("/futurePayment/add")
+    public ResponseEntity addFuturePayment(@RequestBody PaymentDTO paymentDTO){
+        if(paymentService.addFuturePayment(paymentDTO))
+            return ResponseEntity.ok(HttpStatus.OK);
+        else
+            return ResponseEntity.badRequest().body("Bad request");
     }
 
     @Transactional
@@ -98,7 +115,7 @@ public class RestController {
     public MBResponse<List<PaymentDTO>> getPaymentsInCategoryDT(@PathVariable String name, Map<String, String> params) {
         List<Payment> returnPayments = new ArrayList<>();
         //TODO should be already fetched from db in this form && or use stream filter
-        userService.getUserPaymentsDesc().forEach(payment -> {
+        paymentService.getUserPaymentsDesc().forEach(payment -> {
             if (payment.getCategory() != null && payment.getCategory().getName().equals(name))
                 returnPayments.add(payment);
         });
@@ -110,7 +127,7 @@ public class RestController {
     @GetMapping("/categoryDT")
     public MBResponse<List<CategoryDTO>> getCategories(Map<String, String> params) {
         MBResponse<List<CategoryDTO>> response = new MBResponse<>();
-        response.setData(userService.getUserCategories().stream().map(CategoryDTO::of).collect(Collectors.toList()));
+        response.setData(paymentService.getUserCategories().stream().map(CategoryDTO::of).collect(Collectors.toList()));
         return response;
     }
 

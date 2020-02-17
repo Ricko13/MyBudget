@@ -1,10 +1,12 @@
 package com.wiktorski.mybudget.service;
 
 import com.wiktorski.mybudget.model.DTO.CategoryDTO;
-import com.wiktorski.mybudget.model.entity.Category;
-import com.wiktorski.mybudget.model.entity.Payment;
 import com.wiktorski.mybudget.model.DTO.PaymentDTO;
+import com.wiktorski.mybudget.model.entity.Category;
+import com.wiktorski.mybudget.model.entity.FuturePayment;
+import com.wiktorski.mybudget.model.entity.Payment;
 import com.wiktorski.mybudget.repository.CategoryRepository;
+import com.wiktorski.mybudget.repository.FuturePaymentRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,11 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +29,7 @@ public class PaymentService {
     private final SecurityService securityService;
     private final CategoryRepository categoryRepo;
     private final UserService userService;
+    private final FuturePaymentRepository futurePaymentRepo;
 
     public boolean addPayment(String name, float price, int idCat, @Nullable Date date, String description) {
         //TODO trycatch i w catchu false
@@ -69,7 +76,6 @@ public class PaymentService {
         } else date = simpleDate.parse(requestDate + time);
         return date;
     }
-
 
 
     public boolean updatePayment(PaymentDTO paymentDTO) {
@@ -138,9 +144,9 @@ public class PaymentService {
         }
     }
 
-    public boolean updateCategory(CategoryDTO categoryDTO){
+    public boolean updateCategory(CategoryDTO categoryDTO) {
         Category cat = categoryRepo.findById(categoryDTO.getId()).orElse(null);
-        if(cat!=null){
+        if (cat != null) {
             try {
                 cat.setName(categoryDTO.getName());
                 categoryRepo.save(cat);
@@ -149,8 +155,56 @@ public class PaymentService {
                 e.printStackTrace();
                 return false;
             }
-        }else
+        } else
             return false;
+    }
+
+
+    public List<Category> getUserCategories() {
+        return securityService.getLoggedInUser().getCategories();
+    }
+
+    private List<Payment> sortPayments(List<Payment> payments) {
+        Comparator<Payment> comp = (o1, o2) -> {
+            if (o1.getDate().before(o2.getDate())) {
+                return 1;
+            } else if (o1.getDate().after(o2.getDate())) {
+                return -1;
+            } else {
+                return 0;
+            }
+        };
+        payments.sort(comp);
+        return payments;
+    }
+
+    public List<Payment> getUserPaymentsDesc() {
+        List<Payment> payments = securityService.getLoggedInUser().getPayments();
+        for (Payment p : payments) {
+            Date date = p.getDate();
+            p.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(date));
+            p.setJustTime(new SimpleDateFormat("HH:mm").format(date));
+        }
+        return sortPayments(payments);  //TODO get from db sorted or leave it for comparator usage example?
+    }
+
+    public List<PaymentDTO> getFuturePayments() {
+        List<FuturePayment> fut = securityService.getLoggedInUser().getFuturePayments();
+        for (FuturePayment f : fut) {
+            if (f.getDate() != null)
+                f.setJustDate(new SimpleDateFormat("dd-MM-yyyyy").format(f.getDate()));
+        }
+        return fut.stream().map(PaymentDTO::of).collect(Collectors.toList());
+    }
+
+    public boolean addFuturePayment(PaymentDTO paymentDTO) {
+
+        try {
+            futurePaymentRepo.save(new FuturePayment(paymentDTO.getName(), paymentDTO.getPrice(), securityService.getLoggedInUser(), parseStringDate(paymentDTO.getDate(), "")));
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
     }
 
 }

@@ -6,6 +6,7 @@ import com.wiktorski.mybudget.model.entity.Category;
 import com.wiktorski.mybudget.model.entity.Payment;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
+import com.wiktorski.mybudget.service.PaymentService;
 import com.wiktorski.mybudget.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class TestController {
     @Autowired
     PaymentRepository paymentRepo;
     @Autowired
-    UserService userService;
+    PaymentService paymentService;
 
     @GetMapping("/category/add/{name}")
     public String addCategory(@PathVariable String name) throws JsonProcessingException {
@@ -38,12 +39,12 @@ public class TestController {
     @GetMapping("/category")
     public String showCategories() throws JsonProcessingException {
         //return  objectMapper.writeValueAsString(categoryRepo.findAll());
-        return objectMapper.writeValueAsString(userService.getUserCategories());
+        return objectMapper.writeValueAsString(paymentService.getUserCategories());
     }
 
     @GetMapping("/payment")
     public String showPayments() throws JsonProcessingException {
-        return objectMapper.writeValueAsString(userService.getUserPaymentsDesc());
+        return objectMapper.writeValueAsString(paymentService.getUserPaymentsDesc());
     }
 
     @GetMapping("/showCat")
