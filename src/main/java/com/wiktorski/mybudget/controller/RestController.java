@@ -56,7 +56,9 @@ public class RestController {
         return response;
     }
 
-    /**without params map for DT*/
+    /**
+     * without params map for DT
+     */
     @GetMapping("/payments")
     public MBResponse<List<PaymentDTO>> getPayments() {
         MBResponse<List<PaymentDTO>> response = new MBResponse<>();
@@ -68,7 +70,7 @@ public class RestController {
     }
 
     @GetMapping("/futurePaymentsDT")
-    public MBResponse<List<PaymentDTO>> getFuturePaymentsDT(Map<String, String> params){
+    public MBResponse<List<PaymentDTO>> getFuturePaymentsDT(Map<String, String> params) {
         MBResponse<List<PaymentDTO>> response = new MBResponse<>();
         response.setData(
                 paymentService.getFuturePayments()
@@ -78,8 +80,8 @@ public class RestController {
 
     @Transactional
     @PostMapping("/futurePayment/add")
-    public ResponseEntity addFuturePayment(@RequestBody PaymentDTO paymentDTO){
-        if(paymentService.addFuturePayment(paymentDTO))
+    public ResponseEntity addFuturePayment(@RequestBody PaymentDTO paymentDTO) {
+        if (paymentService.addFuturePayment(paymentDTO))
             return ResponseEntity.ok(HttpStatus.OK);
         else
             return ResponseEntity.badRequest().body("Bad request");
@@ -105,11 +107,18 @@ public class RestController {
 
     @GetMapping("/payment/delete/{paymentId}")
     public ResponseEntity deletePayment(@PathVariable int paymentId) {
-        if (paymentService.deleteById(paymentId))
+        if (paymentService.deletePaymentById(paymentId))
             return ResponseEntity.ok(HttpStatus.OK);
         else
             return ResponseEntity.badRequest().body("Bad request");
     }
+
+    @GetMapping("/futurePayment/delete/{id}")
+    public ResponseEntity deteleFuturepayment(@PathVariable int id) {
+        paymentService.deleteFuturePaymentById(id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
 
     @GetMapping("/categoryDT/{name}")
     public MBResponse<List<PaymentDTO>> getPaymentsInCategoryDT(@PathVariable String name, Map<String, String> params) {
@@ -149,7 +158,7 @@ public class RestController {
     }
 
     @GetMapping("/budget")
-    public Map<String, String> getBudget(){
+    public Map<String, String> getBudget() {
         User user = securityService.getLoggedInUser();
         Map<String, String> data = new HashMap<>();
         data.put("budget", String.valueOf(user.getBudget()));

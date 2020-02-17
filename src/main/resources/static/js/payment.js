@@ -3,13 +3,13 @@ var paymentsDataTable;
 var isModalActive = false;
 var originalData;
 var updatedData;
-var paymentsURL = '/api/payment';
+var crudURL = '/api/payment';
 
 
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
-    if($('#isFuture').val() == 'true'){ paymentsURL = '/api/futurePayment' }
+    if($('#isFuture').val() == 'true'){ crudURL = '/api/futurePayment' }
 
     /****************** DATATABLES */
     table.destroy();
@@ -60,7 +60,7 @@ $(document).ready(function () {
             description: $('#descriptionEdit').val(),
             categoryId: $('#categoriesEdit').children("option:selected").val()
         };
-        axios.post(paymentsURL+'/update', updatedData)
+        axios.post(crudURL+'/update', updatedData)
             .then(function (response) {
                 toastr.success('Payment updated');
             })
@@ -100,7 +100,7 @@ $(document).ready(function () {
     /***************** ADD PAYMENT SUBMIT */
     $('#addPaymentForm').submit(function (e) {
         e.preventDefault();
-        axios.post( paymentsURL+'/add' , {
+        axios.post( crudURL+'/add' , {
             id: -1,
             name: $('#name').val(),
             price: $('#price').val(),
@@ -150,7 +150,7 @@ var id;
 
      $('#hiddenForm').submit(function(e){
             e.preventDefault();
-            axios.get('/api/payment/delete/'+id)
+            axios.get(crudURL+'/delete/'+id)
             .then(function(response){
                 toastr.success("Payment deleted");
                 reloadDataTables();

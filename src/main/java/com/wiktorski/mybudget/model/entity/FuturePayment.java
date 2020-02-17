@@ -44,12 +44,21 @@ public class FuturePayment {
     private String justDate;
     @Transient
     private String justTime;
-
+/*
     public FuturePayment(String name, float price, User user, Date date) {
         this.name = name;
         this.price = price;
         this.date = date;
         this.user = user;
+    }*/
+
+    public FuturePayment(User user, String name, float price, Date date, String description, Category category) {
+        this.user = user;
+        this.name = name;
+        this.price = price;
+        this.date = date;
+        this.description = description;
+        this.category = category;
     }
 
     @JsonManagedReference

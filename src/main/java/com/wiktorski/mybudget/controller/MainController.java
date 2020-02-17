@@ -82,6 +82,7 @@ public class MainController {
         model.addAttribute("category", name);
         model.addAttribute("dataURL", "/api/categoryDT/"+name);
         model.addAttribute("categories", paymentService.getUserCategories());
+        model.addAttribute("isFuture", false);
 //        model.addAttribute("inCategory", true);
         //model.addAttribute("payments", returnPayments);
         //return "/payment/paymentInCategory";
@@ -92,6 +93,7 @@ public class MainController {
     public String futurePayments(Model model){
         model.addAttribute("dataURL", "/api/futurePaymentsDT");
         model.addAttribute("isFuture", true);
+        model.addAttribute("categories", paymentService.getUserCategories());
         return "/payment/payment";
     }
 
@@ -115,7 +117,7 @@ public class MainController {
     }
 
     @GetMapping("/payment/delete/{id}")
-    public String deletePayment(@PathVariable int id, Model model) {
+    public String deletePayment(@PathVariable int id) {
         paymentRepository.deleteById(id);
         return "redirect:/history";
     }

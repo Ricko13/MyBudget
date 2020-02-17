@@ -45,9 +45,10 @@ public class PaymentDTO implements Serializable {
     public static PaymentDTO of(FuturePayment futurePayment) {
         Category cat = futurePayment.getCategory();
         return PaymentDTO.builder()
-                .date(futurePayment.getDate() == null ? null : futurePayment.getDate().toString().split(" ")[0])
-//                .date(futurePayment.getDate() == null ? null : futurePayment.getDate().toString())
-                .description(futurePayment.getDescription() == null ? "" : futurePayment.getDescription())
+//                .date(futurePayment.getDate() == null ? null : futurePayment.getDate().toString().split(" ")[0])
+                .date(futurePayment.getJustDate())
+//                .description(futurePayment.getDescription() == null ? "" : futurePayment.getDescription())
+                .description(futurePayment.getDescription())
                 .id(futurePayment.getId())
                 .name(futurePayment.getName())
                 .price(futurePayment.getPrice())

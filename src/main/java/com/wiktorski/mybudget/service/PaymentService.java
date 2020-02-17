@@ -57,27 +57,6 @@ public class PaymentService {
         }
     }
 
-    /**
-     * form always sends data but data can be empty like ""
-     */
-    private Date parseStringDate(String requestDate, String time) throws ParseException {
-        Date date;
-        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-ddHH:mm");
-
-        if (requestDate.equals("") && time.equals("")) {
-            return new Date();
-        } else if (!requestDate.equals("") && time.equals("")) {
-            date = simpleDate.parse(requestDate + "00:00");
-        } else if (requestDate.equals("")) {
-            String[] timeArr = time.split(":");
-            date = new Date();
-            date.setHours(Integer.parseInt(timeArr[0]));  /*should use Calendar*/
-            date.setMinutes(Integer.parseInt(timeArr[1]));
-        } else date = simpleDate.parse(requestDate + time);
-        return date;
-    }
-
-
     public boolean updatePayment(PaymentDTO paymentDTO) {
         Payment payment = paymentRepo.findById(paymentDTO.getId()).orElse(null);
         if (payment == null) return false;
@@ -96,36 +75,7 @@ public class PaymentService {
         return true;
     }
 
-    public Payment paymentDTOtoPayment(PaymentDTO paymentDTO) throws ParseException {
-        Payment payment = Payment.builder()
-                .id(paymentDTO.getId())
-                .name(paymentDTO.getName())
-                .price(paymentDTO.getPrice())
-                .description(paymentDTO.getDescription())
-                .category(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null))
-                .build();
-        if (!paymentDTO.getDate().equals(""))
-            payment.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(paymentDTO.getDate()));
-
-        return payment;
-    }
-
-    public PaymentDTO paymentToPaymentDTO(Payment payment) {
-        PaymentDTO dto = PaymentDTO.builder()
-                .id(payment.getId())
-                .date(payment.getJustDate())
-                .description(payment.getDescription())
-                .name(payment.getName())
-                .price(payment.getPrice())
-                .build();
-        if (payment.getCategory() != null) {
-            dto.setCategoryId(payment.getCategory().getId());
-            dto.setCategoryName(payment.getCategory().getName());
-        }
-        return dto;
-    }
-
-    public boolean deleteById(int paymentId) {
+    public boolean deletePaymentById(int paymentId) {
         try {
             paymentRepo.deleteById(paymentId);
             return true;
@@ -159,23 +109,8 @@ public class PaymentService {
             return false;
     }
 
-
     public List<Category> getUserCategories() {
         return securityService.getLoggedInUser().getCategories();
-    }
-
-    private List<Payment> sortPayments(List<Payment> payments) {
-        Comparator<Payment> comp = (o1, o2) -> {
-            if (o1.getDate().before(o2.getDate())) {
-                return 1;
-            } else if (o1.getDate().after(o2.getDate())) {
-                return -1;
-            } else {
-                return 0;
-            }
-        };
-        payments.sort(comp);
-        return payments;
     }
 
     public List<Payment> getUserPaymentsDesc() {
@@ -197,16 +132,86 @@ public class PaymentService {
         return fut.stream().map(PaymentDTO::of).collect(Collectors.toList());
     }
 
-    public boolean addFuturePayment(PaymentDTO paymentDTO) {
+    public boolean addFuturePayment(PaymentDTO dto) {
 
         try {
-            futurePaymentRepo.save(new FuturePayment(paymentDTO.getName(), paymentDTO.getPrice(), securityService.getLoggedInUser(), parseStringDate(paymentDTO.getDate(), "")));
+//            futurePaymentRepo.save(new FuturePayment(dto.getName(), dto.getPrice(), securityService.getLoggedInUser(), parseStringDate(dto.getDate(), "")));
+            Category cat = categoryRepo.findById(dto.getCategoryId()).orElse(null);
+            futurePaymentRepo.save(new FuturePayment(securityService.getLoggedInUser(),dto.getName(),dto.getPrice(),
+                    new SimpleDateFormat("dd-MM-yyyy").parse(dto.getDate()), dto.getDescription(), cat));
             return true;
         } catch (ParseException e) {
             return false;
         }
     }
 
+    public boolean deleteFuturePaymentById(int id){
+        futurePaymentRepo.deleteById(id);
+        return true;
+    }
+
+    public Payment paymentDTOtoPayment(PaymentDTO paymentDTO) throws ParseException {
+        Payment payment = Payment.builder()
+                .id(paymentDTO.getId())
+                .name(paymentDTO.getName())
+                .price(paymentDTO.getPrice())
+                .description(paymentDTO.getDescription())
+                .category(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null))
+                .build();
+        if (!paymentDTO.getDate().equals(""))
+            payment.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(paymentDTO.getDate()));
+
+        return payment;
+    }
+
+    public PaymentDTO paymentToPaymentDTO(Payment payment) {
+        PaymentDTO dto = PaymentDTO.builder()
+                .id(payment.getId())
+                .date(payment.getJustDate())
+                .description(payment.getDescription())
+                .name(payment.getName())
+                .price(payment.getPrice())
+                .build();
+        if (payment.getCategory() != null) {
+            dto.setCategoryId(payment.getCategory().getId());
+            dto.setCategoryName(payment.getCategory().getName());
+        }
+        return dto;
+    }
+
+    /**
+     * form always sends data but data can be empty like ""
+     */
+    private Date parseStringDate(String requestDate, String time) throws ParseException {
+        Date date;
+        SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-ddHH:mm");
+
+        if (requestDate.equals("") && time.equals("")) {
+            return new Date();
+        } else if (!requestDate.equals("") && time.equals("")) {
+            date = simpleDate.parse(requestDate + "00:00");
+        } else if (requestDate.equals("")) {
+            String[] timeArr = time.split(":");
+            date = new Date();
+            date.setHours(Integer.parseInt(timeArr[0]));  /*should use Calendar*/
+            date.setMinutes(Integer.parseInt(timeArr[1]));
+        } else date = simpleDate.parse(requestDate + time);
+        return date;
+    }
+
+    private List<Payment> sortPayments(List<Payment> payments) {
+        Comparator<Payment> comp = (o1, o2) -> {
+            if (o1.getDate().before(o2.getDate())) {
+                return 1;
+            } else if (o1.getDate().after(o2.getDate())) {
+                return -1;
+            } else {
+                return 0;
+            }
+        };
+        payments.sort(comp);
+        return payments;
+    }
 }
 
 
