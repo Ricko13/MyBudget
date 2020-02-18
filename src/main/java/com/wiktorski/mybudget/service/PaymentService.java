@@ -15,11 +15,12 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class PaymentService {
         userService.decreaseBudget(price);
         //if (date == null) { date = new Date(); }  //TODO dlaczego data sama się tworzy? coś z @Nullable?
         Payment payment = new Payment(name, price, securityService.getLoggedInUser(), date);
+//        payment.setLocalDate(LocalDate.now());
         if (!description.equals(""))
             payment.setDescription(description);
         if (idCat != -1)
@@ -127,25 +129,26 @@ public class PaymentService {
         List<FuturePayment> fut = securityService.getLoggedInUser().getFuturePayments();
         for (FuturePayment f : fut) {
             if (f.getDate() != null)
-                f.setJustDate(new SimpleDateFormat("dd-MM-yyyyy").format(f.getDate()));
+                f.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(f.getDate()));
         }
-        return fut.stream().map(PaymentDTO::of).collect(Collectors.toList());
+        return sortFuturePayments(fut).stream().map(PaymentDTO::of).collect(Collectors.toList());
     }
 
     public boolean addFuturePayment(PaymentDTO dto) {
-
         try {
 //            futurePaymentRepo.save(new FuturePayment(dto.getName(), dto.getPrice(), securityService.getLoggedInUser(), parseStringDate(dto.getDate(), "")));
             Category cat = categoryRepo.findById(dto.getCategoryId()).orElse(null);
-            futurePaymentRepo.save(new FuturePayment(securityService.getLoggedInUser(),dto.getName(),dto.getPrice(),
-                    new SimpleDateFormat("dd-MM-yyyy").parse(dto.getDate()), dto.getDescription(), cat));
+//            Date date = !dto.getDate().equals("") ? new SimpleDateFormat("yyyy-MM-dd").parse(dto.getDate()) : new Date();
+            futurePaymentRepo.save(new FuturePayment(securityService.getLoggedInUser(), dto.getName(), dto.getPrice()
+                    , LocalDate.parse(dto.getDate(), DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                    , dto.getDescription(), cat));
             return true;
-        } catch (ParseException e) {
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean deleteFuturePaymentById(int id){
+    public boolean deleteFuturePaymentById(int id) {
         futurePaymentRepo.deleteById(id);
         return true;
     }
@@ -167,7 +170,7 @@ public class PaymentService {
     public PaymentDTO paymentToPaymentDTO(Payment payment) {
         PaymentDTO dto = PaymentDTO.builder()
                 .id(payment.getId())
-                .date(payment.getJustDate())
+                .date(payment.getJustDate().equals("") ? payment.getDate().toString() : payment.getJustDate())
                 .description(payment.getDescription())
                 .name(payment.getName())
                 .price(payment.getPrice())
@@ -199,8 +202,23 @@ public class PaymentService {
         return date;
     }
 
+    //TODO 2 same comparators, merge it, or let futurePayment extends from payment
     private List<Payment> sortPayments(List<Payment> payments) {
         Comparator<Payment> comp = (o1, o2) -> {
+            if (o1.getDate().before(o2.getDate())) {
+                return 1;
+            } else if (o1.getDate().after(o2.getDate())) {
+                return -1;
+            } else {
+                return 0;
+            }
+        };
+        payments.sort(comp);
+        return payments;
+    }
+
+    private List<FuturePayment> sortFuturePayments(List<FuturePayment> payments) {
+        Comparator<FuturePayment> comp = (o1, o2) -> {
             if (o1.getDate().before(o2.getDate())) {
                 return 1;
             } else if (o1.getDate().after(o2.getDate())) {

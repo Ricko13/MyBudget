@@ -30,6 +30,8 @@ public class Payment {
     @NotNull
     //@Temporal(TemporalType.DATE)
     private Date date;
+//    private LocalDate localDate;
+
     private String description;
     @ManyToOne
     @JoinColumn(name = "category_id")

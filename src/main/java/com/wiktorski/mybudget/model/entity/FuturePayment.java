@@ -2,15 +2,21 @@ package com.wiktorski.mybudget.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.wiktorski.mybudget.model.DTO.PaymentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -29,7 +35,9 @@ public class FuturePayment {
     private float price;
     @Deprecated //TODO change to LocalDate or LocalDateTime
     //@Temporal(TemporalType.DATE)
+    @CreationTimestamp
     private Date date;
+    private LocalDate localDate;
     private String description;
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -57,6 +65,15 @@ public class FuturePayment {
         this.name = name;
         this.price = price;
         this.date = date;
+        this.description = description;
+        this.category = category;
+    }
+
+    public FuturePayment(User user, String name, float price, LocalDate localDate, String description, Category category) {
+        this.user = user;
+        this.name = name;
+        this.price = price;
+        this.localDate = localDate;
         this.description = description;
         this.category = category;
     }
