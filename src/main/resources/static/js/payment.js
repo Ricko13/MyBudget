@@ -4,12 +4,15 @@ var isModalActive = false;
 var originalData;
 var updatedData;
 var crudURL = '/api/payment';
+var movingToHistory = false;
 
 
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
-    if($('#isFuture').val() == 'true'){ crudURL = '/api/futurePayment' }
+    if ($('#isFuture').val() == 'true') {
+        crudURL = '/api/futurePayment'
+    }
 
     /****************** DATATABLES */
     table.destroy();
@@ -37,10 +40,15 @@ $(document).ready(function () {
             {
                 render: function (data, type, row) {
                     tmp = '<div style="width:80px;">';
+                    if ($('#isFuture').val() == 'true') {
+                        tmp += '<a data-toggle="modal" href="#editPaymentModal" class="icon-block" data-id="' + row.id + '" data-name="' + row.name + '" data-move="true">';
+                        tmp += '<img src="/assets/move.png" style="width:26%; height:5%; float:right; margin-left:10px;" data-toggle="tooltip" title="MOVE TO HISTORY"/>';
+                        tmp += '</a>';
+                    }
                     tmp += '<a data-toggle="modal" href="#deletePayConfirm" class="icon-block" data-id="' + row.id + '" data-name="' + row.name + '">';
                     tmp += '<img src="/assets/delete-button.png" style="width:26%; height:5%; float:right; margin-left:10px;" data-toggle="tooltip" title="DELETE"/>';
                     tmp += '</a>';
-                    tmp += '<a  data-toggle="modal" href="#editPaymentModal" class="icon-block" data-id="' + row.id + '">';
+                    tmp += '<a  data-toggle="modal" href="#editPaymentModal" class="icon-block" data-id="' + row.id + '" data-move="false">';
                     tmp += '<img src="/assets/edit-button.png" style="width:23%; height:5%; float:right;" data-toggle="tooltip" title="EDIT"/></a>';
                     tmp += '</div>';
                     return tmp;
@@ -49,7 +57,7 @@ $(document).ready(function () {
         ]
     });
 
-    /***************** UPDATE SUBMIT */
+    /***************** UPDATE/MOVE SUBMIT */
     $("#editPaymentForm").submit(function (e) {
         e.preventDefault();
         updatedData = {
@@ -60,7 +68,8 @@ $(document).ready(function () {
             description: $('#descriptionEdit').val(),
             categoryId: $('#categoriesEdit').children("option:selected").val()
         };
-        axios.post(crudURL+'/update', updatedData)
+
+        axios.post(crudURL + (movingToHistory === true ? '/move' : '/update' ), updatedData)
             .then(function (response) {
                 toastr.success('Payment updated');
             })
@@ -72,8 +81,10 @@ $(document).ready(function () {
         //return false;
     });
 
-    /**************** UPDATE MODAL */
+    /**************** UPDATE/MOVE MODAL */
     $('#editPaymentModal').on('show.bs.modal', function (event) {
+        checkIfMovingToHistory($(event.relatedTarget));
+
         var paymentId = $(event.relatedTarget).data('id');
         //        var data = paymentsDataTable.data();
         let data = paymentsDataTable.data().toArray();
@@ -97,10 +108,22 @@ $(document).ready(function () {
 
     });
 
+    function checkIfMovingToHistory(eventRelatetTarget){
+        if(eventRelatetTarget.data('move') === true){
+            $('#editPaymentTitle').html("Move to history");
+            $('#editPaymentSubmit').html("Accept and move");
+            movingToHistory = true;
+        }else{
+            $('#editPaymentTitle').text("Edit payment");
+            $('#editPaymentSubmit').text("Submit");
+            movingToHistory = false;
+        }
+    }
+
     /***************** ADD PAYMENT SUBMIT */
     $('#addPaymentForm').submit(function (e) {
         e.preventDefault();
-        axios.post( crudURL+'/add' , {
+        axios.post(crudURL + '/add', {
             id: -1,
             name: $('#name').val(),
             price: $('#price').val(),
@@ -137,7 +160,7 @@ function reloadDataTables() {
 //trigger handling without ajaxStop cause handling wont work with reload then
 $(window).on('load', function () {
 //modal delete confirm
-var id;
+    var id;
 
     $('#deletePayConfirm').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
@@ -148,21 +171,20 @@ var id;
         modal.find('.modal-body .name').text(name)
     });
 
-     $('#hiddenForm').submit(function(e){
-            e.preventDefault();
-            axios.get(crudURL+'/delete/'+id)
-            .then(function(response){
+    $('#hiddenForm').submit(function (e) {
+        e.preventDefault();
+        axios.get(crudURL + '/delete/' + id)
+            .then(function (response) {
                 toastr.success("Payment deleted");
                 reloadDataTables();
-            }).catch(function(error){
-                toastr.error("Error while deletin payment");
-            })
+            }).catch(function (error) {
+            toastr.error("Error while deletin payment");
+        })
         $('#deletePayConfirm').modal('toggle');
-     });
+    });
 
 
 });
-
 
 
 /*

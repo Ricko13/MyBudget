@@ -46,16 +46,6 @@ public class RestController {
                 , HttpStatus.OK);
     }*/
 
-    @GetMapping("/paymentsDT")
-    public MBResponse<List<PaymentDTO>> getPaymentsForDataTables(Map<String, String> params) {
-        MBResponse<List<PaymentDTO>> response = new MBResponse<>();
-        response.setData(
-                paymentService.getUserPaymentsDesc().stream()
-                        .map(paymentService::paymentToPaymentDTO).collect(Collectors.toList())
-        );
-        return response;
-    }
-
     /**
      * without params map for DT
      */
@@ -69,22 +59,14 @@ public class RestController {
         return response;
     }
 
-    @GetMapping("/futurePaymentsDT")
-    public MBResponse<List<PaymentDTO>> getFuturePaymentsDT(Map<String, String> params) {
+    @GetMapping("/paymentsDT")
+    public MBResponse<List<PaymentDTO>> getPaymentsForDataTables(Map<String, String> params) {
         MBResponse<List<PaymentDTO>> response = new MBResponse<>();
         response.setData(
-                paymentService.getFuturePayments()
+                paymentService.getUserPaymentsDesc().stream()
+                        .map(paymentService::paymentToPaymentDTO).collect(Collectors.toList())
         );
         return response;
-    }
-
-    @Transactional
-    @PostMapping("/futurePayment/add")
-    public ResponseEntity addFuturePayment(@RequestBody PaymentDTO paymentDTO) {
-        if (paymentService.addFuturePayment(paymentDTO))
-            return ResponseEntity.ok(HttpStatus.OK);
-        else
-            return ResponseEntity.badRequest().body("Bad request");
     }
 
     @Transactional
@@ -113,9 +95,39 @@ public class RestController {
             return ResponseEntity.badRequest().body("Bad request");
     }
 
+    @GetMapping("/futurePaymentsDT")
+    public MBResponse<List<PaymentDTO>> getFuturePaymentsDT(Map<String, String> params) {
+        MBResponse<List<PaymentDTO>> response = new MBResponse<>();
+        response.setData(
+                paymentService.getFuturePaymentsDesc()
+        );
+        return response;
+    }
+
+    @Transactional
+    @PostMapping("/futurePayment/add")
+    public ResponseEntity addFuturePayment(@RequestBody PaymentDTO paymentDTO) {
+        if (paymentService.addFuturePayment(paymentDTO))
+            return ResponseEntity.ok(HttpStatus.OK);
+        else
+            return ResponseEntity.badRequest().body("Bad request");
+    }
+
     @GetMapping("/futurePayment/delete/{id}")
-    public ResponseEntity deteleFuturepayment(@PathVariable int id) {
+    public ResponseEntity deteleFuturePayment(@PathVariable int id) {
         paymentService.deleteFuturePaymentById(id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PostMapping("/futurePayment/update")
+    public ResponseEntity updateFuturePayment(@RequestBody PaymentDTO paymentDTO) {
+        paymentService.updateFuturePayment(paymentDTO);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PostMapping("/futurePayment/move")
+    public ResponseEntity moveFuturePayment(@RequestBody PaymentDTO paymentDTO){
+        paymentService.moveFuturePayment(paymentDTO);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

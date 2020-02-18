@@ -86,6 +86,16 @@ public class PaymentService {
         }
     }
 
+    public List<Payment> getUserPaymentsDesc() {
+        List<Payment> payments = securityService.getLoggedInUser().getPayments();
+        for (Payment p : payments) {
+            Date date = p.getDate();
+            p.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(date));
+            p.setJustTime(new SimpleDateFormat("HH:mm").format(date));
+        }
+        return sortPayments(payments);  //TODO get from db sorted or leave it for comparator usage example?
+    }
+
     public boolean deleteCategory(int categoryId) {
         try {
             paymentRepo.findByCategoryId(categoryId).forEach(payment -> payment.setCategory(null));
@@ -115,23 +125,13 @@ public class PaymentService {
         return securityService.getLoggedInUser().getCategories();
     }
 
-    public List<Payment> getUserPaymentsDesc() {
-        List<Payment> payments = securityService.getLoggedInUser().getPayments();
-        for (Payment p : payments) {
-            Date date = p.getDate();
-            p.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(date));
-            p.setJustTime(new SimpleDateFormat("HH:mm").format(date));
-        }
-        return sortPayments(payments);  //TODO get from db sorted or leave it for comparator usage example?
-    }
-
-    public List<PaymentDTO> getFuturePayments() {
-        List<FuturePayment> fut = securityService.getLoggedInUser().getFuturePayments();
-        for (FuturePayment f : fut) {
-            if (f.getDate() != null)
-                f.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(f.getDate()));
-        }
-        return sortFuturePayments(fut).stream().map(PaymentDTO::of).collect(Collectors.toList());
+    public List<PaymentDTO> getFuturePaymentsDesc() {
+        List<FuturePayment> payments = securityService.getLoggedInUser().getFuturePayments();
+         /*for (FuturePayment tmp : payments) {
+           if (tmp.getDate() != null)
+                tmp.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(tmp.getDate()));
+        }*/
+        return sortFuturePayments(payments).stream().map(PaymentDTO::of).collect(Collectors.toList());
     }
 
     public boolean addFuturePayment(PaymentDTO dto) {
@@ -140,7 +140,7 @@ public class PaymentService {
             Category cat = categoryRepo.findById(dto.getCategoryId()).orElse(null);
 //            Date date = !dto.getDate().equals("") ? new SimpleDateFormat("yyyy-MM-dd").parse(dto.getDate()) : new Date();
             futurePaymentRepo.save(new FuturePayment(securityService.getLoggedInUser(), dto.getName(), dto.getPrice()
-                    , LocalDate.parse(dto.getDate(), DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                    , dto.getDate().equals("") ? null : LocalDate.parse(dto.getDate(), DateTimeFormatter.ofPattern("yyyy-DD-mm"))
                     , dto.getDescription(), cat));
             return true;
         } catch (Exception e) {
@@ -151,6 +151,23 @@ public class PaymentService {
     public boolean deleteFuturePaymentById(int id) {
         futurePaymentRepo.deleteById(id);
         return true;
+    }
+
+    public boolean updateFuturePayment(PaymentDTO paymentDTO) {
+        FuturePayment fut = futurePaymentRepo.findById(paymentDTO.getId()).orElse(null);
+        if (fut != null) {
+            fut.setLocalDate(paymentDTO.getDate().equals("") ? null : LocalDate.parse(paymentDTO.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            fut.setCategory(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null));
+            fut.setDescription(paymentDTO.getDescription());
+            fut.setName(paymentDTO.getName());
+            fut.setPrice(paymentDTO.getPrice());
+        }
+        futurePaymentRepo.save(fut);
+        return true;
+    }
+
+    public boolean moveFuturePayment(PaymentDTO paymentDTO) {
+        return deleteFuturePaymentById(paymentDTO.getId()) && addPayment(paymentDTO);
     }
 
     public Payment paymentDTOtoPayment(PaymentDTO paymentDTO) throws ParseException {

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,6 +38,7 @@ public class FuturePayment {
     //@Temporal(TemporalType.DATE)
     @CreationTimestamp
     private Date date;
+//    @Convert
     private LocalDate localDate;
     private String description;
     @ManyToOne

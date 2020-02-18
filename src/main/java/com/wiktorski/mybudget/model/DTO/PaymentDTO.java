@@ -12,6 +12,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -47,7 +48,7 @@ public class PaymentDTO implements Serializable {
         return PaymentDTO.builder()
 //                .date(futurePayment.getDate() == null ? null : futurePayment.getDate().toString().split(" ")[0])
 //                .date(futurePayment.getJustDate())
-                .date(futurePayment.getLocalDate()!=null? futurePayment.getLocalDate().toString() : "")
+                .date(futurePayment.getLocalDate()!=null? futurePayment.getLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) : "")
 //                .description(futurePayment.getDescription() == null ? "" : futurePayment.getDescription())
                 .description(futurePayment.getDescription())
                 .id(futurePayment.getId())
