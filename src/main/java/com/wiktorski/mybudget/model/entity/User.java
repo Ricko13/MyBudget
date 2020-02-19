@@ -48,6 +48,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Category> categories;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Income> incomes;
+
     @ManyToMany
     private Set<Role> roles;
 

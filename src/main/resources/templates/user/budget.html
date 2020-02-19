@@ -16,10 +16,10 @@
         <div th:class="addToBudget">
             <form th:action="@{/budget/add}" th:method="post" th:class="form-inline">
                 <div class="form-group" style="margin-right: auto; margin-left: auto;">
+                    <input type="text" placeholder="Title" class="form-control" name="title" required style="margin-right: 15px;">
                     <input  id="budgetEdit" class="form-control" type="number" name="amount"
-                           placeholder="Add to budget..." min="0" required>
+                           placeholder="Value" min="0" required>
                     <button type="submit" class="btn btn-secondary pull-right" style="margin-left:5px;">Add</button>
-                    <button type="submit" class="btn btn-secondary pull-right" style="margin-left:5px;">Set</button>
                 </div>
             </form>
         </div>
@@ -61,6 +61,15 @@
             add
         </button>
     </form>-->
+
+    <table class="table">
+        <thead>
+            <td>Title</td>
+            <td>Value</td>
+            <td></td>
+        </thead>
+
+    </table>
 
 
 </div>

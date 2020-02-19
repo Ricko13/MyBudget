@@ -1,8 +1,10 @@
 package com.wiktorski.mybudget.controller;
 
 import com.wiktorski.mybudget.model.DTO.CategoryDTO;
+import com.wiktorski.mybudget.model.DTO.IncomeDTO;
 import com.wiktorski.mybudget.model.DTO.PaymentDTO;
 import com.wiktorski.mybudget.model.MBResponse;
+import com.wiktorski.mybudget.model.entity.Income;
 import com.wiktorski.mybudget.model.entity.Payment;
 import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.service.PaymentService;
@@ -114,7 +116,7 @@ public class RestController {
     }
 
     @GetMapping("/futurePayment/delete/{id}")
-    public ResponseEntity deteleFuturePayment(@PathVariable int id) {
+    public ResponseEntity deleteFuturePayment(@PathVariable int id) {
         paymentService.deleteFuturePaymentById(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -169,11 +171,10 @@ public class RestController {
             return ResponseEntity.badRequest().body("Bad request");
     }
 
-    @GetMapping("/budget")
-    public Map<String, String> getBudget() {
-        User user = securityService.getLoggedInUser();
-        Map<String, String> data = new HashMap<>();
-        data.put("budget", String.valueOf(user.getBudget()));
-        return data;
+    @GetMapping("/incomeDT")
+    public MBResponse<List<IncomeDTO>> getIncome() {
+        MBResponse<List<IncomeDTO>> response = new MBResponse<>();
+        response.setData(securityService.getLoggedInUser().getIncomes().stream().map(IncomeDTO::of).collect(Collectors.toList()));
+        return response;
     }
 }
