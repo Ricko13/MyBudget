@@ -1,12 +1,12 @@
 package com.wiktorski.mybudget.controller;
 
+import com.wiktorski.mybudget.model.DTO.BudgetResponse;
 import com.wiktorski.mybudget.model.DTO.CategoryDTO;
 import com.wiktorski.mybudget.model.DTO.IncomeDTO;
 import com.wiktorski.mybudget.model.DTO.PaymentDTO;
 import com.wiktorski.mybudget.model.MBResponse;
-import com.wiktorski.mybudget.model.entity.Income;
 import com.wiktorski.mybudget.model.entity.Payment;
-import com.wiktorski.mybudget.model.entity.User;
+import com.wiktorski.mybudget.service.BudgetService;
 import com.wiktorski.mybudget.service.PaymentService;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,6 +31,7 @@ public class RestController {
 
     private final PaymentService paymentService;
     private final SecurityService securityService;
+    private final BudgetService budgetService;
 
     @GetMapping
     public String henlo() {
@@ -176,5 +176,15 @@ public class RestController {
         MBResponse<List<IncomeDTO>> response = new MBResponse<>();
         response.setData(securityService.getLoggedInUser().getIncomes().stream().map(IncomeDTO::of).collect(Collectors.toList()));
         return response;
+    }
+
+    @GetMapping("/budget")
+    public BudgetResponse getBudgetData(){
+        return budgetService.getBudgetResponse();
+    }
+
+    @PostMapping("/income")
+    public void addIncome(@RequestBody IncomeDTO request){
+        budgetService.addIncome(request);
     }
 }

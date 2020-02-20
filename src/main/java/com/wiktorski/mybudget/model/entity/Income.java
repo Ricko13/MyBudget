@@ -1,6 +1,7 @@
 package com.wiktorski.mybudget.model.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import java.sql.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Income {
 
     @Id
