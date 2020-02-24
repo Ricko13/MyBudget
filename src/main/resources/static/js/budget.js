@@ -5,6 +5,7 @@ var budget;
 $(document).ready(function () {
     initIncomeDT();
     initBudgetVue();
+    Vue.use(VueMask.VueMaskPlugin);
     budgetVue.getBudgetData();
 });
 

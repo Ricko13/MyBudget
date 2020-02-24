@@ -17,7 +17,8 @@
                 <div class="form-group" style="margin-right: auto; margin-left: auto;">
                     <input v-model="request.title" type="text" placeholder="Title" class="form-control" name="title"
                            required style="margin-right: 15px;">
-                    <input v-model="request.value" id="budgetEdit" class="form-control" type="number" name="amount"
+                    <!-- v-mask="'##.##'"-->
+                    <input v-model="request.value"  id="budgetEdit" class="form-control" type="number" name="amount"
                            placeholder="Value" min="0" required>
                     <button v-on:click="submitIncome" type="submit" class="btn btn-secondary pull-right"
                             style="margin-left:5px;">Add
@@ -50,4 +51,5 @@
 <div th:replace="template.html :: js-include"></div>
 </body>
 <script th:src="@{/js/budget.js}"></script>
+<script th:src="@{https://cdn.jsdelivr.net/npm/v-mask/dist/v-mask.min.js}"></script>
 </html>

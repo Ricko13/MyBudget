@@ -17,6 +17,12 @@ import java.io.Serializable;
 public class CategoryDTO implements Serializable {
     private int id;
     private String name;
+    private float valueSum;
+
+    public CategoryDTO(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public static CategoryDTO of(Category cat){
         return new CategoryDTO(cat.getId(),cat.getName());

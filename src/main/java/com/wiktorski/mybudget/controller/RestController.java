@@ -128,7 +128,7 @@ public class RestController {
     }
 
     @PostMapping("/futurePayment/move")
-    public ResponseEntity moveFuturePayment(@RequestBody PaymentDTO paymentDTO){
+    public ResponseEntity moveFuturePayment(@RequestBody PaymentDTO paymentDTO) {
         paymentService.moveFuturePayment(paymentDTO);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -171,7 +171,15 @@ public class RestController {
             return ResponseEntity.badRequest().body("Bad request");
     }
 
+    @GetMapping("/category/chart") //TODO póki co takie samo jak /categoryDT
+    public MBResponse<List<CategoryDTO>> getCategoryChartData(){
+        return MBResponse.<List<CategoryDTO>>builder().data(
+                paymentService.getUserCategories().stream().map(CategoryDTO::of).collect(Collectors.toList())
+        ).build();
+    }
+
     @GetMapping("/incomeDT")
+
     public MBResponse<List<IncomeDTO>> getIncome() {
         MBResponse<List<IncomeDTO>> response = new MBResponse<>();
         response.setData(securityService.getLoggedInUser().getIncomes().stream().map(IncomeDTO::of).collect(Collectors.toList()));
@@ -179,12 +187,12 @@ public class RestController {
     }
 
     @GetMapping("/budget")
-    public BudgetResponse getBudgetData(){
+    public BudgetResponse getBudgetData() {
         return budgetService.getBudgetResponse();
     }
 
     @PostMapping("/income")
-    public void addIncome(@RequestBody IncomeDTO request){
+    public void addIncome(@RequestBody IncomeDTO request) {
         budgetService.addIncome(request);
     }
 }
