@@ -23,15 +23,18 @@ function initBudgetVue() {
         },
         methods: {
             submitIncome: function () {
-                axios.post("/api/income", budgetVue.request)
-                    .then(function (response) {
-                        toastr.success("Added income")
-                    }).catch(function (error) {
-                    toastr.error("Error while adding income: ");
-                    console.log("Error: " + error);
-                });
-                reloadDataTables();
-                budgetVue.getBudgetData();
+                if(budgetVue.request.title !== ""){
+                    axios.post("/api/income", budgetVue.request)
+                        .then(function (response) {
+                            toastr.success("Added income")
+                        }).catch(function (error) {
+                        toastr.error("Error while adding income: ");
+                    });
+                }
+                setTimeout(function () {
+                    reloadDataTables();
+                    budgetVue.getBudgetData();
+                }, 500);
             },
             getBudgetData: function () {
                 axios.get("/api/budget").then(function (response) {

@@ -103,6 +103,7 @@ public class MainController {
         return "/payment/newPayment";
     }
 
+    @Deprecated
     @Transactional
     @PostMapping("/payment/add")
     public String paymentAddFinal(@RequestParam String name, @RequestParam float price,

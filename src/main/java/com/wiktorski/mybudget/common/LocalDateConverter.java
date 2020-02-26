@@ -11,9 +11,10 @@ import java.util.Optional;
  * doesn’t support the new Date and Time API. If you want to use the
  * new classes (in the right way), you need to define the conversion to
  * java.sql.Date and java.sql.Timestamp yourself.*/
-@Converter(autoApply = true)
-public class LocalDateConverter implements AttributeConverter<LocalDate, Date> {
+//@Converter(autoApply = true)
+public class LocalDateConverter  {
 
+    /*implements AttributeConverter<LocalDate, Date>
     @Override
     public Date convertToDatabaseColumn(LocalDate localDate) {
         return Optional.ofNullable(localDate)
@@ -26,5 +27,5 @@ public class LocalDateConverter implements AttributeConverter<LocalDate, Date> {
         return Optional.ofNullable(date)
                 .map(Date::toLocalDate)
                 .orElse(null);
-    }
+    }*/
 }

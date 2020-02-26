@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -30,7 +31,7 @@ public class Payment {
     @NotNull
     //@Temporal(TemporalType.DATE)
     private Date date;
-//    private LocalDate localDate;
+    private LocalDate localDate;
 
     private String description;
     @ManyToOne
