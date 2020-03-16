@@ -25,15 +25,16 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     private String name;
+
     private float price;
-    @Deprecated //TODO change to LocalDate or LocalDateTime
+
     @NotNull
-    //@Temporal(TemporalType.DATE)
-    private Date date;
-    private LocalDate localDate;
+    private LocalDate date;
 
     private String description;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -43,22 +44,18 @@ public class Payment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Transient
-    private String justDate;
-    @Transient
-    private String justTime;
 
-    public Payment(String name, float price, User user, Date date) {
+    public Payment(String name, float price, User user, LocalDate date) {
         this.name = name;
         this.price = price;
         this.date = date;
         this.user = user;
     }
 
-    @JsonManagedReference
+    /*@JsonManagedReference
     public Category getCategory() {
         return category;
-    }
+    }*/
 
     @Override
     public String toString() {

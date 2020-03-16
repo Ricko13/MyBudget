@@ -15,9 +15,8 @@ $(document).ready(function () {
     }
 
     /****************** DATATABLES */
-    table.destroy();
+    table.destroy();  //TODO CO Z TYM - usuń inicjowanie datatables w template.html::js-include
     paymentsDataTable = $("#dataTable").DataTable({
-        // ajax: '/api/paymentsDT',
         ajax: $('#paymentURL').val(),
         order: [],
         columnDefs: [
@@ -26,7 +25,12 @@ $(document).ready(function () {
         columns: [
             {data: "name"},
             {data: "price"},
-            {data: "date"},
+            {
+                 // render: formatLocalDate(row.date)
+                render: function (data, type, row) {
+                    return formatLocalDate(row.date)
+                }
+            },
             {data: "description"},
             {
                 render: function (data, type, row) {
@@ -40,7 +44,7 @@ $(document).ready(function () {
             {
                 render: function (data, type, row) {
                     tmp = '<div style="width:80px;">';
-                    if ($('#isFuture').val() == 'true') {
+                    if ($('#isFuture').val() === 'true') {
                         tmp += '<a data-toggle="modal" href="#editPaymentModal" class="icon-block" data-id="' + row.id + '" data-name="' + row.name + '" data-move="true">';
                         tmp += '<img src="/assets/move.png" style="width:26%; height:5%; float:right; margin-left:10px;" data-toggle="tooltip" title="MOVE TO HISTORY"/>';
                         tmp += '</a>';
@@ -69,7 +73,7 @@ $(document).ready(function () {
             categoryId: $('#categoriesEdit').children("option:selected").val()
         };
 
-        axios.post(crudURL + (movingToHistory === true ? '/move' : '/update' ), updatedData)
+        axios.post(crudURL + (movingToHistory === true ? '/move' : '/update'), updatedData)
             .then(function (response) {
                 toastr.success('Payment updated');
             })
@@ -78,7 +82,6 @@ $(document).ready(function () {
             });
         $('#editPaymentModal').modal('toggle');
         reloadDataTables();
-        //return false;
     });
 
     /**************** UPDATE/MOVE MODAL */
@@ -89,12 +92,13 @@ $(document).ready(function () {
         //        var data = paymentsDataTable.data();
         let data = paymentsDataTable.data().toArray();
         data.forEach(function (el) {
-            if (el.id == paymentId) {
-                let date = el.date.split('-');
+            if (el.id === paymentId) {
+                // let date = el.date.split('-');
                 $('#idEdit').val(el.id);
                 $('#nameEdit').val(el.name);
                 $('#priceEdit').val(el.price);
-                $('#dateEdit').val(date[2] + '-' + date[1] + '-' + date[0]);
+                // $('#dateEdit').val(date[2] + '-' + date[1] + '-' + date[0]);
+                $('#dateEdit').val(el.date);
                 $('#descriptionEdit').val(el.description);
                 $('[name=categoryId] option').filter(function () {   /** setting category in modal */
                     if ($(this).text() === el.categoryName) {
@@ -108,12 +112,12 @@ $(document).ready(function () {
 
     });
 
-    function checkIfMovingToHistory(eventRelatetTarget){
-        if(eventRelatetTarget.data('move') === true){
+    function checkIfMovingToHistory(eventRelatetTarget) {
+        if (eventRelatetTarget.data('move') === true) {
             $('#editPaymentTitle').html("Move to history");
             $('#editPaymentSubmit').html("Accept and move");
             movingToHistory = true;
-        }else{
+        } else {
             $('#editPaymentTitle').text("Edit payment");
             $('#editPaymentSubmit').text("Submit");
             movingToHistory = false;
@@ -134,7 +138,7 @@ $(document).ready(function () {
             toastr.success("Payment added succesfuly");
         }).catch(function (error) {
             toastr.error("Error while adding payment");
-        })
+        });
         $('#addPaymentButton').click();
         reloadDataTables();
     });
@@ -163,10 +167,10 @@ $(window).on('load', function () {
     var id;
 
     $('#deletePayConfirm').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        id = button.data('id')
-        var name = button.data('name')
-        var modal = $(this)
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        id = button.data('id');
+        var name = button.data('name');
+        var modal = $(this);
         modal.find('#hiddenForm').attr('action', '/payment/delete/' + id)
         modal.find('.modal-body .name').text(name)
     });
@@ -179,7 +183,7 @@ $(window).on('load', function () {
                 reloadDataTables();
             }).catch(function (error) {
             toastr.error("Error while deletin payment");
-        })
+        });
         $('#deletePayConfirm').modal('toggle');
     });
 

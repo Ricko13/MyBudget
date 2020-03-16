@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Builder
 @Setter
@@ -19,13 +20,13 @@ public class IncomeDTO implements Serializable {
     private int userId;
     private String title;
     private float value;
-    private String timestamp;
+    private LocalDateTime timestamp;
 
     public static IncomeDTO of(Income income) {
         return IncomeDTO.builder()
                 .id(income.getId())
                 .userId(income.getUser().getId())
-                .timestamp(income.getTimestamp().toString())
+                .timestamp(income.getTimestamp())
                 .title(income.getTitle())
                 .value(income.getValue())
                 .build();

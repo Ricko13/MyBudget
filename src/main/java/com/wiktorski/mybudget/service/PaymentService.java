@@ -1,24 +1,23 @@
 package com.wiktorski.mybudget.service;
 
+import com.wiktorski.mybudget.common.Validator;
+import com.wiktorski.mybudget.common.exception.ExceptionType;
+import com.wiktorski.mybudget.common.exception.MBException;
 import com.wiktorski.mybudget.model.DTO.CategoryDTO;
 import com.wiktorski.mybudget.model.DTO.PaymentDTO;
 import com.wiktorski.mybudget.model.entity.Category;
 import com.wiktorski.mybudget.model.entity.FuturePayment;
 import com.wiktorski.mybudget.model.entity.Payment;
+import com.wiktorski.mybudget.model.entity.User;
+import com.wiktorski.mybudget.model.mapper.EntitiesMapper;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.FuturePaymentRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,8 +30,13 @@ public class PaymentService {
     private final CategoryRepository categoryRepo;
     private final UserService userService;
     private final FuturePaymentRepository futurePaymentRepo;
+    private final EntitiesMapper mapper;
+    private final Validator validator;
 
-    public boolean addPayment(String name, float price, int idCat, @Nullable Date date, String description) {
+    /**
+     * old add payment
+     */
+ /*   public boolean addPayment(String name, float price, int idCat, @Nullable Date date, String description) {
         //TODO trycatch i w catchu false
         userService.decreaseBudget(price);
         //if (date == null) { date = new Date(); }  //TODO dlaczego data sama się tworzy? coś z @Nullable?
@@ -48,129 +52,105 @@ public class PaymentService {
 
     public boolean addPayment(String name, float price, int idCat, String date, String time, String description) throws ParseException {
         return addPayment(name, price, idCat, parseStringDate(date, time), description);
+    }*/
+    @Transactional
+    public void addPayment(PaymentDTO dto) {
+/*        LocalDate date = Optional.ofNullable(dto.getDate()).orElse(LocalDate.now());
+        Payment payment = new Payment(dto.getName(), dto.getPrice(), getUser(), date);
+        payment.setDescription(dto.getDescription()); //TODO to constructor
+        if (dto.getCategoryId() != -1)
+            payment.setCategory(categoryRepo.findById(dto.getCategoryId()).orElseThrow(() -> new MBException(ExceptionType.ENTITY_NOT_FOUND)));
+        */
+        //TODO Validator.validate
+        paymentRepo.save(mapper.toPaymentEntity(dto));
+        userService.decreaseBudget(dto.getPrice());
     }
 
-    public boolean addPayment(PaymentDTO paymentDTO) {
-        try {
-            return addPayment(paymentDTO.getName(), paymentDTO.getPrice(), paymentDTO.getCategoryId(),
-                    parseStringDate(paymentDTO.getDate(), ""), paymentDTO.getDescription());
-        } catch (ParseException e) {
-            return false;
-        }
+    @Transactional
+    public void updatePayment(PaymentDTO paymentDTO) {
+        //TODO Validator.validatePaymentDTO(paymentDTO);
+        Payment payment = paymentRepo.findById(paymentDTO.getId()).orElseThrow(() -> new MBException(ExceptionType.ENTITY_NOT_FOUND));
+        /*payment.setCategory(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null));
+        payment.setDescription(paymentDTO.getDescription());
+        payment.setDate(paymentDTO.getDate());
+        payment.setName(paymentDTO.getName());
+        payment.setPrice(paymentDTO.getPrice());
+        paymentRepo.save(payment);*/
+
+
+        mapper.updatePayment(paymentDTO, payment);
     }
 
-    public boolean updatePayment(PaymentDTO paymentDTO) {
-        Payment payment = paymentRepo.findById(paymentDTO.getId()).orElse(null);
-        if (payment == null) return false;
-        try {
-            payment.setCategory(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null));
-            payment.setDescription(paymentDTO.getDescription());
-            payment.setDate(parseStringDate(paymentDTO.getDate(), ""));
-            payment.setName(paymentDTO.getName());
-            payment.setPrice(paymentDTO.getPrice());
-            paymentRepo.save(payment);
-        } catch (Exception e) {
-            System.out.println("test");
-            //TODO exception logging
-            return false;
-        }
-        return true;
-    }
+    public void deletePaymentById(int paymentId) {
+        //TODO check if exists and constraints and throw exception
+        paymentRepo.deleteById(paymentId);
 
-    public boolean deletePaymentById(int paymentId) {
-        try {
-            paymentRepo.deleteById(paymentId);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     public List<Payment> getUserPaymentsDesc() {
-        List<Payment> payments = securityService.getLoggedInUser().getPayments();
-        for (Payment p : payments) {
-            Date date = p.getDate();
-            p.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(date));
-            p.setJustTime(new SimpleDateFormat("HH:mm").format(date));
-        }
-        return sortPayments(payments);  //TODO get from db sorted or leave it for comparator usage example?
+        return paymentRepo.findAllByUserOrderByDateDesc(securityService.getLoggedInUser());
+       /* QPayment qPayment = QPayment.payment;
+        BooleanBuilder expr = new BooleanBuilder();
+        expr.and(qPayment.user.id.eq(securityService.getLoggedInUser().getId())).and()*/
+
+       /* List<Payment> payments = securityService.getLoggedInUser().getPayments();
+        return sortPayments(payments);  //TODO get from db sorted or leave it for comparator usage example?*/
     }
 
-    public boolean deleteCategory(int categoryId) {
-        try {
-            paymentRepo.findByCategoryId(categoryId).forEach(payment -> payment.setCategory(null));
-            categoryRepo.deleteById(categoryId);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public void deleteCategory(int categoryId) {
+        paymentRepo.findByCategoryId(categoryId).forEach(payment -> payment.setCategory(null));
+        categoryRepo.deleteById(categoryId);
     }
 
-    public boolean updateCategory(CategoryDTO categoryDTO) {
-        Category cat = categoryRepo.findById(categoryDTO.getId()).orElse(null);
-        if (cat != null) {
-            try {
-                cat.setName(categoryDTO.getName());
-                categoryRepo.save(cat);
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        } else
-            return false;
+    public void updateCategory(CategoryDTO categoryDTO) {
+        Category cat = categoryRepo.findById(categoryDTO.getId()).orElseThrow(() -> new MBException(ExceptionType.ENTITY_NOT_FOUND));
+        cat.setName(categoryDTO.getName());
+        categoryRepo.save(cat);
     }
 
     public List<Category> getUserCategories() {
-        return securityService.getLoggedInUser().getCategories();
+        return getUser().getCategories();
     }
 
     public List<PaymentDTO> getFuturePaymentsDesc() {
-        List<FuturePayment> payments = securityService.getLoggedInUser().getFuturePayments();
-         /*for (FuturePayment tmp : payments) {
-           if (tmp.getDate() != null)
-                tmp.setJustDate(new SimpleDateFormat("dd-MM-yyyy").format(tmp.getDate()));
-        }*/
-        return sortFuturePayments(payments).stream().map(PaymentDTO::of).collect(Collectors.toList());
+       /* List<FuturePayment> payments = securityService.getLoggedInUser().getFuturePayments();
+        return sortFuturePayments(payments).stream().map(PaymentDTO::of).collect(Collectors.toList());*/
+        return futurePaymentRepo.findAllByUserOrderByDateDesc(getUser()).stream().map(mapper::toDTO).collect(Collectors.toList());
     }
 
     public boolean addFuturePayment(PaymentDTO dto) {
         try {
-//            futurePaymentRepo.save(new FuturePayment(dto.getName(), dto.getPrice(), securityService.getLoggedInUser(), parseStringDate(dto.getDate(), "")));
             Category cat = categoryRepo.findById(dto.getCategoryId()).orElse(null);
-//            Date date = !dto.getDate().equals("") ? new SimpleDateFormat("yyyy-MM-dd").parse(dto.getDate()) : new Date();
             futurePaymentRepo.save(new FuturePayment(securityService.getLoggedInUser(), dto.getName(), dto.getPrice()
-                    , dto.getDate().equals("") ? null : LocalDate.parse(dto.getDate(), DateTimeFormatter.ofPattern("yyyy-DD-mm"))
-                    , dto.getDescription(), cat));
+                    , dto.getDate(), dto.getDescription(), cat));
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean deleteFuturePaymentById(int id) {
+    public void deleteFuturePaymentById(int id) {
         futurePaymentRepo.deleteById(id);
-        return true;
     }
 
-    public boolean updateFuturePayment(PaymentDTO paymentDTO) {
-        FuturePayment fut = futurePaymentRepo.findById(paymentDTO.getId()).orElse(null);
+    public void updateFuturePayment(PaymentDTO paymentDTO) {
+        FuturePayment fut = futurePaymentRepo.findById(paymentDTO.getId()).orElseThrow(() -> new MBException(ExceptionType.ENTITY_NOT_FOUND));
         if (fut != null) {
-            fut.setLocalDate(paymentDTO.getDate().equals("") ? null : LocalDate.parse(paymentDTO.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            fut.setDate(paymentDTO.getDate());
             fut.setCategory(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null));
             fut.setDescription(paymentDTO.getDescription());
             fut.setName(paymentDTO.getName());
             fut.setPrice(paymentDTO.getPrice());
         }
         futurePaymentRepo.save(fut);
-        return true;
     }
 
-    public boolean moveFuturePayment(PaymentDTO paymentDTO) {
-        return deleteFuturePaymentById(paymentDTO.getId()) && addPayment(paymentDTO);
+    public void moveFuturePayment(PaymentDTO paymentDTO) {
+        addPayment(paymentDTO);
+        deleteFuturePaymentById(paymentDTO.getId());
     }
 
-    public Payment paymentDTOtoPayment(PaymentDTO paymentDTO) throws ParseException {
+   /* public Payment paymentDTOtoPayment(PaymentDTO paymentDTO) throws ParseException {
         Payment payment = Payment.builder()
                 .id(paymentDTO.getId())
                 .name(paymentDTO.getName())
@@ -182,12 +162,13 @@ public class PaymentService {
             payment.setDate(new SimpleDateFormat("dd-MM-yyyy").parse(paymentDTO.getDate()));
 
         return payment;
-    }
+    }*/
 
-    public PaymentDTO paymentToPaymentDTO(Payment payment) {
+    /*public PaymentDTO paymentToPaymentDTO(Payment payment) {
         PaymentDTO dto = PaymentDTO.builder()
                 .id(payment.getId())
-                .date(payment.getJustDate().equals("") ? payment.getDate().toString() : payment.getJustDate())
+//                .localDate(payment.getJustDate().equals("") ? payment.getDate().toString() : payment.getJustDate())
+                .date(payment.getDate())
                 .description(payment.getDescription())
                 .name(payment.getName())
                 .price(payment.getPrice())
@@ -197,13 +178,13 @@ public class PaymentService {
             dto.setCategoryName(payment.getCategory().getName());
         }
         return dto;
-    }
+    }*/
 
     /**
      * form always sends data but data can be empty like ""
      */
-    private Date parseStringDate(String requestDate, String time) throws ParseException {
-        Date date;
+     /* private Date parseStringDate(String requestDate, String time) throws ParseException {
+      Date date;
         SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-ddHH:mm");
 
         if (requestDate.equals("") && time.equals("")) {
@@ -213,15 +194,15 @@ public class PaymentService {
         } else if (requestDate.equals("")) {
             String[] timeArr = time.split(":");
             date = new Date();
-            date.setHours(Integer.parseInt(timeArr[0]));  /*should use Calendar*/
+            date.setHours(Integer.parseInt(timeArr[0]));  *//*should use Calendar*//*
             date.setMinutes(Integer.parseInt(timeArr[1]));
         } else date = simpleDate.parse(requestDate + time);
         return date;
-    }
+    }*/
 
     //TODO 2 same comparators, merge it, or let futurePayment extends from payment
     private List<Payment> sortPayments(List<Payment> payments) {
-        Comparator<Payment> comp = (o1, o2) -> {
+        /*Comparator<Payment> comp = (o1, o2) -> {
             if (o1.getDate().before(o2.getDate())) {
                 return 1;
             } else if (o1.getDate().after(o2.getDate())) {
@@ -230,12 +211,13 @@ public class PaymentService {
                 return 0;
             }
         };
-        payments.sort(comp);
+        payments.sort(comp);*/
         return payments;
     }
 
+    //TODO przykład ułatwienia z query dsl/hibernate
     private List<FuturePayment> sortFuturePayments(List<FuturePayment> payments) {
-        Comparator<FuturePayment> comp = (o1, o2) -> {
+        /*Comparator<FuturePayment> comp = (o1, o2) -> {
             if (o1.getDate().before(o2.getDate())) {
                 return 1;
             } else if (o1.getDate().after(o2.getDate())) {
@@ -244,8 +226,12 @@ public class PaymentService {
                 return 0;
             }
         };
-        payments.sort(comp);
+        payments.sort(comp);*/
         return payments;
+    }
+
+    private User getUser() {
+        return securityService.getLoggedInUser();
     }
 }
 

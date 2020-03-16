@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 //@Profile("dev")
 @Component
@@ -45,11 +45,11 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
             userService.save(user);
 
 
-            Payment pmnt = new Payment("nocat", (float) 25.60, user, new Date());
+            Payment pmnt = new Payment("nocat", (float) 25.60, user, LocalDate.now());
             paymentRepo.save(pmnt);
 
             Category cat = new Category("przykladowa kategoria", user);
-            Payment pmnt2 = new Payment("cat", (float) 89.34, user, new Date());
+            Payment pmnt2 = new Payment("cat", (float) 89.34, user, LocalDate.now());
             pmnt2.setCategory(cat);
             catRepo.save(cat);
             paymentRepo.save(pmnt2);

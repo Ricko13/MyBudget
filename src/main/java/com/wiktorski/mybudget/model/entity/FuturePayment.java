@@ -15,9 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -31,15 +30,20 @@ public class FuturePayment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     private String name;
+
     private float price;
+
     @Deprecated //TODO change to LocalDate or LocalDateTime
     //@Temporal(TemporalType.DATE)
     @CreationTimestamp
-    private Date date;
-//    @Convert
-    private LocalDate localDate;
+    private LocalDateTime timestamp;
+
+    private LocalDate date;
+
     private String description;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -49,25 +53,11 @@ public class FuturePayment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Transient
-    private String justDate;
-    @Transient
-    private String justTime;
-
-    public FuturePayment(User user, String name, float price, Date date, String description, Category category) {
-        this.user = user;
-        this.name = name;
-        this.price = price;
-        this.date = date;
-        this.description = description;
-        this.category = category;
-    }
-
     public FuturePayment(User user, String name, float price, LocalDate localDate, String description, Category category) {
         this.user = user;
         this.name = name;
         this.price = price;
-        this.localDate = localDate;
+        this.date = localDate;
         this.description = description;
         this.category = category;
     }

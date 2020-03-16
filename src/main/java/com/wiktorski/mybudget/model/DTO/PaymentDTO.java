@@ -11,8 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -24,32 +23,29 @@ public class PaymentDTO implements Serializable {
     private int id;
     private String name;
     private float price;
-    private String date;
+    private LocalDate date;
     private String description;
     private String categoryName;
     private int categoryId;
 
 
-    //TODO may throw nullpointer exception
+    //TODO may throw nullpointer exception cause of category
     public static PaymentDTO of(Payment payment) {
         return PaymentDTO.builder()
                 .id(payment.getId())
-                .categoryId(payment.getId())
-                .date(payment.getJustDate())
+                .categoryId(payment.getCategory().getId())
+                .date(payment.getDate())
                 .description(payment.getDescription())
                 .name(payment.getName())
                 .price(payment.getPrice())
                 .build();
     }
 
-
+    //Optional.ofNullable dla category
     public static PaymentDTO of(FuturePayment futurePayment) {
         Category cat = futurePayment.getCategory();
         return PaymentDTO.builder()
-//                .date(futurePayment.getDate() == null ? null : futurePayment.getDate().toString().split(" ")[0])
-//                .date(futurePayment.getJustDate())
-                .date(futurePayment.getLocalDate()!=null? futurePayment.getLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) : "")
-//                .description(futurePayment.getDescription() == null ? "" : futurePayment.getDescription())
+                .date(futurePayment.getDate())
                 .description(futurePayment.getDescription())
                 .id(futurePayment.getId())
                 .name(futurePayment.getName())

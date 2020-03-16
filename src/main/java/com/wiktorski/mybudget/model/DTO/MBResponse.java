@@ -1,4 +1,4 @@
-package com.wiktorski.mybudget.model;
+package com.wiktorski.mybudget.model.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

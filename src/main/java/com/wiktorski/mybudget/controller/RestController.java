@@ -3,9 +3,10 @@ package com.wiktorski.mybudget.controller;
 import com.wiktorski.mybudget.model.DTO.BudgetResponse;
 import com.wiktorski.mybudget.model.DTO.CategoryDTO;
 import com.wiktorski.mybudget.model.DTO.IncomeDTO;
+import com.wiktorski.mybudget.model.DTO.MBResponse;
 import com.wiktorski.mybudget.model.DTO.PaymentDTO;
-import com.wiktorski.mybudget.model.MBResponse;
 import com.wiktorski.mybudget.model.entity.Payment;
+import com.wiktorski.mybudget.model.mapper.EntitiesMapper;
 import com.wiktorski.mybudget.service.BudgetService;
 import com.wiktorski.mybudget.service.PaymentService;
 import com.wiktorski.mybudget.service.security.SecurityService;
@@ -32,21 +33,12 @@ public class RestController {
     private final PaymentService paymentService;
     private final SecurityService securityService;
     private final BudgetService budgetService;
+    private final EntitiesMapper mapper;
 
     @GetMapping
     public String henlo() {
         return "Henlo there";
     }
-
-
-/*    //TODO no usage
-    @GetMapping("/paymentt")
-    public ResponseEntity<List<PaymentDTO>> getPaymentss() {
-        return new ResponseEntity<>(
-                paymentService.getUserPaymentsDesc().stream()
-                        .map(paymentService::paymentToPaymentDTO).collect(Collectors.toList())
-                , HttpStatus.OK);
-    }*/
 
     /**
      * without params map for DT
@@ -56,7 +48,7 @@ public class RestController {
         MBResponse<List<PaymentDTO>> response = new MBResponse<>();
         response.setData(
                 paymentService.getUserPaymentsDesc().stream()
-                        .map(paymentService::paymentToPaymentDTO).collect(Collectors.toList())
+                        .map(mapper::toDTO).collect(Collectors.toList())
         );
         return response;
     }
@@ -66,35 +58,34 @@ public class RestController {
         MBResponse<List<PaymentDTO>> response = new MBResponse<>();
         response.setData(
                 paymentService.getUserPaymentsDesc().stream()
-                        .map(paymentService::paymentToPaymentDTO).collect(Collectors.toList())
+                        .map(mapper::toDTO).collect(Collectors.toList())
         );
         return response;
+        //TODO wykorzystaj builer jak niżej, i przerzuć mapowanie do serwisu
+        /*return MBResponse.<List<PaymentDTO>>builder().data(
+                paymentService.getUserPaymentsDesc().stream()
+                        .map(mapper::toDTO).collect(Collectors.toList())
+        ).build();*/
     }
 
-    @Transactional
+
     @PostMapping("/payment/add")
     public ResponseEntity addPayment(@RequestBody PaymentDTO paymentDTO) {
-        if (paymentService.addPayment(paymentDTO))
-            return ResponseEntity.ok(HttpStatus.OK);
-        else
-            return ResponseEntity.badRequest().body("Bad request");
+        paymentService.addPayment(paymentDTO);
+        return ResponseEntity.ok("Added payment succesfully");
+
     }
 
     @PostMapping("/payment/update")
     public ResponseEntity updatePayment(@RequestBody PaymentDTO paymentDTO) {
-        if (paymentService.updatePayment(paymentDTO))
-            return ResponseEntity.ok(HttpStatus.OK);
-        else
-            return ResponseEntity.badRequest().body("Bad request");
-
+        paymentService.updatePayment(paymentDTO);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/payment/delete/{paymentId}")
     public ResponseEntity deletePayment(@PathVariable int paymentId) {
-        if (paymentService.deletePaymentById(paymentId))
-            return ResponseEntity.ok(HttpStatus.OK);
-        else
-            return ResponseEntity.badRequest().body("Bad request");
+        paymentService.deletePaymentById(paymentId);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/futurePaymentsDT")
@@ -143,7 +134,7 @@ public class RestController {
                 returnPayments.add(payment);
         });
         MBResponse<List<PaymentDTO>> response = new MBResponse<>();
-        response.setData(returnPayments.stream().map(paymentService::paymentToPaymentDTO).collect(Collectors.toList()));
+        response.setData(returnPayments.stream().map(mapper::toDTO).collect(Collectors.toList()));
         return response;
     }
 
@@ -156,23 +147,20 @@ public class RestController {
 
     @GetMapping("/category/delete/{categoryId}")
     public ResponseEntity deleteCategory(@PathVariable int categoryId) {
-        if (paymentService.deleteCategory(categoryId))
-            return ResponseEntity.ok(HttpStatus.OK);
-        else
-            return ResponseEntity.badRequest().body("Bad Request");
+        paymentService.deleteCategory(categoryId);
+        return ResponseEntity.ok(HttpStatus.OK);
+
     }
 
     @Transactional
     @PostMapping("/category/update")
     public ResponseEntity updateCategory(@RequestBody CategoryDTO categoryDTO) {
-        if (paymentService.updateCategory(categoryDTO))
-            return ResponseEntity.ok(HttpStatus.OK);
-        else
-            return ResponseEntity.badRequest().body("Bad request");
+        paymentService.updateCategory(categoryDTO);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/category/chart") //TODO póki co takie samo jak /categoryDT
-    public MBResponse<List<CategoryDTO>> getCategoryChartData(){
+    public MBResponse<List<CategoryDTO>> getCategoryChartData() {
         return MBResponse.<List<CategoryDTO>>builder().data(
                 paymentService.getUserCategories().stream().map(CategoryDTO::of).collect(Collectors.toList())
         ).build();

@@ -103,7 +103,7 @@ public class MainController {
         return "/payment/newPayment";
     }
 
-    @Deprecated
+   /* @Deprecated
     @Transactional
     @PostMapping("/payment/add")
     public String paymentAddFinal(@RequestParam String name, @RequestParam float price,
@@ -115,7 +115,7 @@ public class MainController {
             e.printStackTrace();
         }
         return "redirect:/history";
-    }
+    }*/
 
     @GetMapping("/payment/delete/{id}")
     public String deletePayment(@PathVariable int id) {

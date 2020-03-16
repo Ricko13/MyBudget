@@ -23,7 +23,7 @@ public class BudgetService {
         return BudgetResponse.builder().budget(securityService.getLoggedInUser().getBudget()).build();
     }
 
-    public List<IncomeDTO> getIncome(){
+    public List<IncomeDTO> getIncome() {
         return securityService.getLoggedInUser()
                 .getIncomes().stream().map(IncomeDTO::of).collect(Collectors.toList());
     }
@@ -31,8 +31,11 @@ public class BudgetService {
     public void addIncome(IncomeDTO request) {
         userService.addToBudget(request.getValue());
         incomeRepo.save(
-                Income.builder().title(request.getTitle())
-                        .value(request.getValue()).user(securityService.getLoggedInUser()).build()
+                Income.builder()
+                        .title(request.getTitle())
+                        .value(request.getValue())
+                        .user(securityService.getLoggedInUser())
+                        .build()
         );
     }
 }
