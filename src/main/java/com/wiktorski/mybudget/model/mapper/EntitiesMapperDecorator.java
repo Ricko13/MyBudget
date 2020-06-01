@@ -4,13 +4,11 @@ import com.wiktorski.mybudget.model.DTO.PaymentDTO;
 import com.wiktorski.mybudget.model.entity.Payment;
 import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
-import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public abstract class EntitiesMapperDecorator implements EntitiesMapper {
@@ -23,8 +21,6 @@ public abstract class EntitiesMapperDecorator implements EntitiesMapper {
     private  CategoryRepository categoryRepo;
     @Autowired
     private  SecurityService securityService;
-    @Autowired
-    private  PaymentRepository paymentRepo;
 
     @Override
     public Payment toPaymentEntity(PaymentDTO dto) {

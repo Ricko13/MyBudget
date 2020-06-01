@@ -20,6 +20,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
+    private String color;
     @OneToMany(mappedBy = "category")
     private List<Payment> payments;
     @JsonIgnore
@@ -27,9 +28,10 @@ public class Category {
     @JoinColumn(name="user_id")
     private User user;
 
-    public Category(String name, User user) {
+    public Category(String name, String color, User user) {
         this.name = name;
         this.user = user;
+        this.color = color;
     }
 
     public Category(String name) {

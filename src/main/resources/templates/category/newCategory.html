@@ -12,8 +12,14 @@
     <header><h2>Add category</h2></header>
     <form th:action="@{/category/add}" method="post">
         <div class="form-group">
+            <p>
             <input type="text" class="form-control" id="name"
                    placeholder="Category name" name="name" autofocus="autofocus" required>
+            </p>
+            <p>
+                <label for="color">Choose category color:</label>
+                <input type="color" name="color" class="form-control" id="color">
+            </p>
             <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
         </div>
         <button type="submit" class="btn btn-secondary">Submit</button>

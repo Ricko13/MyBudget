@@ -29,7 +29,6 @@ function submitEdit(){
         reloadDataTables();
         toastr.success("Category edited");
     }).catch(function(error){
-        console.log("XDDDD");
         toastr.error("Error while updating category");
     });
 }
@@ -47,8 +46,15 @@ $(document).ready(function(){
          ],
         columns: [
             {render: function(data, type, row){
-                return '<div id="catName'+row.id+'"><a href="/category/'+row.name+'">'+row.name+'</a></div>';
+                var toReturn = '<div id="catName'+row.id+'"><a href="/category/'+row.name+'">'+row.name+'</a>'
+                return toReturn + '<div id="color'+row.id+'" style="background-color:'+row.color+'; width: 50px; height: 20px;"></div> </div>';
             }},
+            /*{
+                render: function(data, type, row){
+                    return `<div id="color${row.id}" style="background-color: ${row.color}; width: 50px; height: 20px;"></div>`;
+                    // return '<div id="color'+row.id+'" style="background-color:'+row.color+'; width: 50px; height: 20px;">'+row.color+'</div>';
+                }
+            },*/
             {render: function(data, type, row){
                 tmp = '<div style="width:80px;">';
                 tmp += '<a data-toggle="modal" href="#deleteCatConfirm" class="icon-block" data-id="' + row.id + '" data-name="' + row.name + '">';

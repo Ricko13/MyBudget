@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" xmlns:v-on="http://www.w3.org/1999/xhtml">
+     xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head th:replace="template.html::head">
     <meta charset="UTF-8">
     <title>Title</title>
@@ -10,14 +10,11 @@
 <div class="container">
     <div id="budget">
         <header><h2>My budget</h2></header>
-        <!--        <hr>-->
-
         <div th:class="addToBudget">
             <form v-on:submit.prevent th:action="@{/budget/add}" th:method="post" th:class="form-inline">
                 <div class="form-group" style="margin-right: auto; margin-left: auto;">
                     <input v-model="request.title" type="text" placeholder="Title" class="form-control" name="title"
                            required style="margin-right: 15px;">
-                    <!-- v-mask="'##.##'"-->
                     <input v-model="request.value"  id="budgetEdit" class="form-control" type="number" name="amount"
                            placeholder="Value" min="0" required>
                     <button v-on:click="submitIncome" type="submit" class="btn btn-secondary pull-right"
@@ -26,16 +23,13 @@
                 </div>
             </form>
         </div>
-
         <table id="budgetTable" class="table table-sm table-hover table-budget" style="width: 200px;">
             <tr>
                 <td><h4>Budget:</h4></td>
                 <td> {{budget}}</td>
             </tr>
-
         </table>
     </div>
-
     <table id="incomeDataTable" class="table table-sm table-hover">
         <thead class="thead-dark">
         <tr>
@@ -46,7 +40,6 @@
         </tr>
         </thead>
     </table>
-
 </div>
 <div th:replace="template.html :: js-include"></div>
 </body>

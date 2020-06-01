@@ -29,45 +29,37 @@ public class MainController {
     UserService userService;
     PaymentService paymentService;
     SecurityService securityService;
-    PaymentRepository paymentRepository;
-    CategoryRepository categoryRepository;
+//    PaymentRepository paymentRepository;
+//    CategoryRepository categoryRepository;
 
     @GetMapping("/")
     public String index(Model model){
-        User user = securityService.getLoggedInUser();
+       /* User user = securityService.getLoggedInUser();
         model.addAttribute("user", user);
-       // model.addAttribute("budgetSum", (user.getBudget()+user.getSavings()));
         model.addAttribute("payments", paymentService.getUserPaymentsDesc());
-        model.addAttribute("categories", paymentService.getUserCategories());
+        model.addAttribute("categories", paymentService.getUserCategories());*/
         return "index";
     }
 
     @GetMapping("/budget")
     public String budget(Model model){
-        User user = securityService.getLoggedInUser();
-        model.addAttribute("user", user);
-       // model.addAttribute("budgetSum", user.getBudget()+user.getSavings());
+      /*  User user = securityService.getLoggedInUser();
+        model.addAttribute("user", user);*/
         return "/user/budget";
     }
 
-    @Transactional
+    @Transactional //TODO ???
     @PostMapping("/budget/add")
     public String addToBudget(@RequestParam float amount){
-        try{
         userService.addToBudget(amount);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         return "redirect:/budget";
     }
 
     @GetMapping("/history")
     public String history(Model model) {
-       // model.addAttribute("payments", paymentService.getUserPaymentsDesc());  //TODO no longer needed
         model.addAttribute("categories", paymentService.getUserCategories());
         model.addAttribute("dataURL", "/api/paymentsDT");
         model.addAttribute("isFuture", false);
-//        model.addAttribute("inCategory", false);
         return "/payment/payment";
     }
 
@@ -83,9 +75,6 @@ public class MainController {
         model.addAttribute("dataURL", "/api/categoryDT/"+name);
         model.addAttribute("categories", paymentService.getUserCategories());
         model.addAttribute("isFuture", false);
-//        model.addAttribute("inCategory", true);
-        //model.addAttribute("payments", returnPayments);
-        //return "/payment/paymentInCategory";
         return "/payment/payment";
     }
 
@@ -103,27 +92,13 @@ public class MainController {
         return "/payment/newPayment";
     }
 
-   /* @Deprecated
-    @Transactional
-    @PostMapping("/payment/add")
-    public String paymentAddFinal(@RequestParam String name, @RequestParam float price,
-                                  @RequestParam(name = "categories") int idCat,
-                                  @RequestParam String date, @RequestParam String description) {
-        try {
-            paymentService.addPayment(name, price, idCat, date, "", description);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return "redirect:/history";
-    }*/
-
-    @GetMapping("/payment/delete/{id}")
+  /*  @GetMapping("/payment/delete/{id}")
     public String deletePayment(@PathVariable int id) {
         paymentRepository.deleteById(id);
         return "redirect:/history";
-    }
+    }*/
 
-    @GetMapping("/payment/edit/{id}")
+  /*  @GetMapping("/payment/edit/{id}")
     public String editPayment(@PathVariable int id, Model model){
         Payment payment =  paymentRepository.findById(id).orElse(null);
         model.addAttribute("payment",payment);
@@ -131,11 +106,11 @@ public class MainController {
         assert payment != null;         //TODO co
         model.addAttribute("date", new SimpleDateFormat("yyyy-MM-dd").format(payment.getDate()));
         if(payment.getCategory()!=null)
-            model.addAttribute("paymentCategoryId", payment.getCategory().getId());
+            model.addAttribute("paymentCategorycId", payment.getCategory().getId());
         else
             model.addAttribute("paymentCategoryId", -1);
         return "/payment/editPayment";
-    }
+    }*/
 
     @GetMapping("/category")
     public String category(Model model) {
@@ -148,11 +123,11 @@ public class MainController {
         return "/category/newCategory";
     }
 
-    @PostMapping("/category/add")
-    public String categoryAdd(@RequestParam String name) {
-        categoryRepository.save(new Category(name, securityService.getLoggedInUser()));
+  /*  @PostMapping("/category/add")
+    public String categoryAdd(@RequestParam String name, @RequestParam String color) {
+        categoryRepository.save(new Category(name, color, securityService.getLoggedInUser()));
         return "redirect:/category";
-    }
+    }*/
 
     @GetMapping("/category/delete/{id}")
     public String deleteCategory(@PathVariable int id) {

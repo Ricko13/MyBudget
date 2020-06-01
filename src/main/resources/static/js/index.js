@@ -1,41 +1,143 @@
 var categories;
 var chartsVue;
+const reportURL = '/api/report';
+var chartLabels = [];
+var chartBackgrounds = [];
+var chartData = [];
+var chart = undefined;
 
-$(document).ready(function(){
-    getCategoryData();
-    initChartJs();
-//    initChartJs2();
+var paymentsDataTable;
+
+$(document).ready(function () {
     initChartsVue();
 });
 
-function initChartsVue(){
+function initChartsVue() {
     chartsVue = new Vue({
-    el: "chartsVue",
-    data: {
-    },
-    methods: {
-    }
+        el: "#chartsVue",
+        data: {
+            startDate:  moment().startOf('month').format('YYYY-MM-DD'),
+            endDate:  moment().format('YYYY-MM-DD'),
+            reportData: {
+                paymentsAmount: 0,
+                totalOutcomeAmount: 0,
+                totalIncomeAmount: 0,
+                averageDailyOutcome: 0,
+                incomeMinusOutcome: 0
+            }
+        },
+        created: function () {
+            // this.setDateRangeToCurrentMonth();
+            this.submitRange();
+        },
+        methods: {
+            submitRange() {
+                axios.post(reportURL, {'startDate': this.startDate, 'endDate': this.endDate})
+                    .then(function (response) {
+                         chartsVue.reportData = response.data;
+                        response.data.sumInCategories.forEach(function (entry, index) {
+                            chartLabels[index] = entry.name;
+                            chartBackgrounds[index] = entry.color;
+                            chartData[index] = entry.summaryAmount;
+                            Vue.nextTick(function () {
+                                chartsVue.initChart('bar');
+                            });
+                        });
+                    })
+            },
+            setDateRangeToCurrentMonth() { //przykład zmniejszenia ilości kodu przez momentjs
+                var date = new Date();
+                var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+                startDate = formatDate(firstDay);
+                var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                endDate = formatDate(lastDay);
+            },
+            setDateRangeToToday() {
+                startDate = endDate = formatDate(new Date());
+            },
+            initChart(type) {
+                if(chart){  window.chart.destroy();  }
+                var ctx = document.getElementById('chart').getContext('2d');
+                chart = new Chart(ctx, {
+                    type: type,
+                    data: {
+                        labels: chartLabels,
+                        datasets: [{
+                            label: 'Values in categories',
+                            backgroundColor: chartBackgrounds,
+                            borderColor: 'rgba(0,0,0)',
+                            data: chartData
+                        }]
+                    },
+                    options: {responsive: true, maintainAspectRatio: false}
+                });
+            },
+            convertResponseColorsToRgb(hexArray) {
+                var rgbArray = [];
+                hexArray.forEach(function (item, index) {
+                    rgbArray[index] = this.hexToRGB(item);
+                });
+                return rgbArray;
+            },
+            submitPaymentsDatatable(){
+                table.destroy();
+                paymentsDataTable = $("#dataTable").DataTable({
+                    ajax: '/api/paymentsDT/',
+                    order: [],
+                    columnDefs: [
+                        {"orderable": false, "targets": 5}
+                    ],
+                    columns: [
+                        {data: "name"},
+                        {data: "price"},
+                        {
+                            // render: formatLocalDate(row.date)
+                            render: function (data, type, row) {
+                                return formatLocalDate(row.date)
+                            }
+                        },
+                        {data: "description"},
+                        {
+                            render: function (data, type, row) {
+                                if (row.categoryName !== null) {
+                                    return '<a href="/category/' + row.categoryName + '">' + row.categoryName + '</a>';
+                                } else {
+                                    return "";
+                                }
+                            }
+                        }
+                    ]
+                });
+            }
+
+        }
 
     })
 }
 
-function getCategoryData(){
-    axios.get("/api/category/chart").then(function(response){
+
+//TODO niepotrzebne chyba
+function getCategoryData() {
+    axios.get("/api/category/chart").then(function (response) {
         categories = response.data;
-        console.log(categories);
-    }).catch(function(error){
+    }).catch(function (error) {
         toastr.error("Error while getting charts data");
     })
 }
 
-function initChartJs(){
+function initChartJs2() {
     var ctx = document.getElementById('myChart').getContext('2d');
-    var chart = new Chart(ctx, {
-        // The type of chart we want to create
+    chart = new Chart(ctx, {
         type: 'pie',
-        // The data for our dataset
         data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            // labels: chartLabels,
+            /*datasets: [{
+                label: 'Values in categories',
+                backgroundColor: chartBackgrounds,
+                borderColor: chartBackgrounds,
+                data: chartData
+            }]*/
+            labels: [1, 2, 3, 4, 5, 6, 7],
             datasets: [{
                 label: 'My First dataset',
                 backgroundColor: 'rgb(52, 58, 64)',
@@ -43,7 +145,6 @@ function initChartJs(){
                 data: [0, 10, 5, 2, 20, 30, 45]
             }]
         },
-        // Configuration options go here
         options: {
             responsive: true,
             maintainAspectRatio: false //options to make chart resizable and responsive
@@ -51,7 +152,7 @@ function initChartJs(){
     });
 }
 
-function initChartJs2(){
+function initChartJs3() {
     var ctx = document.getElementById('myChart2');
     var myChart = new Chart(ctx, {
         type: 'bar',
@@ -90,11 +191,6 @@ function initChartJs2(){
         }
     });
 
-}
-
-function random_rgba() {
-    var o = Math.round, r = Math.random, s = 255;
-    return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
 }
 
 

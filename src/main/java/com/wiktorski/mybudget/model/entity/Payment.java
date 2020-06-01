@@ -19,7 +19,6 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@Inheritance(strategy = InheritanceType.JOINED)
 public class Payment {
 
     @Id
@@ -30,7 +29,7 @@ public class Payment {
 
     private float price;
 
-    @NotNull
+    @NotNull  //TODO to jest do walidacji, chyba niepotrzebne bez niej
     private LocalDate date;
 
     private String description;

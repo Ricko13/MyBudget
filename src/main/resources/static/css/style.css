@@ -19,7 +19,7 @@ body {
 }
 
 .container {
-    margin-top: 20px;
+    padding: 20px;
     width: 1000px;
     /*height: 750px;*/
     /*height:86vh;                                            !*!!!!!!!!!!!!!!!!!!*!*/
@@ -78,11 +78,24 @@ body {
 }
 
 .container-wide {
-    margin-top: 20px;
+    padding: 20px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
     width: auto; /*100%;*/ /*1300px;*/
+}
+
+#chartsVue {
+    width: 1400px;
+    /*margin-left: 100px;*/
+    margin-left: auto;
+    /*margin-right: 100px;*/
+    margin-right: auto;
+    background: #1D1F20;
+}
+
+.dark-body {
+    background: #1D1F20;
 }
 
 .overflow {
@@ -177,6 +190,10 @@ a:hover {
     margin-top: 20px;
 }
 
+.shadow {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 /*DO MIERNIKA HASLA*/
 .short {
     color: #FF0000;
@@ -269,4 +286,17 @@ a:hover {
 
 #budgetTable {
     font-size: x-large;
+}
+
+#chartDiv {
+    /*border: 1px dotted red;*/
+}
+
+.pieChart {
+    width: 400px; height:400px;
+}
+
+.barChart {
+    width: 400px; height: 800px;
+    margin-bottom: 200px; margin-left:auto; margin-right:auto;
 }

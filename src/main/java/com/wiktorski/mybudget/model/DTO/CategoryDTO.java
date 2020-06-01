@@ -17,14 +17,16 @@ import java.io.Serializable;
 public class CategoryDTO implements Serializable {
     private int id;
     private String name;
+    private String color;
     private float valueSum;
 
-    public CategoryDTO(int id, String name) {
+    public CategoryDTO(int id, String name, String color) {
         this.id = id;
         this.name = name;
+        this.color = color;
     }
 
     public static CategoryDTO of(Category cat){
-        return new CategoryDTO(cat.getId(),cat.getName());
+        return new CategoryDTO(cat.getId(),cat.getName(), cat.getColor());
     }
 }

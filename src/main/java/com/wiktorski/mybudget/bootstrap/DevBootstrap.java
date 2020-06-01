@@ -48,7 +48,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
             Payment pmnt = new Payment("nocat", (float) 25.60, user, LocalDate.now());
             paymentRepo.save(pmnt);
 
-            Category cat = new Category("przykladowa kategoria", user);
+            Category cat = new Category("przykladowa kategoria", "#ffffff", user);
             Payment pmnt2 = new Payment("cat", (float) 89.34, user, LocalDate.now());
             pmnt2.setCategory(cat);
             catRepo.save(cat);
