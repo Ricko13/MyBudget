@@ -3,9 +3,15 @@ package com.wiktorski.mybudget.model.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
+import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +19,7 @@ import java.util.Set;
 @Setter
 @Getter
 @Entity
+@ToString
 public class User {
 
     @Id
@@ -25,23 +32,15 @@ public class User {
     private String password;
     private String confirmationToken;
     private boolean enabled;
-
-    //TODO Powinno być w oddzielnym entity w relacji @OneToOne*/
     private float budget;
 //    private float savings;
-//    private float toSave;
-    /*@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-    private Budget budget;*/
-    /*****************************************************/
 
     @Transient
     private String passwordConfirm;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Payment> payments;
-    public void addPayment(Payment payment) {
-        this.payments.add(payment);
-    }       //TODO NIE UŻYWANE
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<FuturePayment> futurePayments;
 
@@ -62,13 +61,4 @@ public class User {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
 }

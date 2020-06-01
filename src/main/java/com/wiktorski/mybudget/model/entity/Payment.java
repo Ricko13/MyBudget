@@ -1,22 +1,26 @@
 package com.wiktorski.mybudget.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Getter
 @Setter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Payment {
@@ -29,7 +33,6 @@ public class Payment {
 
     private float price;
 
-    @NotNull  //TODO to jest do walidacji, chyba niepotrzebne bez niej
     private LocalDate date;
 
     private String description;
@@ -43,7 +46,6 @@ public class Payment {
     @JoinColumn(name = "user_id")
     private User user;
 
-
     public Payment(String name, float price, User user, LocalDate date) {
         this.name = name;
         this.price = price;
@@ -51,17 +53,4 @@ public class Payment {
         this.user = user;
     }
 
-    /*@JsonManagedReference
-    public Category getCategory() {
-        return category;
-    }*/
-
-    @Override
-    public String toString() {
-        return "Payment{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                '}';
-    }
 }

@@ -1,31 +1,43 @@
 package com.wiktorski.mybudget.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.List;
 
-
 @Entity
-@NoArgsConstructor
+@ToString
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     private String name;
+
     private String color;
-    @OneToMany(mappedBy = "category")
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Payment> payments;
-    @JsonIgnore
+
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Category(String name, String color, User user) {
@@ -34,25 +46,4 @@ public class Category {
         this.color = color;
     }
 
-    public Category(String name) {
-        this.name = name;
-    }
-
-    @JsonIgnore
-    @JsonBackReference
-    public List<Payment> getPayments(){
-        return payments;
-    }
-    public void setPayments(List<Payment> payments) {
-        this.payments = payments;
-    }
-
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", payments=" + payments +
-                '}';
-    }
 }

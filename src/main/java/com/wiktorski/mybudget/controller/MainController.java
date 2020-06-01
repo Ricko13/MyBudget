@@ -1,13 +1,9 @@
 package com.wiktorski.mybudget.controller;
 
-import com.wiktorski.mybudget.model.entity.Category;
 import com.wiktorski.mybudget.model.entity.Payment;
-import com.wiktorski.mybudget.model.entity.User;
-import com.wiktorski.mybudget.repository.CategoryRepository;
-import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.PaymentService;
-import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.service.UserService;
+import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 

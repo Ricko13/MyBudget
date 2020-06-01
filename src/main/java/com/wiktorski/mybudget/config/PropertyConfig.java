@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 //@ConfigurationProperties(prefix = "custom")
 //@Validated
 
+//TODO co z tym
+
 @Component
 @EnableConfigurationProperties(PropertyConfig.class)
 @ConfigurationProperties("custom")
