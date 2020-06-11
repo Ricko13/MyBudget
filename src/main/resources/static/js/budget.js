@@ -26,10 +26,10 @@ function initBudgetVue() {
                 if(budgetVue.request.title !== ""){
                     axios.post("/api/income", budgetVue.request)
                         .then(function (response) {
-                            toastr.success("Added income")
+                            toastr.success("Income added succesfully")
                         }).catch(function (error) {
-                        toastr.error("Error while adding income: ");
-                    });
+                            toastr.error("Error while adding income: ");
+                        });
                 }
                 setTimeout(function () {
                     reloadDataTables();
@@ -37,21 +37,14 @@ function initBudgetVue() {
                 }, 500);
             },
             getBudgetData: function () {
-                axios.get("/api/budget").then(function (response) {
-                    budgetVue.budget = response.data.budget;
-                }).catch(function (error) {
-                    console.log("Error while getting budget data: " + error);
-                });
+                axios.get("/api/budget")
+                    .then(function (response) {
+                        budgetVue.budget = response.data.budget;
+                    }).catch(function (error) {
+                        toastr.error("Error while getting budget data")
+                    });
             }
         }
-        /*,
-        computed: {
-             budgetData: function () {
-                 axios.get("/api/budget").then(function (response) {
-                     return response;
-                 });
-             }  
-        }, */
     })
 }
 

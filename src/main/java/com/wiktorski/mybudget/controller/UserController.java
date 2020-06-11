@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.UUID;
 
-//TODO too much logic in controller, should be extracted to UserService or smaller methods
+//TODO too much logic in controller, should be extracted to UserService or RegistrationService
 @Controller
 public class UserController {
     @Autowired
@@ -92,10 +92,7 @@ public class UserController {
         } else {
             user.setEnabled(true);
             user.setConfirmationToken(null);
-            if (user.isEnabled())
-                model.addAttribute("confirmed", "Your account has been activated seccessfully, you can sign in now.");
-            else
-                model.addAttribute("confirmed", "gówno");
+            model.addAttribute("confirmed", "Your account has been activated successfully, you can sign in now.");
         }
         return "user/login";
     }
@@ -135,12 +132,12 @@ public class UserController {
 
            /*
             return "index";*/
-           return "redirect:/";
+            return "redirect:/";
         }
     }
 
     @GetMapping("/user/delete")
-    public String deleteUser(){
+    public String deleteUser() {
         userService.deleteUser();
         return "redirect:/logout";
     }

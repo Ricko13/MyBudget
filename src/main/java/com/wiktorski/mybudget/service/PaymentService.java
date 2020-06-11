@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,11 +64,19 @@ public class PaymentService {
         return paymentRepo.findAllByUserOrderByDateDesc(securityService.getLoggedInUser());
     }
 
-    public List<Payment> getPayments(ReportDTO dto){
-        QPayment qPayment =QPayment.payment;
+
+    public List<PaymentDTO> getUserPaymentsDtoDesc() {
+        return paymentRepo.findAllByUserOrderByDateDesc(securityService.getLoggedInUser())
+                .stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<Payment> getPayments(ReportDTO dto) {
+        QPayment qPayment = QPayment.payment;
         BooleanBuilder where = new BooleanBuilder();
         where.and(qPayment.user.id.eq(getUser().getId()))
-            .and(qPayment.date.between(dto.getStartDate(), dto.getEndDate()));
+                .and(qPayment.date.between(dto.getStartDate(), dto.getEndDate()));
         return paymentRepo.findAll(where, new Sort(Sort.Direction.DESC, "price"));
     }
 
@@ -92,14 +101,14 @@ public class PaymentService {
     }
 
     public boolean addFuturePayment(PaymentDTO dto) {
-            Category cat = categoryRepo.findById(dto.getCategoryId()).orElse(null);
-            futurePaymentRepo.save(new FuturePayment(securityService.getLoggedInUser(),
-                                                    dto.getName(),
-                                                    dto.getPrice(),
-                                                    dto.getDate(),
-                                                    dto.getDescription(),
-                                                    cat));
-            return true;
+        Category cat = categoryRepo.findById(dto.getCategoryId()).orElse(null);
+        futurePaymentRepo.save(new FuturePayment(securityService.getLoggedInUser(),
+                dto.getName(),
+                dto.getPrice(),
+                dto.getDate(),
+                dto.getDescription(),
+                cat));
+        return true;
     }
 
     public void deleteFuturePaymentById(int id) {
@@ -123,7 +132,6 @@ public class PaymentService {
         addPayment(paymentDTO);
         deleteFuturePaymentById(paymentDTO.getId());
     }
-
 
 
     private User getUser() {

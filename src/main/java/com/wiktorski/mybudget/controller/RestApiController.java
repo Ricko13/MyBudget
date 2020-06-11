@@ -1,5 +1,6 @@
 package com.wiktorski.mybudget.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wiktorski.mybudget.model.DTO.BudgetResponse;
 import com.wiktorski.mybudget.model.DTO.CategoryDTO;
 import com.wiktorski.mybudget.model.DTO.IncomeDTO;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +30,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-@org.springframework.web.bind.annotation.RestController
+@RestController
 @RequestMapping("/api")
-public class RestController {
+public class RestApiController {
 
     private final PaymentService paymentService;
     private final SecurityService securityService;
@@ -38,45 +40,24 @@ public class RestController {
     private final EntitiesMapper mapper;
     private final ReportingService reportingService;
 
-    @GetMapping
-    public String henlo() {
-        return "Henlo there";
-    }
-
-    /**
-     * without params map for DT
-     */
     @GetMapping("/payments")
     public MBResponse<List<PaymentDTO>> getPayments() {
-        MBResponse<List<PaymentDTO>> response = new MBResponse<>();
-        response.setData(
-                paymentService.getUserPaymentsDesc().stream()
-                        .map(mapper::toDTO).collect(Collectors.toList())
-        );
-        return response;
+        return MBResponse.<List<PaymentDTO>>builder()
+                .data(paymentService.getUserPaymentsDtoDesc())
+                .build();
     }
 
     @GetMapping("/paymentsDT")
-    public MBResponse<List<PaymentDTO>> getPaymentsForDataTables(Map<String, String> params) {
-        MBResponse<List<PaymentDTO>> response = new MBResponse<>();
-        response.setData(
-                paymentService.getUserPaymentsDesc().stream()
-                        .map(mapper::toDTO).collect(Collectors.toList())
-        );
-        return response;
-        //TODO wykorzystaj builer jak niżej, i przerzuć mapowanie do serwisu
-        /*return MBResponse.<List<PaymentDTO>>builder().data(
-                paymentService.getUserPaymentsDesc().stream()
-                        .map(mapper::toDTO).collect(Collectors.toList())
-        ).build();*/
+    public MBResponse<List<PaymentDTO>> getPaymentsForDataTable(Map<String, String> params) {
+        return MBResponse.<List<PaymentDTO>>builder()
+                .data(paymentService.getUserPaymentsDtoDesc())
+                .build();
     }
-
 
     @PostMapping("/payment/add")
     public ResponseEntity addPayment(@RequestBody PaymentDTO paymentDTO) {
         paymentService.addPayment(paymentDTO);
-        return ResponseEntity.ok("Added payment succesfully");
-
+        return ResponseEntity.ok("Payment added successfully");
     }
 
     @PostMapping("/payment/update")

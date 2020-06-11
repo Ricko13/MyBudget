@@ -55,7 +55,7 @@ $("#editPaymentForm").submit(function(e) {
         };
         axios.post('/api/payment/update', updatedData)
         .then(function (response) {
-            toastr.success('Payment updated');   // location.reload();  console.log(response);
+            toastr.success('Payment updated');
         })
         .catch(function (error) {
             toastr.error('Payment update error');

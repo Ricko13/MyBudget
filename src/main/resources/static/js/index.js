@@ -27,7 +27,6 @@ function initChartsVue() {
             }
         },
         created: function () {
-            // this.setDateRangeToCurrentMonth();
             this.submitRange();
         },
         methods: {
@@ -45,7 +44,7 @@ function initChartsVue() {
                         });
                     })
             },
-            setDateRangeToCurrentMonth() { //przykład zmniejszenia ilości kodu przez momentjs
+            setDateRangeToCurrentMonth() {
                 var date = new Date();
                 var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
                 startDate = formatDate(firstDay);

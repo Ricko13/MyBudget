@@ -80,6 +80,7 @@ $(document).ready(function () {
             .catch(function (error) {
                 toastr.error('Payment update error');
             });
+
         $('#editPaymentModal').modal('toggle');
         reloadDataTables();
     });
@@ -182,7 +183,7 @@ $(window).on('load', function () {
                 toastr.success("Payment deleted");
                 reloadDataTables();
             }).catch(function (error) {
-            toastr.error("Error while deletin payment");
+            toastr.error("Error while deleting payment");
         });
         $('#deletePayConfirm').modal('toggle');
     });
