@@ -60,9 +60,11 @@
         </div>
         <div id="chartDiv" class="col"
              style="width:300px; height:400px; margin-bottom: 200px; margin-left:auto; margin-right:auto;">
-            <button v-on:click="initChart('pie')" class="btn btn-secondary">Pie chart</button>
-            <button v-on:click="initChart('bar')" class="btn btn-secondary">Bar chart</button>
-            <canvas id="chart" width="300" height="200"></canvas>
+            <div v-if="reportData.paymentsAmount > 0">
+                <button v-on:click="initChart('pie')" class="btn btn-secondary">Pie chart</button>
+                <button v-on:click="initChart('bar')" class="btn btn-secondary">Bar chart</button>
+                <canvas id="chart" width="300" height="200"></canvas>
+            </div>
         </div>
     </div>
     <div class="form-row">

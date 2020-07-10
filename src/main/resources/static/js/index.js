@@ -33,6 +33,7 @@ function initChartsVue() {
             submitRange() {
                 axios.post(reportURL, {'startDate': this.startDate, 'endDate': this.endDate})
                     .then(function (response) {
+                        // console.log(response);
                          chartsVue.reportData = response.data;
                         response.data.sumInCategories.forEach(function (entry, index) {
                             chartLabels[index] = entry.name;
@@ -42,6 +43,7 @@ function initChartsVue() {
                                 chartsVue.initChart('bar');
                             });
                         });
+                        // console.log(chartLabels);
                     })
             },
             setDateRangeToCurrentMonth() {

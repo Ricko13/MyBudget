@@ -34,11 +34,11 @@ public class ReportingService {
             Category cat = payment.getCategory();
             if (cat != null) {
                 valuesInCategories.merge(cat.getName(), payment.getPrice(), Float::sum);
-                if(!colorsInCategories.containsKey(cat.getName()))
+                if (!colorsInCategories.containsKey(cat.getName()))
                     colorsInCategories.put(cat.getName(), cat.getColor());
-            }else {
+            } else {
                 valuesInCategories.merge(NO_CATEGORY, payment.getPrice(), Float::sum);
-                if(!colorsInCategories.containsKey(NO_CATEGORY))
+                if (!colorsInCategories.containsKey(NO_CATEGORY))
                     colorsInCategories.put(NO_CATEGORY, "#000000");
             }
         });
@@ -50,9 +50,13 @@ public class ReportingService {
         budgetService.getIncome(dto).forEach(income -> totalIncome[0] += income.getValue());
         dto.setBudget(budgetService.getBudgetResponse().getBudget());
         dto.setTotalIncomeAmount(totalIncome[0]);
-        dto.setAverageDailyOutcome(totalOutcome[0] / paymentsAmount[0]);
         dto.setIncomeMinusOutcome(totalIncome[0] - totalOutcome[0]);
-       return  dto;
+        if (paymentsAmount[0] != 0) {
+            dto.setAverageDailyOutcome(totalOutcome[0] / paymentsAmount[0]);
+        } else {
+            dto.setAverageDailyOutcome(0);
+        }
+        return dto;
     }
 
     private List<CategorySummaryDTO> summaryDtoListFromMap(Map<String, Float> values, Map<String, String> colors) {
@@ -68,7 +72,7 @@ public class ReportingService {
         return toReturn;
     }
 
-    private void sortCategorySummaryByAmountAsc(List<CategorySummaryDTO> list){
+    private void sortCategorySummaryByAmountAsc(List<CategorySummaryDTO> list) {
 //        list.sort((cat1, cat2) -> cat1.getSummaryAmount() > cat2.getSummaryAmount() ? 1 : 0);
         list.sort(Comparator.comparingInt(cat -> (int) cat.getSummaryAmount()));
     }
