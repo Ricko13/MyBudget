@@ -51,4 +51,10 @@ public class BudgetService {
                 .and(qIncome.timestamp.between(dto.getStartDate().atStartOfDay(), dto.getEndDate().atTime(23,59)));
         return incomeRepo.findAll(where);
     }
+
+    public void deleteIncome(int id) {
+        Income income = incomeRepo.findById(id).get(); //TODO to change
+        userService.decreaseBudget(income.getValue());
+        incomeRepo.deleteById(id);
+    }
 }

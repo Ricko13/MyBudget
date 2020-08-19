@@ -6,6 +6,7 @@ import com.wiktorski.mybudget.model.entity.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -52,7 +53,8 @@ public class ReportingService {
         dto.setTotalIncomeAmount(totalIncome[0]);
         dto.setIncomeMinusOutcome(totalIncome[0] - totalOutcome[0]);
         if (paymentsAmount[0] != 0) {
-            dto.setAverageDailyOutcome(totalOutcome[0] / paymentsAmount[0]);
+            float averageDailyOutcome = totalOutcome[0] / paymentsAmount[0];
+            dto.setAverageDailyOutcome((float)(Math.round(averageDailyOutcome * 100.0) / 100.0));
         } else {
             dto.setAverageDailyOutcome(0);
         }

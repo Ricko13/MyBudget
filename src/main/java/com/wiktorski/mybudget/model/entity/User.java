@@ -27,8 +27,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String name;
-    private String surname;
+    /*private String name;
+    private String surname;*/
     private String email;
     private String username;
     private String password;
@@ -54,11 +54,11 @@ public class User {
     @ManyToMany
     private Set<Role> roles;
 
-    public User(String name, String surname, String email, String username, String password) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
+    public User(String username, String password, String email) { //String name, String surname,
+        /*this.name = name;
+        this.surname = surname;*/
         this.username = username;
+        this.email = email;
         this.password = password;
     }
 

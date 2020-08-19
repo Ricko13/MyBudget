@@ -39,10 +39,23 @@ function initBudgetVue() {
             getBudgetData: function () {
                 axios.get("/api/budget")
                     .then(function (response) {
-                        budgetVue.budget = response.data.budget;
+                        budgetVue.budget = formatMoney(response.data.budget);
                     }).catch(function (error) {
                         toastr.error("Error while getting budget data")
                     });
+            },
+            renderTimestamp(timestamp) {
+                let toReturn = timestamp;
+                let arr = timestamp.toString().split('T')
+                if(arr.length === 2) {
+                    toReturn = `${arr[0]} ${arr[1]}`
+                }
+                return toReturn;
+            },
+            reloadDataTables() {
+                setTimeout(function () {
+                    this.incomeDataTable.ajax.reload();
+                }, 500);
             }
         }
     })
@@ -53,11 +66,30 @@ function initIncomeDT() {
         ajax: "/api/incomeDT",
         columns: [
             {data: "title"},
-            {data: "value"},
-            {data: "timestamp"},
             {
-                render: function () {
-                    return "";
+                render: function (data, type, row) {
+                    return formatMoney(row.value);
+                }
+            },
+            {
+                render: function (data, type, row) {
+                    return budgetVue.renderTimestamp(row.timestamp);
+                }
+            },
+            {
+                render: function (data, type, row) {
+                    tmp = '<div style="width:30px;">'
+                    tmp += '<a href="#deleteIncomeConfirm" onClick="deleteIncome(' + row.id + ')" class="icon-block" style="margin-top: auto; margin-bottom: auto;">';
+                    tmp += '<img src="/assets/delete-button.png" style="width:20px !important; height:5% !important; float:right; margin-left:10px;"/>';
+                    tmp += '</a>';
+                    tmp += '</div>';
+                    return tmp;
+
+                   /* tmp = '<div style="width:80px;">';
+                    tmp += '<a data-toggle="modal" href="#deletePayConfirm" class="icon-block" data-id="' + row.id + '" data-name="' + row.name + '">';
+                    tmp += '<img src="/assets/delete-button.png" style="width:26%; height:5%; float:right; margin-left:10px;" data-toggle="tooltip" title="DELETE"/></a>';
+                    tmp += '</div>';
+                    return tmp;*/
                 }
             }
         ],
@@ -70,5 +102,13 @@ function initIncomeDT() {
 function reloadDataTables() {
     setTimeout(function () {
         this.incomeDataTable.ajax.reload();
+        budgetVue.getBudgetData();
     }, 500);
+}
+
+function deleteIncome(id) {
+    axios.get(`/api/income/${id}`)
+        .then(value => toastr.success('Income deleted successfully!'))
+        .catch(reason => toastr.error('Error while deleting income'));
+    this.reloadDataTables();
 }

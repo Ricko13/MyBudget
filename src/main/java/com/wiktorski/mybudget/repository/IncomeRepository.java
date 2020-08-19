@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IncomeRepository extends JpaRepository<Income, Integer>, QuerydslPredicateExecutor {
+public interface IncomeRepository extends JpaRepository<Income, Integer>, QuerydslPredicateExecutor { //TODO popraw raw use dla QuerydslPredicateExec
 
     List<Income> findAll(Predicate predicate);
 

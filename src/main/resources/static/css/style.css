@@ -129,6 +129,10 @@ header {
     margin-top: 15px;
 }
 
+.table-payments {
+    table-layout: fixed;
+}
+
 .table-budget {
     margin-right: auto;
     margin-left: auto;

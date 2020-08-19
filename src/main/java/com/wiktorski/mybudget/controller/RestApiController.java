@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -151,7 +152,6 @@ public class RestApiController {
     }
 
     @GetMapping("/incomeDT")
-
     public MBResponse<List<IncomeDTO>> getIncome() {
         MBResponse<List<IncomeDTO>> response = new MBResponse<>();
         response.setData(securityService.getLoggedInUser().getIncomes().stream().map(IncomeDTO::of).collect(Collectors.toList()));
@@ -166,6 +166,11 @@ public class RestApiController {
     @PostMapping("/income")
     public void addIncome(@RequestBody IncomeDTO request) {
         budgetService.addIncome(request);
+    }
+
+    @GetMapping("/income/{id}")
+    public void deleteIncome(@PathVariable int id) {
+        budgetService.deleteIncome(id);
     }
 
     @PostMapping("/report")

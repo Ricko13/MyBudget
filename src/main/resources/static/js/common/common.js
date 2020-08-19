@@ -1,4 +1,21 @@
 
+/** formating money to ###.## */
+function formatMoney(money) {
+    if(money === 0){
+        return ''
+    } else if(typeof money == 'number') {
+        money = money.toString();
+    }
+    let moneyArray = money.split('.');
+    if(moneyArray.length === 2 && moneyArray[1].length === 1) {
+        return `${moneyArray[0]}.${moneyArray[1]}0`
+    } else if (moneyArray.length === 1) {
+        return `${moneyArray[0]}.00`
+    }
+    return money;
+}
+
+
 /** Date class to yyyy-mm-dd  */
 function formatDate(date){
     var dd = String(date.getDate()).padStart(2, '0');

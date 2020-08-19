@@ -73,6 +73,13 @@ function initChartsVue() {
                     options: {responsive: true, maintainAspectRatio: false}
                 });
             },
+            /*formatReportDataValues() {
+                this.reportData.averageDailyOutcome = formatMoney(this.reportData.averageDailyOutcome);
+                this.reportData.incomeMinusOutcome = formatMoney(this.reportData.incomeMinusOutcome);
+                this.reportData.paymentsAmount = formatMoney(this.reportData.paymentsAmount);
+                this.reportData.totalIncomeAmount = formatMoney(this.reportData.totalIncomeAmount);
+                this.reportData.totalOutcomeAmount = formatMoney(this.reportData.totalOutcomeAmount);
+            },*/
             convertResponseColorsToRgb(hexArray) {
                 var rgbArray = [];
                 hexArray.forEach(function (item, index) {

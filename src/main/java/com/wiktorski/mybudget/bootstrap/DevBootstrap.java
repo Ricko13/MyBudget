@@ -31,7 +31,8 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
 
     private void initWithExampleData() {
         if (userService.findByUsername("a") == null) {
-            User user = new User("a", "a", "dwiktorski13@gmail.com", "a", "a");
+//            User user = new User("a", "a", "dwiktorski13@gmail.com", "a", "a");
+            User user = new User("a", "a", "dwiktorski13@gmail.com");
             user.setEnabled(true);
             userService.save(user);
 

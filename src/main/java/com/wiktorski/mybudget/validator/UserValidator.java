@@ -9,7 +9,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,23 +32,22 @@ public class UserValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
 
-        if (user.getUsername().length() < 4 || user.getUsername().length() > 32)
-            errors.rejectValue("username", "Size.userForm.username");
+      /*  if (user.getUsername().length() < 4 || user.getUsername().length() > 32)
+            errors.rejectValue("username", "Size.userForm.username");*/
 
         /*if(userService.findByEmail(user.getEmail()) != null)
             errors.rejectValue("email", "Duplicate.userForm.email");*/
-        userService.findByEmail(user.getEmail()).ifPresent(user1 -> errors.rejectValue("email", "Duplicate.userForm.email"));
+//        userService.findByEmail(user.getEmail()).ifPresent(user1 -> errors.rejectValue("email", "Duplicate.userForm.email"));
 
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
 
-        if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
+     /*   if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
             errors.rejectValue("password", "Size.userForm.password");
         } else if (!containsSpecialChar(user.getPassword())) {
             errors.rejectValue("password", "Size.userForm.password");
-        }
+        }*/
 
-        /*DODAJ POTWIERDZANIE HASLA, mailem tez nie zaszkodzi */
         if (!user.getPasswordConfirm().equals(user.getPassword())) {
             errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
         }

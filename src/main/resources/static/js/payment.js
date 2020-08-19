@@ -10,7 +10,7 @@ var movingToHistory = false;
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
-    if ($('#isFuture').val() == 'true') {
+    if ($('#isFuture').val() === 'true') {
         crudURL = '/api/futurePayment'
     }
 
@@ -23,15 +23,30 @@ $(document).ready(function () {
             {"orderable": false, "targets": 5}
         ],
         columns: [
-            {data: "name"},
-            {data: "price"},
+            // {data: "name"},
+            {
+                render: function (data, type, row) {
+                    return `<div style="width: 200px; text-align: center">${row.name}</div>`
+                }
+            },
+            // {data: "price"},
+            {
+                render: function (data, type, row) {
+                    return formatMoney(row.price)
+                }
+            },
             {
                  // render: formatLocalDate(row.date)
                 render: function (data, type, row) {
                     return formatLocalDate(row.date)
                 }
             },
-            {data: "description"},
+            // {data: "description"},
+            {
+                render: function (data, type, row) {
+                    return `<div style='width: 200px;'>${row.description ? row.description : ''}</div>`
+                }
+            },
             {
                 render: function (data, type, row) {
                     if (row.categoryName !== null) {
@@ -160,6 +175,7 @@ function reloadDataTables() {
         this.paymentsDataTable.ajax.reload();
     }, 500);
 }
+
 
 
 //trigger handling without ajaxStop cause handling wont work with reload then

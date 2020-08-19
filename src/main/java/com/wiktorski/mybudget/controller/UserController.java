@@ -3,8 +3,8 @@ package com.wiktorski.mybudget.controller;
 
 import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.service.EmailService;
-import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.service.UserService;
+import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.validator.ReCaptcha.RecaptchaService;
 import com.wiktorski.mybudget.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +62,7 @@ public class UserController {
         String ip = request.getRemoteAddr();
         String captchaVerifyMessage =
                 captchaService.verifyRecaptcha(ip, recaptchaResponse);
-        //if ( StringUtils.isNotEmpty(captchaVerifyMessage)) {
+        //if ( StringUtils.isNotBlank(captchaVerifyMessage)) {
         if (captchaVerifyMessage != null && captchaVerifyMessage != "") {
             return "redirect:/registration";
         }
