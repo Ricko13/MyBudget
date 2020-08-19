@@ -13,7 +13,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Setter
@@ -35,6 +38,7 @@ public class Income {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @CreationTimestamp
+    @CreationTimestamp  //TODO in database created as only date
     private LocalDateTime timestamp;
+
 }

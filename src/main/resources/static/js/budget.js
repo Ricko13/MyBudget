@@ -44,13 +44,10 @@ function initBudgetVue() {
                         toastr.error("Error while getting budget data")
                     });
             },
-            renderTimestamp(timestamp) {
-                let toReturn = timestamp;
-                let arr = timestamp.toString().split('T')
-                if(arr.length === 2) {
-                    toReturn = `${arr[0]} ${arr[1]}`
-                }
-                return toReturn;
+            renderTimestamp(date) { //TODO tmp because issue with timestamp type in database
+                let arrDateTime = date.toString().split('T')
+                let arrDate = arrDateTime[0].split('-')
+                return arrDate[2] + '-' + arrDate[1] + '-' + arrDate[0]
             },
             reloadDataTables() {
                 setTimeout(function () {

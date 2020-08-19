@@ -23,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,11 +51,12 @@ public class PaymentService {
         //TODO Validator.validatePaymentDTO(paymentDTO);
         Payment payment = paymentRepo.findById(paymentDTO.getId())
                 .orElseThrow(() -> new MBException(ExceptionType.ENTITY_NOT_FOUND));
+        LocalDate date = payment.getDate();
+        int x = paymentDTO.getDate().compareTo(payment.getDate());
         mapper.updatePayment(paymentDTO, payment);
     }
 
     public void deletePaymentById(int paymentId) {
-        //TODO check if exists and constraints and throw exception
         paymentRepo.deleteById(paymentId);
 
     }

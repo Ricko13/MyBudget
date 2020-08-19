@@ -36,8 +36,12 @@ public interface EntitiesMapper {
 
 
 
+    @Mapping(target = "category", ignore = true)
     void updatePayment(PaymentDTO paymentDTO, @MappingTarget Payment toUpdate);
+
+    @Mapping(target = "category", ignore = true)
     void updateFuturePayment(PaymentDTO paymentDTO, @MappingTarget FuturePayment toUpdate);
+
     void updateCategory(CategoryDTO categoryDTO, @MappingTarget Category category);
 }
 
