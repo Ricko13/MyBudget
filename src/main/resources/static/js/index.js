@@ -1,11 +1,10 @@
-var categories;
+const REPORT_URL = '/api/report';
+
 var chartsVue;
-const reportURL = '/api/report';
 var chartLabels = [];
 var chartBackgrounds = [];
 var chartData = [];
 var chart = undefined;
-
 var paymentsDataTable;
 
 $(document).ready(function () {
@@ -16,25 +15,42 @@ function initChartsVue() {
     chartsVue = new Vue({
         el: "#chartsVue",
         data: {
-            startDate:  moment().startOf('month').format('YYYY-MM-DD'),
-            endDate:  moment().format('YYYY-MM-DD'),
+            startDate: moment().startOf('month').format('YYYY-MM-DD'),
+            endDate: moment().format('YYYY-MM-DD'),
             reportData: {
                 paymentsAmount: 0,
                 totalOutcomeAmount: 0,
                 totalIncomeAmount: 0,
                 averageDailyOutcome: 0,
                 incomeMinusOutcome: 0
-            }
+            },
+            barChartOptions: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                }
+            },
+            pieChartOptions: { responsive: true, maintainAspectRatio: false }
         },
         created: function () {
             this.submitRange();
+            // this.formatReportData();
         },
         methods: {
             submitRange() {
-                axios.post(reportURL, {'startDate': this.startDate, 'endDate': this.endDate})
+                axios.post(REPORT_URL, {'startDate': this.startDate, 'endDate': this.endDate})
                     .then(function (response) {
                         // console.log(response);
-                         chartsVue.reportData = response.data;
+                        chartsVue.reportData = response.data;
+                        chartsVue.formatReportData();
                         response.data.sumInCategories.forEach(function (entry, index) {
                             chartLabels[index] = entry.name;
                             chartBackgrounds[index] = entry.color;
@@ -43,8 +59,14 @@ function initChartsVue() {
                                 chartsVue.initChart('bar');
                             });
                         });
-                        // console.log(chartLabels);
                     })
+            },
+            formatReportData() {
+                this.reportData.budget = formatMoney(this.reportData.budget)
+                this.reportData.totalOutcomeAmount = formatMoney(this.reportData.totalOutcomeAmount)
+                this.reportData.totalIncomeAmount = formatMoney(this.reportData.totalIncomeAmount)
+                this.reportData.averageDailyOutcome = formatMoney(this.reportData.averageDailyOutcome)
+                this.reportData.incomeMinusOutcome = formatMoney(this.reportData.incomeMinusOutcome)
             },
             setDateRangeToCurrentMonth() {
                 var date = new Date();
@@ -57,7 +79,9 @@ function initChartsVue() {
                 startDate = endDate = formatDate(new Date());
             },
             initChart(type) {
-                if(chart){  window.chart.destroy();  }
+                if (chart) {
+                    window.chart.destroy();
+                }
                 var ctx = document.getElementById('chart').getContext('2d');
                 chart = new Chart(ctx, {
                     type: type,
@@ -70,16 +94,15 @@ function initChartsVue() {
                             data: chartData
                         }]
                     },
-                    options: {responsive: true, maintainAspectRatio: false}
+                    options: this.getChartOptionsByType(type)
                 });
             },
-            /*formatReportDataValues() {
-                this.reportData.averageDailyOutcome = formatMoney(this.reportData.averageDailyOutcome);
-                this.reportData.incomeMinusOutcome = formatMoney(this.reportData.incomeMinusOutcome);
-                this.reportData.paymentsAmount = formatMoney(this.reportData.paymentsAmount);
-                this.reportData.totalIncomeAmount = formatMoney(this.reportData.totalIncomeAmount);
-                this.reportData.totalOutcomeAmount = formatMoney(this.reportData.totalOutcomeAmount);
-            },*/
+            getChartOptionsByType (type) {
+                switch (type) {
+                    case 'pie': return this.pieChartOptions;
+                    case 'bar': return this.barChartOptions;
+                }
+            },
             convertResponseColorsToRgb(hexArray) {
                 var rgbArray = [];
                 hexArray.forEach(function (item, index) {
@@ -87,7 +110,7 @@ function initChartsVue() {
                 });
                 return rgbArray;
             },
-            submitPaymentsDatatable(){
+            submitPaymentsDatatable() {
                 table.destroy();
                 paymentsDataTable = $("#dataTable").DataTable({
                     ajax: '/api/paymentsDT/',
@@ -117,22 +140,22 @@ function initChartsVue() {
                     ]
                 });
             }
-
         }
-
     })
 }
 
 
-//TODO niepotrzebne chyba
+/*//TODO niepotrzebne chyba
 function getCategoryData() {
     axios.get("/api/category/chart").then(function (response) {
         categories = response.data;
     }).catch(function (error) {
         toastr.error("Error while getting charts data");
     })
-}
+}*/
 
+
+//TODO - test to delete
 function initChartJs2() {
     var ctx = document.getElementById('myChart').getContext('2d');
     chart = new Chart(ctx, {
@@ -160,6 +183,7 @@ function initChartJs2() {
     });
 }
 
+//TODO - test to delete
 function initChartJs3() {
     var ctx = document.getElementById('myChart2');
     var myChart = new Chart(ctx, {

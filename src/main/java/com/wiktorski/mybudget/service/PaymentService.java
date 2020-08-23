@@ -1,10 +1,12 @@
 package com.wiktorski.mybudget.service;
 
+import com.mysql.cj.PreparedQuery;
 import com.querydsl.core.BooleanBuilder;
 import com.wiktorski.mybudget.common.Validator;
 import com.wiktorski.mybudget.common.exception.ExceptionType;
 import com.wiktorski.mybudget.common.exception.MBException;
 import com.wiktorski.mybudget.model.DTO.CategoryDTO;
+import com.wiktorski.mybudget.model.DTO.ChangeCategoryColorRequest;
 import com.wiktorski.mybudget.model.DTO.PaymentDTO;
 import com.wiktorski.mybudget.model.DTO.ReportDTO;
 import com.wiktorski.mybudget.model.entity.Category;
@@ -18,12 +20,10 @@ import com.wiktorski.mybudget.repository.FuturePaymentRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,14 +51,13 @@ public class PaymentService {
         //TODO Validator.validatePaymentDTO(paymentDTO);
         Payment payment = paymentRepo.findById(paymentDTO.getId())
                 .orElseThrow(() -> new MBException(ExceptionType.ENTITY_NOT_FOUND));
-        LocalDate date = payment.getDate();
-        int x = paymentDTO.getDate().compareTo(payment.getDate());
         mapper.updatePayment(paymentDTO, payment);
     }
 
+    @Transactional
     public void deletePaymentById(int paymentId) {
+        paymentRepo.findById(paymentId).ifPresent(payment -> userService.addToBudget(payment.getPrice()));
         paymentRepo.deleteById(paymentId);
-
     }
 
     public List<Payment> getUserPaymentsDesc() {
@@ -119,14 +118,17 @@ public class PaymentService {
     public void updateFuturePayment(PaymentDTO paymentDTO) {
         FuturePayment fut = futurePaymentRepo.findById(paymentDTO.getId())
                 .orElseThrow(() -> new MBException(ExceptionType.ENTITY_NOT_FOUND));
-        if (fut != null) {
+        mapper.updateFuturePayment(paymentDTO, fut);
+
+
+       /* if (fut != null) {
             fut.setDate(paymentDTO.getDate());
             fut.setCategory(categoryRepo.findById(paymentDTO.getCategoryId()).orElse(null));
             fut.setDescription(paymentDTO.getDescription());
             fut.setName(paymentDTO.getName());
             fut.setPrice(paymentDTO.getPrice());
         }
-        futurePaymentRepo.save(fut);
+        futurePaymentRepo.save(fut);*/
     }
 
     public void moveFuturePayment(PaymentDTO paymentDTO) {
@@ -137,6 +139,13 @@ public class PaymentService {
 
     private User getUser() {
         return securityService.getLoggedInUser();
+    }
+
+    public void updateCategoryColor(ChangeCategoryColorRequest request) {
+        Category cat = categoryRepo.findById(request.getId())
+                .orElseThrow(() -> new MBException(ExceptionType.ENTITY_NOT_FOUND));
+        cat.setColor(request.getColor());
+        categoryRepo.save(cat);
     }
 }
 

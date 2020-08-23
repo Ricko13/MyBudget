@@ -33,6 +33,17 @@ function submitEdit() {
     });
 }
 
+function changeColor(id) {
+    let newColor = $(`#color${id}`).val();
+    console.log(newColor);
+    axios.post('/api/category/color/change', { id: id, color: newColor })
+        .then(value => toastr.success('Color changed'))
+        .catch(reason => {
+            toastr.error('Color change failed')
+            console.log(reason)
+        })
+}
+
 $(document).ready(function () {
 
 
@@ -48,7 +59,8 @@ $(document).ready(function () {
             {
                 render: function (data, type, row) {
                     var toReturn = '<div id="catName' + row.id + '"><a href="/category/' + row.name + '">' + row.name + '</a>'
-                    return toReturn + '<div id="color' + row.id + '" style="background-color:' + row.color + '; width: 50px; height: 20px;"></div> </div>';
+                    // return toReturn + '<div id="color' + row.id + '" style="background-color:' + row.color + '; width: 50px; height: 20px; float: left;"></div> </div>';
+                    return toReturn + '<div style="float: left;"><input id="color' + row.id + '" type="color" onchange="changeColor(' + row.id +')"  value="'+ row.color +'"/></div>'
                 }
             },
             /*{

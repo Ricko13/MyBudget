@@ -1,8 +1,8 @@
 package com.wiktorski.mybudget.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wiktorski.mybudget.model.DTO.BudgetResponse;
 import com.wiktorski.mybudget.model.DTO.CategoryDTO;
+import com.wiktorski.mybudget.model.DTO.ChangeCategoryColorRequest;
 import com.wiktorski.mybudget.model.DTO.IncomeDTO;
 import com.wiktorski.mybudget.model.DTO.MBResponse;
 import com.wiktorski.mybudget.model.DTO.PaymentDTO;
@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -144,12 +143,18 @@ public class RestApiController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping("/category/chart") //TODO póki co takie samo jak /categoryDT
+    @PostMapping("/category/color/change")
+    public ResponseEntity updateCategoryColor(@RequestBody ChangeCategoryColorRequest request) {
+        paymentService.updateCategoryColor(request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+/*    @GetMapping("/category/chart") //TODO póki co takie samo jak /categoryDT
     public MBResponse<List<CategoryDTO>> getCategoryChartData() {
         return MBResponse.<List<CategoryDTO>>builder().data(
                 paymentService.getUserCategories().stream().map(CategoryDTO::of).collect(Collectors.toList())
         ).build();
-    }
+    }*/
 
     @GetMapping("/incomeDT")
     public MBResponse<List<IncomeDTO>> getIncome() {
@@ -174,12 +179,13 @@ public class RestApiController {
     }
 
     @PostMapping("/report")
-    public ReportDTO getReportData(@RequestBody ReportDTO dto){
+    public ReportDTO getReportData(@RequestBody ReportDTO dto) {
         return reportingService.getPaymentsReport(dto);
     }
 
     @GetMapping("/category")
-    public List<CategoryDTO> getCategoried(){
+    public List<CategoryDTO> getCategoried() {
         return securityService.getLoggedInUser().getCategories().stream().map(CategoryDTO::of).collect(Collectors.toList());
     }
+
 }

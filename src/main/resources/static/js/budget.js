@@ -92,7 +92,8 @@ function initIncomeDT() {
         ],
         columnDefs: [
             {"orderable": false, "targets": 3}
-        ]
+        ],
+        order: [[ 2, "desc" ]]
     });
 }
 

@@ -32,11 +32,11 @@
             <table class="table table-dark">
                 <tbody>
                 <tr>
-                    <td><strong>Budget</strong></td>
+                    <td><strong>Budget</strong> (overall)</td>
                     <td><strong>{{reportData.budget}}</strong></td>
                 </tr>
                 <tr>
-                    <td>Total income</td>
+                    <td>Income</td>
                     <td>{{reportData.totalIncomeAmount}}</td>
                 </tr>
                 <tr>
@@ -52,7 +52,7 @@
                     <td>{{reportData.averageDailyOutcome}}</td>
                 </tr>
                 <tr>
-                    <td>Budget value in date range</td>
+                    <td>Income/outcome comparison</td>
                     <td>{{reportData.incomeMinusOutcome}}</td>
                 </tr>
                 </tbody>
@@ -63,7 +63,7 @@
             <div v-if="reportData.paymentsAmount > 0">
                 <button v-on:click="initChart('pie')" class="btn btn-secondary">Pie chart</button>
                 <button v-on:click="initChart('bar')" class="btn btn-secondary">Bar chart</button>
-                <canvas id="chart" width="300" height="200"></canvas>
+                <canvas id="chart" width="300" height="200" style="margin-top: 20px;"></canvas>
             </div>
         </div>
     </div>
@@ -80,7 +80,6 @@
                     <th scope="col">Category</th>
                 </tr>
                 </thead>
-
             </table>
         </div>
     </div>

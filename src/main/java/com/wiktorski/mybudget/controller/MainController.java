@@ -1,6 +1,8 @@
 package com.wiktorski.mybudget.controller;
 
+import com.wiktorski.mybudget.model.entity.Category;
 import com.wiktorski.mybudget.model.entity.Payment;
+import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.service.PaymentService;
 import com.wiktorski.mybudget.service.UserService;
 import com.wiktorski.mybudget.service.security.SecurityService;
@@ -25,6 +27,7 @@ public class MainController {
     UserService userService;
     PaymentService paymentService;
     SecurityService securityService;
+    CategoryRepository categoryRepository;
 
     //@GetMapping("/")
     public String index(){
@@ -83,11 +86,15 @@ public class MainController {
         return "/category/newCategory";
     }
 
-  /*  @PostMapping("/category/add")
+    //TODO change to async request to API
+    @PostMapping("/category/add")
     public String categoryAdd(@RequestParam String name, @RequestParam String color) {
-        categoryRepository.save(new Category(name, color, securityService.getLoggedInUser()));
-        return "redirect:/category";
-    }*/
+        if(!categoryRepository.existsByName(name)) {
+            categoryRepository.save(new Category(name, color, securityService.getLoggedInUser()));
+            return "redirect:/category";
+        }
+        return "/category/newCategory";
+    }
 
     @GetMapping("/category/delete/{id}")
     public String deleteCategory(@PathVariable int id) {
