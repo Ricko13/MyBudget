@@ -37,11 +37,11 @@
                 </tr>
                 <tr>
                     <td>Income</td>
-                    <td>{{reportData.totalIncomeAmount}}</td>
+                    <td class="income">{{reportData.totalIncomeAmount}}</td>
                 </tr>
                 <tr>
                     <td>Payments value</td>
-                    <td>{{reportData.totalOutcomeAmount}}</td>
+                    <td class="outcome">{{reportData.totalOutcomeAmount}}</td>
                 </tr>
                 <tr>
                     <td>Amount of payments</td>
@@ -67,7 +67,7 @@
             </div>
         </div>
     </div>
-    <div class="form-row">
+  <!--  <div class="form-row">
         <div class="col">
         <div class="overflow">
             <table id="dataTable" class="table table-sm table-hover">
@@ -83,7 +83,7 @@
             </table>
         </div>
     </div>
-    </div>
+    </div>-->
     <div class="button-group" sec:authorize="!isFullyAuthenticated()">
         <p><a href="/login">Login</a></p>
         <p><a href="/registration">Register</a></p>

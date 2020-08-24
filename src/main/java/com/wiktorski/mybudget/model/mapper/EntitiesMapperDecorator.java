@@ -42,7 +42,16 @@ public abstract class EntitiesMapperDecorator implements EntitiesMapper {
         return payment;
     }
 
+    //TODO nie działa?
     @Override
+    public FuturePayment toFutureEntity(PaymentDTO dto) {
+        FuturePayment fut = delegate.toFutureEntity(dto);
+        fut.setCategory(categoryRepo.findById(dto.getCategoryId()).orElse(null));
+        fut.setUser(getUser());
+        return fut;
+    }
+
+/*    @Override
     public PaymentDTO toDTO(Payment payment){
         PaymentDTO dto = delegate.toDTO(payment);
         Optional.ofNullable(payment.getCategory()).ifPresent(category -> {
@@ -50,7 +59,7 @@ public abstract class EntitiesMapperDecorator implements EntitiesMapper {
             dto.setCategoryName(category.getName());
         });
         return dto;
-    }
+    }*/
 
     @Override
     public void updatePayment(PaymentDTO paymentDTO, Payment toUpdate) {

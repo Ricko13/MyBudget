@@ -1,4 +1,32 @@
 
+
+function getBudget () {
+    console.log("GET BUDGET FOR HEADER")
+    axios.get('/api/budget')
+        .then(response => {
+            if(response.data.budget) {
+                let budget = formatMoney(response.data.budget)
+                if($("#headerBudget")) {
+                    $("#headerBudget").html(budget);
+                }
+            }
+        })
+}
+
+// Add a response interceptor
+axios.interceptors.response.use(function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    if(!response.data.budget && response.config.method !== 'get') {
+        getBudget()
+    }
+    return response;
+}, function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error);
+});
+
 /** formating money to ###.## */
 function formatMoney(money) {
     if(money === 0){

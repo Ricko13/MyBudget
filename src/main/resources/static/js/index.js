@@ -110,7 +110,7 @@ function initChartsVue() {
                 });
                 return rgbArray;
             },
-            submitPaymentsDatatable() {
+          /*  submitPaymentsDatatable() {
                 table.destroy();
                 paymentsDataTable = $("#dataTable").DataTable({
                     ajax: '/api/paymentsDT/',
@@ -139,7 +139,7 @@ function initChartsVue() {
                         }
                     ]
                 });
-            }
+            }*/
         }
     })
 }

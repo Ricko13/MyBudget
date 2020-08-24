@@ -48,7 +48,7 @@ public class FuturePayment {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

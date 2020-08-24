@@ -64,6 +64,7 @@
         <!--<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
         <th:block sec:authorize="isAuthenticated()">
+            <div id="headerBudgetDiv">Budget: <span id="headerBudget"></span></div>
             <a class="nav-link" th:href="@{/myAccount}">My Account</a>
 
             <!--<a class="nav-link" th:href="@{/logout}">Logout</a>-->
@@ -89,13 +90,14 @@
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
     <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.js}"></script>
-    <!--DATATABLES-->
+    <!--DATATABLES and on document ready default methods-->
     <script th:src="@{http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             table = $('#dataTable').DataTable({
                 "order": [],
             });
+            getBudget ()
         });
     </script>
     <!--TOASTR js-->
@@ -106,6 +108,9 @@
     <script th:src="@{https://cdn.jsdelivr.net/npm/vue/dist/vue.js}"></script>  <!--https://cdn.jsdelivr.net/npm/vue  <PRODUCTION-->
     <!--MY COMMON JS-->
     <script th:src="@{/js/common/common.js}"></script>
+    <script>
+
+    </script>
 </div>
 
 

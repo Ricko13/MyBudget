@@ -1,4 +1,29 @@
 
+#headerBudget {
+    font-weight: bold;
+    font-size: large;
+    color: forestgreen; !important;
+}
+
+#headerBudgetDiv {
+    margin-right: 50px;
+    color: dimgray;
+    font-weight: bold;
+    background: ghostwhite;
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+.income {
+    color: chartreuse;
+    font-weight: bold;
+}
+
+.outcome {
+    color: #FF0000;
+    font-weight: bold;
+}
+
 body {
     /*OBRAZ W TLE*/
     /*background-image: url(../assets/padlock_photo.jpg);

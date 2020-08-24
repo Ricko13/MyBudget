@@ -1,6 +1,5 @@
 package com.wiktorski.mybudget.service;
 
-import com.mysql.cj.PreparedQuery;
 import com.querydsl.core.BooleanBuilder;
 import com.wiktorski.mybudget.common.Validator;
 import com.wiktorski.mybudget.common.exception.ExceptionType;
@@ -51,6 +50,8 @@ public class PaymentService {
         //TODO Validator.validatePaymentDTO(paymentDTO);
         Payment payment = paymentRepo.findById(paymentDTO.getId())
                 .orElseThrow(() -> new MBException(ExceptionType.ENTITY_NOT_FOUND));
+        userService.addToBudget(payment.getPrice());
+        userService.decreaseBudget(paymentDTO.getPrice());
         mapper.updatePayment(paymentDTO, payment);
     }
 
@@ -100,15 +101,19 @@ public class PaymentService {
         return futurePaymentRepo.findAllByUserOrderByDateDesc(getUser()).stream().map(mapper::toDTO).collect(Collectors.toList());
     }
 
-    public boolean addFuturePayment(PaymentDTO dto) {
+    public void addFuturePayment(PaymentDTO dto) {
+//        FuturePayment fut = mapper.toFutureEntity(dto);
+
         Category cat = categoryRepo.findById(dto.getCategoryId()).orElse(null);
-        futurePaymentRepo.save(new FuturePayment(securityService.getLoggedInUser(),
+        FuturePayment fut = new FuturePayment(
+                securityService.getLoggedInUser(),
                 dto.getName(),
                 dto.getPrice(),
                 dto.getDate(),
                 dto.getDescription(),
-                cat));
-        return true;
+                cat
+        );
+        futurePaymentRepo.save(fut);
     }
 
     public void deleteFuturePaymentById(int id) {

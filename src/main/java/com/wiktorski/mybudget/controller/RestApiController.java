@@ -7,6 +7,7 @@ import com.wiktorski.mybudget.model.DTO.IncomeDTO;
 import com.wiktorski.mybudget.model.DTO.MBResponse;
 import com.wiktorski.mybudget.model.DTO.PaymentDTO;
 import com.wiktorski.mybudget.model.DTO.ReportDTO;
+import com.wiktorski.mybudget.model.DTO.StandingInstructionDTO;
 import com.wiktorski.mybudget.model.entity.Payment;
 import com.wiktorski.mybudget.model.mapper.EntitiesMapper;
 import com.wiktorski.mybudget.service.BudgetService;
@@ -84,10 +85,8 @@ public class RestApiController {
     @Transactional
     @PostMapping("/futurePayment/add")
     public ResponseEntity addFuturePayment(@RequestBody PaymentDTO paymentDTO) {
-        if (paymentService.addFuturePayment(paymentDTO))
-            return ResponseEntity.ok(HttpStatus.OK);
-        else
-            return ResponseEntity.badRequest().body("Bad request");
+        paymentService.addFuturePayment(paymentDTO);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/futurePayment/delete/{id}")
@@ -186,6 +185,14 @@ public class RestApiController {
     @GetMapping("/category")
     public List<CategoryDTO> getCategoried() {
         return securityService.getLoggedInUser().getCategories().stream().map(CategoryDTO::of).collect(Collectors.toList());
+    }
+
+
+    //TODO do zrobienia
+    @PostMapping("/standinginstruction")
+    public ResponseEntity addStandingInstruction(@RequestBody StandingInstructionDTO request) {
+
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 }
