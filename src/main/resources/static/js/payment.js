@@ -25,7 +25,7 @@ $(document).ready(function () {
         columns: [
             {// {data: "name"},
                 render: function (data, type, row) {
-                    return `<div style="width: 200px; text-align: center">${row.name}</div>`
+                    return `<div style="width: 200px; text-align: center"><strong>${row.name}</strong></div>`
                 }
             },
             {// {data: "price"},
@@ -47,7 +47,7 @@ $(document).ready(function () {
             {
                 render: function (data, type, row) {
                     if (row.categoryName !== null) {
-                        return '<a href="/category/' + row.categoryName + '">' + row.categoryName + '</a>';
+                        return '<div class="categoryCell"><strong><a href="/category/' + row.categoryName + '" style="color:' + row.categoryColor + '">' + row.categoryName + '</a></strong></div>';
                     } else {
                         return "";
                     }

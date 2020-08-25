@@ -26,6 +26,7 @@ public class PaymentDTO implements Serializable {
     private LocalDate date;
     private String description;
     private String categoryName;
+    private String categoryColor;
     private int categoryId;
 
 

@@ -24,6 +24,7 @@ public class StandingInstructionDTO implements Serializable {
     private String description;
     private int categoryId;
     private String categoryName;
+    private String categoryColor;
     private LocalDate latestExecution;
 
 }

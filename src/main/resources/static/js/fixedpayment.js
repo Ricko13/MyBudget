@@ -40,7 +40,7 @@ $(document).ready(function () {
             {
                 render: function (data, type, row) {
                     if (row.categoryName !== null && row.categoryName !== undefined) {
-                        return '<a href="/category/' + row.categoryName + '">' + row.categoryName + '</a>';
+                        return '<div class="categoryCell"><strong><a href="/category/' + row.categoryName + '" style="color:' + row.categoryColor + '">' + row.categoryName + '</a></strong></div>';
                     } else {
                         return "";
                     }
