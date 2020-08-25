@@ -1,6 +1,7 @@
 package com.wiktorski.mybudget.controller;
 
 
+import com.wiktorski.mybudget.model.DTO.ChangePasswordRequest;
 import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.service.EmailService;
 import com.wiktorski.mybudget.service.UserService;
@@ -71,7 +72,7 @@ public class UserController {
 
         userForm.setConfirmationToken(UUID.randomUUID().toString());
         userForm.setEnabled(false);
-        userService.save(userForm);
+        userService.addUser(userForm);
         //securityService.autoLogin(userForm.getUsername(),userForm.getPasswordConfirm());
 
         SimpleMailMessage registrationEmail = emailService.createConfirmationEmail(userForm, request);
@@ -109,6 +110,7 @@ public class UserController {
         return "user/login";
     }
 
+    //TODO password shouldnt be requestparam
     @PostMapping("/loginCheckpoint")
     public String check(@RequestParam String username, @RequestParam String password, Model model, HttpServletRequest request) {
         if (username == null || username.equals("") || password == null || password.equals("")) return "/user/login";
@@ -147,6 +149,21 @@ public class UserController {
             userService.sendDeleteConfirmationEmail(request);
             return "user/delete";
         }
+    }
+
+
+    @GetMapping("/changepassword")
+    public String changePassword(@RequestParam String currentPassword, @RequestParam String newPassword, @RequestParam String newPasswordConfirm, RedirectAttributes redir) {
+        boolean ok = userService.changePassword(ChangePasswordRequest.builder()
+                .currentPassword(currentPassword)
+                .newPassword(newPassword)
+                .newPasswordConfirm(newPasswordConfirm)
+                .build());
+        if(ok)
+            redir.addFlashAttribute("confirmationMessage", "Password changed successfully!");
+        else
+            redir.addFlashAttribute("errorMessage", "Error");
+        return "redirect:/myAccount";
     }
 
 }

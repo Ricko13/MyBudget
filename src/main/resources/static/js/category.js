@@ -37,7 +37,10 @@ function changeColor(id) {
     let newColor = $(`#color${id}`).val();
     console.log(newColor);
     axios.post('/api/category/color/change', { id: id, color: newColor })
-        .then(value => toastr.success('Color changed'))
+        .then(value => {
+            toastr.success('Color changed')
+            reloadDataTables()
+        })
         .catch(reason => {
             toastr.error('Color change failed')
             console.log(reason)
@@ -58,7 +61,7 @@ $(document).ready(function () {
         columns: [
             {
                 render: function (data, type, row) {
-                    var toReturn = '<div id="catName' + row.id + '"><a href="/category/' + row.name + '">' + row.name + '</a>'
+                    var toReturn = '<div id="catName' + row.id + '"><strong><a href="/category/' + row.name + '" style="color:' + row.color + '">' + row.name + '</a></strong>'
                     // return toReturn + '<div id="color' + row.id + '" style="background-color:' + row.color + '; width: 50px; height: 20px; float: left;"></div> </div>';
                     return toReturn + '<div style="float: left;"><input id="color' + row.id + '" type="color" onchange="changeColor(' + row.id +')"  value="'+ row.color +'"/></div>'
                 }

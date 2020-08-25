@@ -1,6 +1,7 @@
 package com.wiktorski.mybudget.service;
 
 
+import com.wiktorski.mybudget.model.DTO.ChangePasswordRequest;
 import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.repository.UserRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
@@ -23,7 +24,7 @@ public class UserService extends AbstractBasicService {
     private final SecurityService securityService;
     private final EmailService emailService;
 
-    public void save(User user) {
+    public void addUser(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
         userRepo.save(user);
     }
@@ -41,9 +42,10 @@ public class UserService extends AbstractBasicService {
     }
 
     public void deleteUser(String token) {
-        if(token.equals(getCurrentUser().getConfirmationToken())) {
+        if (token.equals(getCurrentUser().getConfirmationToken())) {
             userRepo.delete(securityService.getLoggedInUser());
-        };
+        }
+        ;
     }
 
     public String generateConfirmationToken() {
@@ -56,19 +58,18 @@ public class UserService extends AbstractBasicService {
 
     /******************************************************************************************/
     //TODO those methods should be in user entity as there are stored those informations
-
-    public void addToBudget(float amount){
+    public void addToBudget(float amount) {
         User user = securityService.getLoggedInUser();
-        user.setBudget(user.getBudget()+amount);
+        user.setBudget(user.getBudget() + amount);
     }
 
-    public void decreaseBudget(float price){
+    public void decreaseBudget(float price) {
         User user = securityService.getLoggedInUser();
-        user.setBudget(user.getBudget()-price);
+        user.setBudget(user.getBudget() - price);
     }
 
     public void decreaseBudget(float price, User user) {
-        user.setBudget(user.getBudget()-price);
+        user.setBudget(user.getBudget() - price);
         userRepo.save(user);
     }
 
@@ -81,6 +82,16 @@ public class UserService extends AbstractBasicService {
         generateConfirmationToken();
         SimpleMailMessage deleteConfirmationEmail = emailService.createDeleteConfirmationEmail(getCurrentUser(), request);
         emailService.sendEmail(deleteConfirmationEmail);
+    }
+
+    public boolean changePassword(ChangePasswordRequest req) {
+        User user = getCurrentUser();
+        if (encoder.matches(req.getCurrentPassword(), user.getPassword())) {
+            user.setPassword(encoder.encode(req.getNewPassword()));
+            userRepo.save(user);
+            return true;
+        }
+        return false;
     }
 
 

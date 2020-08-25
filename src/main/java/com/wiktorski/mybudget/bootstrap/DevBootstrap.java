@@ -34,7 +34,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
 //            User user = new User("a", "a", "dwiktorski13@gmail.com", "a", "a");
             User user = new User("a", "a", "dwiktorski13@gmail.com");
             user.setEnabled(true);
-            userService.save(user);
+            userService.addUser(user);
 
             Payment pmnt = new Payment("nocat", (float) 25.60, user, LocalDate.now());
             paymentRepo.save(pmnt);
