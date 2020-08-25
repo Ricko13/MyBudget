@@ -27,13 +27,17 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         User user = (User) o;
 
-        if (userService.findByUsername(user.getUsername()) != null)
+        if (userService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
+            System.err.println("Validation error - duplicate username");
+        }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
 
-      /*  if (user.getUsername().length() < 4 || user.getUsername().length() > 32)
-            errors.rejectValue("username", "Size.userForm.username");*/
+        if (user.getUsername().length() < 4 || user.getUsername().length() > 32){
+            errors.rejectValue("username", "Size.userForm.username");
+            System.err.println("Username wrong length");
+        }
 
         /*if(userService.findByEmail(user.getEmail()) != null)
             errors.rejectValue("email", "Duplicate.userForm.email");*/
@@ -42,14 +46,15 @@ public class UserValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
 
-     /*   if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
+        if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
             errors.rejectValue("password", "Size.userForm.password");
+            System.err.println("Wrong password length");
         } else if (!containsSpecialChar(user.getPassword())) {
             errors.rejectValue("password", "Size.userForm.password");
-        }*/
-
-        if (!user.getPasswordConfirm().equals(user.getPassword())) {
+            System.err.println("Password not caontaining special char");
+        } else if (!user.getPasswordConfirm().equals(user.getPassword())) {
             errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
+            System.err.println("Password and password confirmation differs each other");
         }
     }
 

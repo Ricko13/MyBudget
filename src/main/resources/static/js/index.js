@@ -38,17 +38,25 @@ function initChartsVue() {
                     display: false
                 }
             },
-            pieChartOptions: { responsive: true, maintainAspectRatio: false }
+            pieChartOptions: {responsive: true, maintainAspectRatio: false}
         },
-        created: function () {
+        mounted: function () {
             this.submitRange();
         },
         methods: {
             submitRange() {
+                if (!isDateRangeValid(this.startDate, this.endDate)) {
+                    return;
+                }
                 axios.post(REPORT_URL, {'startDate': this.startDate, 'endDate': this.endDate})
                     .then(function (response) {
+                        console.log(response)
                         chartsVue.reportData = response.data;
                         chartsVue.formatReportData();
+
+                        chartData = [];
+                        chartLabels = [];
+                        chartBackgrounds = []; //reset chart data before add new sets
                         response.data.sumInCategories.forEach(function (entry, index) {
                             chartLabels[index] = entry.name;
                             chartBackgrounds[index] = entry.color;
@@ -80,6 +88,8 @@ function initChartsVue() {
                 if (chart) {
                     window.chart.destroy();
                 }
+                console.log(chartLabels)
+                console.log(chartData)
                 var ctx = document.getElementById('chart').getContext('2d');
                 chart = new Chart(ctx, {
                     type: type,
@@ -95,10 +105,12 @@ function initChartsVue() {
                     options: this.getChartOptionsByType(type)
                 });
             },
-            getChartOptionsByType (type) {
+            getChartOptionsByType(type) {
                 switch (type) {
-                    case 'pie': return this.pieChartOptions;
-                    case 'bar': return this.barChartOptions;
+                    case 'pie':
+                        return this.pieChartOptions;
+                    case 'bar':
+                        return this.barChartOptions;
                 }
             },
             convertResponseColorsToRgb(hexArray) {
@@ -108,40 +120,46 @@ function initChartsVue() {
                 });
                 return rgbArray;
             },
-          /*  submitPaymentsDatatable() {
-                table.destroy();
-                paymentsDataTable = $("#dataTable").DataTable({
-                    ajax: '/api/paymentsDT/',
-                    order: [],
-                    columnDefs: [
-                        {"orderable": false, "targets": 5}
-                    ],
-                    columns: [
-                        {data: "name"},
-                        {data: "price"},
-                        {
-                            // render: formatLocalDate(row.date)
-                            render: function (data, type, row) {
-                                return formatLocalDate(row.date)
-                            }
-                        },
-                        {data: "description"},
-                        {
-                            render: function (data, type, row) {
-                                if (row.categoryName !== null) {
-                                    return '<a href="/category/' + row.categoryName + '">' + row.categoryName + '</a>';
-                                } else {
-                                    return "";
-                                }
-                            }
-                        }
-                    ]
-                });
-            }*/
+            /*  submitPaymentsDatatable() {
+                  table.destroy();
+                  paymentsDataTable = $("#dataTable").DataTable({
+                      ajax: '/api/paymentsDT/',
+                      order: [],
+                      columnDefs: [
+                          {"orderable": false, "targets": 5}
+                      ],
+                      columns: [
+                          {data: "name"},
+                          {data: "price"},
+                          {
+                              // render: formatLocalDate(row.date)
+                              render: function (data, type, row) {
+                                  return formatLocalDate(row.date)
+                              }
+                          },
+                          {data: "description"},
+                          {
+                              render: function (data, type, row) {
+                                  if (row.categoryName !== null) {
+                                      return '<a href="/category/' + row.categoryName + '">' + row.categoryName + '</a>';
+                                  } else {
+                                      return "";
+                                  }
+                              }
+                          }
+                      ]
+                  });
+              }*/
         }
     })
 }
-
+function isDateRangeValid(from, to) {
+    if(new Date(from) > new Date(to)) {
+        toastr.warning("Wrong date - 'from' date is after 'to'")
+        return false;
+    }
+    return true;
+}
 
 /*//TODO niepotrzebne chyba
 function getCategoryData() {

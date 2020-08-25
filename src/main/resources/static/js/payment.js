@@ -76,14 +76,18 @@ $(document).ready(function () {
     /***************** UPDATE/MOVE SUBMIT */
     $("#editPaymentForm").submit(function (e) {
         e.preventDefault();
-        if($('#priceEdit').val() <= 0) {
+        let price = $('#priceEdit').val()
+        if(price <= 0) {
             toastr.warning('Price must be greater than 0')
+            return;
+        }
+        if(!isPriceValid(price)) {
             return;
         }
         updatedData = {
             id: $('#idEdit').val(),
             name: $('#nameEdit').val(),
-            price: $('#priceEdit').val(),
+            price: price,
             date: $('#dateEdit').val(),
             description: $('#descriptionEdit').val(),
             categoryId: $('#categoriesEdit').children("option:selected").val()
@@ -104,7 +108,6 @@ $(document).ready(function () {
     /**************** UPDATE/MOVE MODAL */
     $('#editPaymentModal').on('show.bs.modal', function (event) {
         checkIfMovingToHistory($(event.relatedTarget));
-
         var paymentId = $(event.relatedTarget).data('id');
         //        var data = paymentsDataTable.data();
         let data = paymentsDataTable.data().toArray();
@@ -144,10 +147,14 @@ $(document).ready(function () {
     /***************** ADD PAYMENT SUBMIT */
     $('#addPaymentForm').submit(function (e) {
         e.preventDefault();
+        let price = $('#price').val()
+        if (!isPriceValid(price)) {
+            return;
+        }
         axios.post(crudURL + '/add', {
             id: -1,
             name: $('#name').val(),
-            price: $('#price').val(),
+            price: price,
             date: $('#date').val(),
             description: $('#description').val(),
             categoryId: $('#categories').val()
@@ -159,6 +166,21 @@ $(document).ready(function () {
         $('#addPaymentButton').click();
         reloadDataTables();
     });
+
+    function isPriceValid(price) {
+        let priceArr = price;
+        if (price.includes('.')) {
+            priceArr = price.split('.')
+        } else if (price.includes(',')) {
+            priceArr = price.split(',')
+        }
+        if (priceArr.length === 2 && priceArr[1].toString().length > 2) {
+            toastr.warning("Wrong price format")
+            return false;
+        }
+        return true;
+    }
+
 });
 
 function changeAddButton() {
