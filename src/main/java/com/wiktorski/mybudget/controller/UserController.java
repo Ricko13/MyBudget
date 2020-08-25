@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.UUID;
 
 //TODO too much logic in controller, should be extracted to UserService or RegistrationService
@@ -58,6 +59,7 @@ public class UserController {
             return "/user/registration";
         }
 
+        //TODO should be extracted to services
         //RECAPTCHA
         String ip = request.getRemoteAddr();
         String captchaVerifyMessage =
@@ -137,8 +139,14 @@ public class UserController {
     }
 
     @GetMapping("/user/delete")
-    public String deleteUser() {
-        userService.deleteUser();
-        return "redirect:/logout";
+    public String deleteUser(@RequestParam(required = false) String token, HttpServletRequest request) {
+        if(Optional.ofNullable(token).isPresent()) {
+            userService.deleteUser(token);
+            return "redirect:/logout";
+        } else {
+            userService.sendDeleteConfirmationEmail(request);
+            return "user/delete";
+        }
     }
+
 }
