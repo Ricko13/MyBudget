@@ -47,6 +47,12 @@ public class MainController {
         return "/payment/payment";
     }
 
+    @GetMapping("/fixedpayments")
+    public String fixedPayments(Model model) {
+        model.addAttribute("categories", paymentService.getUserCategories());
+        return "/payment/fixedpayments";
+    }
+
     @RequestMapping(method = RequestMethod.DELETE, value = "/test")
     public String test(){
         return "";

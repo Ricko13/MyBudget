@@ -2,9 +2,11 @@ package com.wiktorski.mybudget.model.mapper;
 
 import com.wiktorski.mybudget.model.DTO.CategoryDTO;
 import com.wiktorski.mybudget.model.DTO.PaymentDTO;
+import com.wiktorski.mybudget.model.DTO.StandingInstructionDTO;
 import com.wiktorski.mybudget.model.entity.Category;
 import com.wiktorski.mybudget.model.entity.FuturePayment;
 import com.wiktorski.mybudget.model.entity.Payment;
+import com.wiktorski.mybudget.model.entity.StandingInstructionEntity;
 import org.hibernate.annotations.Source;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
@@ -16,6 +18,7 @@ import org.mapstruct.Mappings;
 @Mapper(componentModel = "Spring")
 public interface EntitiesMapper {
 
+    /** TO ENTITY */
 
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "user", ignore = true)
@@ -27,11 +30,16 @@ public interface EntitiesMapper {
 
     Category toCategory(CategoryDTO dto);
 
+    @Mapping(target = "category", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "latestExecution", ignore = true)
+    StandingInstructionEntity toStandingInstruction(StandingInstructionDTO dto);
 
-    /**
-     * Można by dla dto @Mapping(source = "category.name", target = "categoryName"
-     * ale w tym wypadku category może być nullem... czy może???
-     * */
+    @Mapping(target = "id", ignore = true)
+    Payment standingToPayment(StandingInstructionEntity standingInstructionEntity);
+
+    /** TO DTO */
+
     @Mappings({
             @Mapping(source = "category.id", target = "categoryId"),
             @Mapping(source = "category.name", target = "categoryName")
@@ -46,7 +54,12 @@ public interface EntitiesMapper {
 
     CategoryDTO toDTO(Category category);
 
+    @Mapping(source = "category.id", target = "categoryId")
+    @Mapping(source = "category.name", target = "categoryName")
+    StandingInstructionDTO toDTO(StandingInstructionEntity standingInstruction);
 
+
+    /** UPDATE */
 
     @Mapping(target = "category", ignore = true)
     void updatePayment(PaymentDTO paymentDTO, @MappingTarget Payment toUpdate);
@@ -55,5 +68,9 @@ public interface EntitiesMapper {
     void updateFuturePayment(PaymentDTO paymentDTO, @MappingTarget FuturePayment toUpdate);
 
     void updateCategory(CategoryDTO categoryDTO, @MappingTarget Category category);
+
+    @Mapping(target = "category", ignore = true)
+    void updateStandingInstruction(StandingInstructionDTO source, @MappingTarget StandingInstructionEntity toUpdate);
+
 }
 

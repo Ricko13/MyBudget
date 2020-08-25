@@ -46,6 +46,12 @@ public class PaymentService {
     }
 
     @Transactional
+    public void addPaymentWithoutLoggedUser(Payment payment) {
+        paymentRepo.save(payment);
+        userService.decreaseBudget(payment.getPrice(), payment.getUser());
+    }
+
+    @Transactional
     public void updatePayment(PaymentDTO paymentDTO) {
         //TODO Validator.validatePaymentDTO(paymentDTO);
         Payment payment = paymentRepo.findById(paymentDTO.getId())

@@ -51,6 +51,11 @@ public class UserService {
         user.setBudget(user.getBudget()-price);
     }
 
+    public void decreaseBudget(float price, User user) {
+        user.setBudget(user.getBudget()-price);
+        userRepo.save(user);
+    }
+
     public void setBudget(float amount) {
         User user = securityService.getLoggedInUser();
         user.setBudget(amount);

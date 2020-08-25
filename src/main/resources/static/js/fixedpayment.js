@@ -1,23 +1,22 @@
+const URL = '/api/fixedpayment'
+
 var paymentEditVue;
 var paymentsDataTable;
 var isModalActive = false;
 var originalData;
 var updatedData;
-var crudURL = '/api/payment';
 var movingToHistory = false;
 
 
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
-    if ($('#isFuture').val() === 'true') {
-        crudURL = '/api/futurePayment'
-    }
+
 
     /****************** DATATABLES */
     table.destroy();  //TODO CO Z TYM - usuń inicjowanie datatables w template.html::js-include
     paymentsDataTable = $("#dataTable").DataTable({
-        ajax: $('#paymentURL').val(),
+        ajax: URL,
         order: [],
         columnDefs: [
             {"orderable": false, "targets": 5}
@@ -35,18 +34,12 @@ $(document).ready(function () {
             },
             {
                 render: function (data, type, row) {
-                    // return formatLocalDate(row.date)
-                    return row.date
-                }
-            },
-            {// {data: "description"},
-                render: function (data, type, row) {
                     return `<div style='width: 200px;'>${row.description ? row.description : ''}</div>`
                 }
             },
             {
                 render: function (data, type, row) {
-                    if (row.categoryName !== null) {
+                    if (row.categoryName !== null && row.categoryName !== undefined) {
                         return '<a href="/category/' + row.categoryName + '">' + row.categoryName + '</a>';
                     } else {
                         return "";
@@ -54,13 +47,11 @@ $(document).ready(function () {
                 }
             },
             {
+                data: "latestExecution"
+            },
+            {
                 render: function (data, type, row) {
-                    tmp = '<div>'; /*style="width:80px;"*/
-                    if ($('#isFuture').val() === 'true') {
-                        tmp += '<a data-toggle="modal" href="#editPaymentModal" class="icon-block" data-id="' + row.id + '" data-name="' + row.name + '" data-move="true">';
-                        tmp += '<img src="/assets/move.png" style="width:20px !important; height:5% !important; float:right; margin-left:10px;" data-toggle="tooltip" title="MOVE TO HISTORY"/>';
-                        tmp += '</a>';
-                    }
+                    tmp = '<div>';
                     tmp += '<a data-toggle="modal" href="#deletePayConfirm" class="icon-block" data-id="' + row.id + '" data-name="' + row.name + '">';
                     tmp += '<img src="/assets/delete-button.png" style="width:20px !important; height:5% !important; float:right; margin-left:10px;" data-toggle="tooltip" title="DELETE"/>';
                     tmp += '</a>';
@@ -84,17 +75,16 @@ $(document).ready(function () {
             id: $('#idEdit').val(),
             name: $('#nameEdit').val(),
             price: $('#priceEdit').val(),
-            date: $('#dateEdit').val(),
             description: $('#descriptionEdit').val(),
             categoryId: $('#categoriesEdit').children("option:selected").val()
         };
 
-        axios.post(crudURL + (movingToHistory === true ? '/move' : '/update'), updatedData)
+        axios.post(URL + '/update', updatedData)
             .then(function (response) {
-                toastr.success('Payment updated');
+                toastr.success('Fixed Payment updated');
             })
             .catch(function (error) {
-                toastr.error('Payment update error');
+                toastr.error('Fixed Payment update error');
             });
 
         $('#editPaymentModal').modal('toggle');
@@ -103,19 +93,17 @@ $(document).ready(function () {
 
     /**************** UPDATE/MOVE MODAL */
     $('#editPaymentModal').on('show.bs.modal', function (event) {
-        checkIfMovingToHistory($(event.relatedTarget));
+        // checkIfMovingToHistory($(event.relatedTarget));
 
         var paymentId = $(event.relatedTarget).data('id');
         //        var data = paymentsDataTable.data();
         let data = paymentsDataTable.data().toArray();
         data.forEach(function (el) {
             if (el.id === paymentId) {
-                // let date = el.date.split('-');
                 $('#idEdit').val(el.id);
                 $('#nameEdit').val(el.name);
                 $('#priceEdit').val(el.price);
-                // $('#dateEdit').val(date[2] + '-' + date[1] + '-' + date[0]);
-                $('#dateEdit').val(el.date);
+                // $('#dateEdit').val(el.date);
                 $('#descriptionEdit').val(el.description);
                 $('[name=categoryId] option').filter(function () {   /** setting category in modal */
                     if ($(this).text() === el.categoryName) {
@@ -129,7 +117,7 @@ $(document).ready(function () {
 
     });
 
-    function checkIfMovingToHistory(eventRelatetTarget) {
+/*    function checkIfMovingToHistory(eventRelatetTarget) {
         if (eventRelatetTarget.data('move') === true) {
             $('#editPaymentTitle').html("Move to history");
             $('#editPaymentSubmit').html("Accept and move");
@@ -139,22 +127,21 @@ $(document).ready(function () {
             $('#editPaymentSubmit').text("Submit");
             movingToHistory = false;
         }
-    }
+    }*/
 
     /***************** ADD PAYMENT SUBMIT */
     $('#addPaymentForm').submit(function (e) {
         e.preventDefault();
-        axios.post(crudURL + '/add', {
+        axios.post(URL + '/add', {
             id: -1,
             name: $('#name').val(),
             price: $('#price').val(),
-            date: $('#date').val(),
             description: $('#description').val(),
             categoryId: $('#categories').val()
         }).then(function (response) {
-            toastr.success("Payment added succesfuly");
+            toastr.success("Fixed payment added succesfuly");
         }).catch(function (error) {
-            toastr.error("Error while adding payment");
+            toastr.error("Error while adding fixed payment");
         });
         $('#addPaymentButton').click();
         reloadDataTables();
@@ -195,35 +182,15 @@ $(window).on('load', function () {
 
     $('#hiddenForm').submit(function (e) {
         e.preventDefault();
-        axios.get(crudURL + '/delete/' + id)
+        axios.get(URL + '/delete/' + id)
             .then(function (response) {
-                toastr.success("Payment deleted");
+                toastr.success("Fixed payment deleted");
                 reloadDataTables();
             }).catch(function (error) {
-            toastr.error("Error while deleting payment");
+            toastr.error("Error while deleting fixed payment");
         });
         $('#deletePayConfirm').modal('toggle');
     });
 
 
 });
-
-
-/*
-function initPaymentEditVue(){
-    paymentEditVue=new Vue({
-        el: '#editPaymentForm',
-        data: {
-            name:'',
-            value:'',
-            date:'',
-            categoryId:'',
-            description:''
-        },
-        methods: {
-            postEditRequest: function () {
-
-            }
-        }
-    })
-}*/

@@ -13,6 +13,7 @@ import com.wiktorski.mybudget.model.mapper.EntitiesMapper;
 import com.wiktorski.mybudget.service.BudgetService;
 import com.wiktorski.mybudget.service.PaymentService;
 import com.wiktorski.mybudget.service.ReportingService;
+import com.wiktorski.mybudget.service.StandingInstructionService;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,7 @@ public class RestApiController {
     private final BudgetService budgetService;
     private final EntitiesMapper mapper;
     private final ReportingService reportingService;
+    private final StandingInstructionService standingInstructionService;
 
     @GetMapping("/payments")
     public MBResponse<List<PaymentDTO>> getPayments() {
@@ -70,6 +72,31 @@ public class RestApiController {
     @GetMapping("/payment/delete/{paymentId}")
     public ResponseEntity deletePayment(@PathVariable int paymentId) {
         paymentService.deletePaymentById(paymentId);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/fixedpayment")
+    public MBResponse<List<StandingInstructionDTO>> getStandingInstructionsForDT(Map<String, String> params) {
+        return MBResponse.<List<StandingInstructionDTO>>builder()
+                .data(standingInstructionService.getStandingInstructions())
+                .build();
+    }
+
+    @PostMapping("/fixedpayment/add")
+    public ResponseEntity addFixedPayment(@RequestBody StandingInstructionDTO dto) {
+        standingInstructionService.addStandingInstruction(dto);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PostMapping("/fixedpayment/update")
+    public ResponseEntity updateFixedPayment(@RequestBody StandingInstructionDTO dto) {
+        standingInstructionService.updateStandingInstruction(dto);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/fixedpayment/delete/{paymentId}")
+    public ResponseEntity deleteFixedPayment(@PathVariable int paymentId) {
+        standingInstructionService.deleteStandingInstruction(paymentId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

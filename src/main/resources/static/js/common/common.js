@@ -44,8 +44,9 @@ function formatMoney(money) {
 }
 
 
-/** Date class to yyyy-mm-dd  */
+/** Date class to YYYY-MM-DD  */
 function formatDate(date){
+    console.log(date)
     var dd = String(date.getDate()).padStart(2, '0');
     var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = date.getFullYear();
@@ -53,7 +54,7 @@ function formatDate(date){
 }
 
 
-/** reverses fields order */ //TODO ???
+/** reverses fields order to DD-MM-RRRR */ //TODO ???
 function formatLocalDate(localdate) {
     if(localdate === null)
         return "";

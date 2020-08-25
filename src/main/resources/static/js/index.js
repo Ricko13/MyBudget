@@ -5,7 +5,7 @@ var chartLabels = [];
 var chartBackgrounds = [];
 var chartData = [];
 var chart = undefined;
-var paymentsDataTable;
+// var paymentsDataTable;
 
 $(document).ready(function () {
     initChartsVue();
@@ -42,13 +42,11 @@ function initChartsVue() {
         },
         created: function () {
             this.submitRange();
-            // this.formatReportData();
         },
         methods: {
             submitRange() {
                 axios.post(REPORT_URL, {'startDate': this.startDate, 'endDate': this.endDate})
                     .then(function (response) {
-                        // console.log(response);
                         chartsVue.reportData = response.data;
                         chartsVue.formatReportData();
                         response.data.sumInCategories.forEach(function (entry, index) {
@@ -68,16 +66,16 @@ function initChartsVue() {
                 this.reportData.averageDailyOutcome = formatMoney(this.reportData.averageDailyOutcome)
                 this.reportData.incomeMinusOutcome = formatMoney(this.reportData.incomeMinusOutcome)
             },
-            setDateRangeToCurrentMonth() {
-                var date = new Date();
-                var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-                startDate = formatDate(firstDay);
-                var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-                endDate = formatDate(lastDay);
-            },
-            setDateRangeToToday() {
-                startDate = endDate = formatDate(new Date());
-            },
+            /* setDateRangeToCurrentMonth() {
+                 var date = new Date();
+                 var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+                 startDate = formatDate(firstDay);
+                 var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                 endDate = formatDate(lastDay);
+             },
+             setDateRangeToToday() {
+                 startDate = endDate = formatDate(new Date());
+             },*/
             initChart(type) {
                 if (chart) {
                     window.chart.destroy();
@@ -88,7 +86,7 @@ function initChartsVue() {
                     data: {
                         labels: chartLabels,
                         datasets: [{
-                            label: 'Values in categories',
+                            label: 'Value in category',
                             backgroundColor: chartBackgrounds,
                             borderColor: 'rgba(0,0,0)',
                             data: chartData
@@ -155,7 +153,7 @@ function getCategoryData() {
 }*/
 
 
-//TODO - test to delete
+//TODO - test - to delete
 function initChartJs2() {
     var ctx = document.getElementById('myChart').getContext('2d');
     chart = new Chart(ctx, {
@@ -183,7 +181,7 @@ function initChartJs2() {
     });
 }
 
-//TODO - test to delete
+//TODO - test - to delete
 function initChartJs3() {
     var ctx = document.getElementById('myChart2');
     var myChart = new Chart(ctx, {

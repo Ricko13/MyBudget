@@ -46,8 +46,10 @@ function initBudgetVue() {
             },
             renderTimestamp(date) { //TODO tmp because issue with timestamp type in database
                 let arrDateTime = date.toString().split('T')
-                let arrDate = arrDateTime[0].split('-')
-                return arrDate[2] + '-' + arrDate[1] + '-' + arrDate[0]
+                /*let arrDate = arrDateTime[0].split('-')
+                return arrDate[2] + '-' + arrDate[1] + '-' + arrDate[0]*/
+                //TODO reversed order to make default sort working properly
+                return arrDateTime[0]
             },
             reloadDataTables() {
                 setTimeout(function () {

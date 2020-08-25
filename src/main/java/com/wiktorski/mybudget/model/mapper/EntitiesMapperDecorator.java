@@ -1,12 +1,15 @@
 package com.wiktorski.mybudget.model.mapper;
 
 import com.wiktorski.mybudget.model.DTO.PaymentDTO;
+import com.wiktorski.mybudget.model.DTO.StandingInstructionDTO;
 import com.wiktorski.mybudget.model.entity.FuturePayment;
 import com.wiktorski.mybudget.model.entity.Payment;
+import com.wiktorski.mybudget.model.entity.StandingInstructionEntity;
 import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.repository.CategoryRepository;
 import com.wiktorski.mybudget.repository.FuturePaymentRepository;
 import com.wiktorski.mybudget.repository.PaymentRepository;
+import com.wiktorski.mybudget.repository.StandingInstructionRepository;
 import com.wiktorski.mybudget.service.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,7 +45,6 @@ public abstract class EntitiesMapperDecorator implements EntitiesMapper {
         return payment;
     }
 
-    //TODO nie działa?
     @Override
     public FuturePayment toFutureEntity(PaymentDTO dto) {
         FuturePayment fut = delegate.toFutureEntity(dto);
@@ -51,7 +53,21 @@ public abstract class EntitiesMapperDecorator implements EntitiesMapper {
         return fut;
     }
 
-/*    @Override
+    @Override
+    public StandingInstructionEntity toStandingInstruction(StandingInstructionDTO dto) {
+        StandingInstructionEntity entity = delegate.toStandingInstruction(dto);
+        entity.setCategory(categoryRepo.findById(dto.getCategoryId()).orElse(null));
+        return entity;
+    }
+
+    @Override
+    public Payment standingToPayment(StandingInstructionEntity standingInstruction) {
+        Payment payment = delegate.standingToPayment(standingInstruction);
+        payment.setDate(LocalDate.now());
+        return payment;
+    }
+
+    /*    @Override
     public PaymentDTO toDTO(Payment payment){
         PaymentDTO dto = delegate.toDTO(payment);
         Optional.ofNullable(payment.getCategory()).ifPresent(category -> {
@@ -76,6 +92,12 @@ public abstract class EntitiesMapperDecorator implements EntitiesMapper {
         categoryRepo.findById(paymentDTO.getCategoryId())
                 .ifPresent(toUpdate::setCategory);
         futurePaymentRepo.save(toUpdate);
+    }
+
+    @Override
+    public void updateStandingInstruction(StandingInstructionDTO source, StandingInstructionEntity toUpdate) {
+        delegate.updateStandingInstruction(source, toUpdate);
+        toUpdate.setCategory(categoryRepo.findById(source.getCategoryId()).orElse(null));
     }
 
     private User getUser(){

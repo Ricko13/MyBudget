@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -21,5 +22,8 @@ public class StandingInstructionDTO implements Serializable {
     private String name;
     private float price;
     private String description;
+    private int categoryId;
+    private String categoryName;
+    private LocalDate latestExecution;
 
 }
