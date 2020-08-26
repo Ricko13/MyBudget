@@ -53,10 +53,20 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") User userForm, @RequestParam(name = "g-recaptcha-response") String recaptchaResponse, BindingResult bindingResult, RedirectAttributes redir, HttpServletRequest request) {
+    public String registration(@ModelAttribute("userForm") User userForm,
+                               @RequestParam(name = "g-recaptcha-response") String recaptchaResponse,
+                               BindingResult bindingResult,
+                               RedirectAttributes redir,
+                               HttpServletRequest request,
+                               Model model) {
 
         userValidator.validate(userForm, bindingResult);
         if (bindingResult.hasErrors()) {
+            //TODO fast temporary solution for registration failure info on frontend
+            if(!userForm.getPassword().equals(userForm.getPasswordConfirm()))
+                model.addAttribute("notMatchingPassword","Password and password confirmation are not matching");
+            else
+                model.addAttribute("usernameExists", "User with that username already exists");
             return "/user/registration";
         }
 
@@ -128,14 +138,8 @@ public class UserController {
             model.addAttribute("messageWarning", "You have to confirm your email address before signing in");
             return "user/login";
         } else {
-
-            //emailService.sendEmail(emailService.createLogingInfoEmail(user, request));
-
             securityService.autoLogin(username, password);
             model.addAttribute("loggedIn", "user " + username);
-
-           /*
-            return "index";*/
             return "redirect:/";
         }
     }

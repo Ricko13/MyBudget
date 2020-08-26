@@ -24,6 +24,15 @@
 
     <br/>
     <header><h3>Registration</h3></header>
+
+    <div th:if="${usernameExists}" class="alert alert-warning" role="alert" style="text-align: center">
+        <p th:text="${usernameExists}"></p>
+    </div>
+
+    <div th:if="${notMatchingPassword}" class="alert alert-warning" role="alert" style="text-align: center">
+        <p th:text="${notMatchingPassword}"></p>
+    </div>
+
     <div class="form">
         <form method="post" th:action="@{/registration}" th:object="${userForm}">
             <div class="form-group">
