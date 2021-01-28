@@ -98,7 +98,7 @@ public class MainController {
     //TODO change to async request to API
     @PostMapping("/category/add")
     public String categoryAdd(@RequestParam String name, @RequestParam String color) {
-        if(!categoryRepository.existsByName(name)) {
+        if(!categoryRepository.existsByName(name)) {  //TODO bład, nieprawidlowe sprawdzanie - sprawdza wszystkie rekordy, a nie tylko dla danego uzytkownika
             categoryRepository.save(new Category(name, color, securityService.getLoggedInUser()));
             return "redirect:/category";
         }
