@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head th:replace="template.html::head">
     <meta charset="UTF-8">
     <title>Title</title>
@@ -8,14 +8,68 @@
 <body>
 
 <div th:replace="template.html::navbar"></div>
-<div class="container">
+<div class="container" id="accountContainer">
     <header><h2>My account</h2></header>
 
-    <a href="/user/delete">Usuń konto</a>
+    <div th:if="${confirmationMessage}" class="alert alert-success" role="alert" style="text-align: center">
+        Password changed successfully!
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="text-align: center">
+        Error while changing password!
+    </div>
+
+    <div><a href="javascript:;" v-on:click="openModal"><strong>Change password</strong></a></div>
+    <div><a href="/user/delete"><strong>Delete account</strong></a></div>
 
 
 </div>
+
+<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordTitle">Change password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="text-align:left;">
+                <form action="/changepassword" method="get" id="changePasswordForm">
+                    <div class="form-group row">
+                        <label for="currentPassword" class="col-md-4">Current password</label>
+                        <input v-model="currentPassword" id="currentPassword" type="password" class="form-control col-md-5"
+                               placeholder="Current password" name="currentPassword" autofocus="autofocus" required>
+                    </div>
+                    <div class="form-group row">
+                        <label for="newPassword" class="col-md-4">New password</label>
+                        <input v-model="newPassword" id="newPassword" type="password" class="form-control col-md-5"
+                               placeholder="New password" name="newPassword" autofocus="autofocus"
+                               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                               title="Password must have at least 8 characters and contain at least one digit, uppercase and lowercase letters"
+                               required>
+                    </div>
+                    <div class="form-group row">
+                        <label for="newPasswordConfirm" class="col-md-4">New password (confirm)</label>
+                        <input v-model="newPasswordConfirm" id="newPasswordConfirm" type="password" class="form-control col-md-5"
+                               placeholder="New password" name="newPasswordConfirm" autofocus="autofocus" required>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button id="changePasswordSubmit" class="btn btn-secondary">Change</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div th:replace="template.html :: js-include"></div>
-<script src="/js/redirect.js"></script>
+<script th:src="@{/js/account.js}"></script>
 </body>
 </html>

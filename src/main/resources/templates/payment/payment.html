@@ -9,25 +9,30 @@
 
 <div th:replace="template.html::navbar"></div>
 <div class="container">
+    <input id="paymentURL" type="hidden" th:value="${dataURL}">
+    <input id="isFuture" type="hidden" th:value="${isFuture}">
     <div class="content">
-        <header>
-            <h2>Payment history
-                <button href="/payment/add" id="addPayment" class="btn btn-secondary button-mid" type="button"
+        <header th:if="!${category}">
+            <h2>
+                <!--                <span th:if="${isFuture}">Future payments</span>-->
+                <!--                <span th:unless="${isFuture}">Payment history</span>-->
+                <span th:text="${isFuture} ? 'Future payments' : 'Payment history'"></span>
+                <button href="/payment/add" id="addPaymentButton" class="btn btn-secondary button-mid" type="button"
                         data-toggle="collapse" data-target="#collapseAddPayment" aria-expanded="false"
-                        aria-controls="collapseExample">
+                        aria-controls="collapseExample" onclick="changeAddButton()">
                     Add
                 </button>
             </h2>
         </header>
+        <header th:if="${category}"><h2 th:text="'Category: '+${category}">Payment history</h2></header>
         <!--<a href="/payment/add" onclick="changeContent('newPayment'); return false;" class="btn btn-secondary button-mid" id="addPayment">
             Add
         </a>-->
 
-
         <div class="collapse" id="collapseAddPayment" style="margin-top:20px; ">
-            <div class="card card-body" style="width: 60%; margin-left: auto; margin-right: auto;">
+            <div class="card card-body shadow" style="width: 60%; margin-left: auto; margin-right: auto;">
                 <header><h2>Add payment</h2></header>
-                <form th:action="@{/payment/add}" method="post">
+                <form th:action="@{/payment/add}" id="addPaymentForm" method="post">
                     <div class="form-group">
                         <div class="form-row">
                             <div class="col">
@@ -39,9 +44,12 @@
 
                             <div class="col">
                                 <label for="price">Value *</label>
-                                <input type="number"
-                                       min="0" step="any" class="form-control" id="price" placeholder="Type price"
-                                       name="price" required
+                                <input th:required="${!isFuture}"
+                                       th:attr="min=${isFuture} ? '0':'1'"
+                                       type="number"
+                                       step="any" class="form-control" id="price"
+                                       placeholder="Type price"
+                                       name="price"
                                        style="width: 200px; margin-right: auto; margin-left: auto;">
                             </div>
                         </div>
@@ -61,12 +69,7 @@
                             <div class="col">
                                 <label for="date" th:value="${date}">Date</label>
                                 <input class="form-control" type="date" id="date" name="date"
-                                       style="width: 160px; margin-right: auto; margin-left: auto;">
-                            </div>
-                            <div class="col">
-                                <label for="time" th:value="${date}">Time</label>
-                                <input class="form-control" type="time" id="time" name="time"
-                                       style="width: 100px; margin-right: auto; margin-left: auto;">
+                                       style="width: 200px; margin-right: auto; margin-left: auto;" max="9999-01-01">
                             </div>
                         </div>
                     </div>
@@ -86,67 +89,57 @@
         </div>
 
         <div class="overflow">
-            <table class="table table-sm table-hover">
+            <table id="dataTable" class="table table-payments table-sm table-hover">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Pos name</th>
-                    <th scope="col">price</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Price</th>
                     <th scope="col">Date</th>
-                    <th scope="col">Time</th>
                     <th scope="col">Description</th>
                     <th scope="col">Category</th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
-                <tbody>
-                <th:block th:each="payment: ${payments}">
-                    <tr>
-                        <td th:text="${payment.name}"></td>
-                        <td th:text="${payment.price}"></td>
-                        <td th:text="${payment.justDate}"></td>
-                        <td th:text="${payment.justTime}"></td>
-                        <td th:text="${payment.description}" style="width: 220px;"></td>
-                        <!--<td th:text="${payment.category!=null}?${payment.category.name} : ''"></td>-->
-                        <td style="width: 220px;"><a
-                                th:href="${payment.category!=null}?@{'/category/'+${payment.category.name}} : '#'"
-                                th:text="${payment.category!=null}?${payment.category.name} : ''"></a></td>
-                        <!--<td><a th:href="@{'/payment/delete/' +${payment.id}}" th:onclick="'deletePos('+${payment.id}+')'">delete</a> </td>-->
-                        <td><a data-toggle="modal" href="#deletePayConfirm"
-                               th:attr="data-id=${payment.id}, data-name=${payment.name}">delete</a></td>
-                    </tr>
-                </th:block>
-                </tbody>
+                <!--    <tbody>
+                    <th:block th:each="payment: ${payments}">
+                        <tr>
+                            <td th:text="${payment.name}" th:attr=" 'data-name' + ${payment.id}=${payment.name}" th:id="'name'+${payment.id}"></td>
+                            <td th:text="${payment.price}" th:id="'price'+${payment.id}"></td>
+                            <td th:text="${payment.justDate}" th:id="'date'+${payment.id}"></td>
+                            <td th:text="${payment.description}" style="width: 220px;" th:id="'description'+${payment.id}"></td>
+                            &lt;!&ndash;<td th:text="${payment.category!=null}?${payment.category.name} : ''"></td>&ndash;&gt;
+                            <td style="width: 220px;" ><a
+                                    th:href="${payment.category!=null}?@{'/category/'+${payment.category.name}} : '#'"
+                                    th:text="${payment.category!=null}?${payment.category.name} : ''"
+                                    th:id="'categoryId'+${payment.id}"></a></td>
+    &lt;!&ndash;                                th:id="'categoryId'+${payment.category?.id}"></a></td>&ndash;&gt;
+                            &lt;!&ndash;<td><a th:href="@{'/payment/delete/' +${payment.id}}" th:onclick="'deletePos('+${payment.id}+')'">delete</a> </td>&ndash;&gt;
+                            <td style="width:80px;">
+                                <a data-toggle="modal" href="#deletePayConfirm" class="icon-block" th:attr="data-id=${payment.id}, data-name=${payment.name}">
+                                   <img th:src="@{/assets/delete-button.png}" style="width:26%; height:5%; float:right; margin-left:10px;" data-toggle="tooltip" title="DELETE"/>
+                                </a>
+                                <a  data-toggle="modal" href="#editPaymentModal" class="icon-block" th:attr="data-id=${payment.id}">
+                                    <img th:src="@{/assets/edit-button.png}" style="width:23%; height:5%; float:right;" data-toggle="tooltip" title="EDIT"/>
+                                </a>
+                                &lt;!&ndash; TO ODNOSI DO NOWEJ STRONY editPaymentDOUSUNIECIA.html
+                                <a th:href="@{'/payment/edit/'+${payment.id}}" class="icon-block">
+                                    <img th:src="@{/assets/edit-button.png}" style="width:23%; height:5%; float:right;" data-toggle="tooltip" title="EDIT"/>
+                                </a>&ndash;&gt;
+                            </td>
+                        </tr>
+                    </th:block>
+                    </tbody>-->
             </table>
         </div>
 
     </div>
 
+    <div th:replace="modals.html :: modals"></div>
 
-    <div class="modal fade" id="deletePayConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteConfirmTitle">Delete</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Do you really want to delete position <span class="name" style="font-weight: bold;"></span>?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <form action="" method="get" id="hiddenForm">
-                        <button type="submit" class="btn btn-primary">Delete</button>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 <div th:replace="template.html :: js-include"></div>
+<script th:src="@{/js/payment.js}"></script>
+
 
 </body>
 </html>

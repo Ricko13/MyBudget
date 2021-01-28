@@ -1,23 +1,25 @@
 package com.wiktorski.mybudget.controller;
 
-import com.wiktorski.mybudget.model.Category;
-import com.wiktorski.mybudget.model.Payment;
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.DTO.ChangePasswordRequest;
+import com.wiktorski.mybudget.model.entity.Category;
+import com.wiktorski.mybudget.model.entity.Payment;
 import com.wiktorski.mybudget.repository.CategoryRepository;
-import com.wiktorski.mybudget.repository.PaymentRepository;
 import com.wiktorski.mybudget.service.PaymentService;
-import com.wiktorski.mybudget.service.security.SecurityService;
 import com.wiktorski.mybudget.service.UserService;
+import com.wiktorski.mybudget.service.security.SecurityService;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import java.text.ParseException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,73 +30,63 @@ public class MainController {
     UserService userService;
     PaymentService paymentService;
     SecurityService securityService;
-    PaymentRepository paymentRepository;
     CategoryRepository categoryRepository;
 
-    @GetMapping("/")
-    public String index(Model model){
-        User user = securityService.getLoggedInUser();
-        model.addAttribute("user", user);
-        model.addAttribute("budgetSum", (user.getBudget()+user.getSavings()));
-        model.addAttribute("payments", userService.getUserPaymentsDesc());
-        model.addAttribute("categories", userService.getUserCategories());
+    //@GetMapping("/")
+    public String index(){
         return "index";
     }
 
     @GetMapping("/budget")
-    public String budget(Model model){
-        User u = securityService.getLoggedInUser();
-        model.addAttribute("user", u);
-        model.addAttribute("budgetSum", u.getBudget()+u.getSavings());
+    public String budget(){
         return "/user/budget";
-    }
-
-    @Transactional
-    @PostMapping("/budget/add")
-    public String addToBudget(@RequestParam float amount){
-        try{
-        userService.addToBudget(amount);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return "redirect:/budget";
     }
 
     @GetMapping("/history")
     public String history(Model model) {
-        model.addAttribute("payments", userService.getUserPaymentsDesc());
-        model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("categories", paymentService.getUserCategories());
+        model.addAttribute("dataURL", "/api/paymentsDT");
+        model.addAttribute("isFuture", false);
+        return "/payment/payment";
+    }
+
+    @GetMapping("/fixedpayments")
+    public String fixedPayments(Model model) {
+        model.addAttribute("categories", paymentService.getUserCategories());
+        return "/payment/fixedpayments";
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/test")
+    public String test(){
+        return "";
+    }
+
+    @GetMapping("/category/{name}")
+    public String showInCategory(@PathVariable String name, Model model) {
+        model.addAttribute("category", name);
+        model.addAttribute("dataURL", "/api/categoryDT/"+name);
+        model.addAttribute("categories", paymentService.getUserCategories());
+        model.addAttribute("isFuture", false);
+        return "/payment/payment";
+    }
+
+    @GetMapping("/futurePayments")
+    public String futurePayments(Model model){
+        model.addAttribute("dataURL", "/api/futurePaymentsDT");
+        model.addAttribute("isFuture", true);
+        model.addAttribute("categories", paymentService.getUserCategories());
         return "/payment/payment";
     }
 
     @GetMapping("/payment/add")
     public String paymentAdd(Model model) {
-        model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("categories", paymentService.getUserCategories());
         return "/payment/newPayment";
-    }
-
-    @Transactional
-    @PostMapping("/payment/add")
-    public String paymentAddFinal(@RequestParam String name, @RequestParam float price,
-                                  @RequestParam(name = "categories") String idCat,
-                                  @RequestParam String date, @RequestParam String time, @RequestParam String description) {
-        try {
-            paymentService.addPayment(name, price, idCat, date, time, description);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return "redirect:/history";
-    }
-
-    @GetMapping("/payment/delete/{id}")
-    public String deletePayment(@PathVariable int id, Model model) {
-        paymentRepository.deleteById(id);
-        return "redirect:/history";
     }
 
     @GetMapping("/category")
     public String category(Model model) {
-        model.addAttribute("categories", userService.getUserCategories());
+        model.addAttribute("categories", paymentService.getUserCategories());
         return "/category/category";
     }
 
@@ -103,10 +95,14 @@ public class MainController {
         return "/category/newCategory";
     }
 
+    //TODO change to async request to API
     @PostMapping("/category/add")
-    public String categoryAdd(@RequestParam String name) {
-        categoryRepository.save(new Category(name, securityService.getLoggedInUser()));
-        return "redirect:/category";
+    public String categoryAdd(@RequestParam String name, @RequestParam String color) {
+        if(!categoryRepository.existsByName(name)) {  //TODO bład, nieprawidlowe sprawdzanie - sprawdza wszystkie rekordy, a nie tylko dla danego uzytkownika
+            categoryRepository.save(new Category(name, color, securityService.getLoggedInUser()));
+            return "redirect:/category";
+        }
+        return "/category/newCategory";
     }
 
     @GetMapping("/category/delete/{id}")
@@ -115,24 +111,10 @@ public class MainController {
         return "redirect:/category";
     }
 
-    @GetMapping("/category/{name}")
-    public String showInCategory(@PathVariable String name, Model model) {
-        List<Payment> payments = userService.getUserPaymentsDesc();
-        List<Payment> returnPayments = new ArrayList<>();
-        for (Payment payment : payments) {
-            if (payment.getCategory() != null) {
-                if (payment.getCategory().getName().equals(name))
-                    returnPayments.add(payment);
-            }
-        }
-        model.addAttribute("category", name);
-        model.addAttribute("payments", returnPayments);
-        return "/payment/paymentInCategory";
-    }
-
     @GetMapping("/myAccount")
     public String account(){
         return "/user/account";
     }
+
 
 }

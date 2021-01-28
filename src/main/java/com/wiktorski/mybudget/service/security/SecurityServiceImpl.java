@@ -1,6 +1,6 @@
 package com.wiktorski.mybudget.service.security;
 
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

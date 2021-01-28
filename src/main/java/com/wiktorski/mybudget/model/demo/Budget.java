@@ -1,6 +1,6 @@
 package com.wiktorski.mybudget.model.demo;
 
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.User;
 import lombok.*;
 
 import javax.persistence.*;

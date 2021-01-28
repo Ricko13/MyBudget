@@ -46,7 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.permitAll()//permitAll nie jest tutaj konieczne bo mozna wyzej w antMatchers dać
                 .defaultSuccessUrl("/")
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
+                .and()
+                .csrf().ignoringAntMatchers("/api/**");
                 /*.permitAll();*/
 
         /*DODAJ TO

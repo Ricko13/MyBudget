@@ -1,66 +1,48 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+     xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head th:replace="template.html::head">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-
 <div th:replace="template.html::navbar"></div>
 <div class="container">
-    <header><h2>My budget</h2></header>
-    <hr>
-
-    <div th:class="addToBudget">
-        <form th:action="@{/budget/add}" th:method="post" th:class="form-inline">
-            <div class="form-group" style="margin-right: auto; margin-left: auto;">
-                <input class="form-control" type="number" name="amount" placeholder="Add to budget..." min="0" required>
-                <button type="submit" class="btn btn-secondary pull-right">Add</button>
-            </div>
-        </form>
-    </div>
-
-    <table class="table table-budget">
-        <tr>
-            <td>Budget:</td>
-            <td th:text="${user.budget}"></td>
-            <td>edit</td>
-        </tr>
-        <tr>
-            <td>Savings:</td>
-            <td th:text="${user.savings}"></td>
-            <td>edit</td>
-        </tr>
-        <tr>
-            <td>Budget sum:</td>
-            <td th:text="${budgetSum}"></td>
-            <td>edit</td>
-        </tr>
-        <tr>
-            <td>I'd like to save monthly:</td>
-            <td th:text="${user.toSave}"></td>
-            <td>edit</td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td><strong>clear</strong></td>
-        </tr>
-    </table>
-
-    <!--<form th:action="@{/addToBudget}" method="post" style="width: 100px;" th:class="form-inline">
-        <div class="form-group mb-2">
-            <input type="number" name="amount" class="form-control" min="0">
+    <div id="budget">
+        <header><h2>My budget</h2></header>
+        <div th:class="addToBudget">
+            <form v-on:submit.prevent th:action="@{/budget/add}" th:method="post" th:class="form-inline">
+                <div class="form-group" style="margin-right: auto; margin-left: auto;">
+                    <input v-model="request.title" type="text" placeholder="Title" class="form-control" name="title"
+                           required style="margin-right: 15px;">
+                    <input v-model="request.value"  id="budgetEdit" class="form-control" type="number" name="amount"
+                           placeholder="Value" min="0" required>
+                    <button v-on:click="submitIncome" type="submit" class="btn btn-secondary pull-right"
+                            style="margin-left:5px;">Add
+                    </button>
+                </div>
+            </form>
         </div>
-        <button type="submit" class="btn btn-secondary mb-2 pull-right">
-            add
-        </button>
-    </form>-->
-
-
+        <table id="budgetTable" class="table table-sm table-hover table-budget" style="width: 200px;">
+            <tr>
+                <td><h4>Budget:</h4></td>
+                <td style="color: forestgreen; font-weight: bold;"> {{budget}}</td>
+            </tr>
+        </table>
+    </div>
+    <table id="incomeDataTable" class="table table-sm table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>Title</th>
+            <th>Value</th>
+            <th>Date</th>
+            <th></th>
+        </tr>
+        </thead>
+    </table>
 </div>
 <div th:replace="template.html :: js-include"></div>
-<script src="/static/js/redirect.js"></script>
 </body>
+<script th:src="@{/js/budget.js}"></script>
+<script th:src="@{https://cdn.jsdelivr.net/npm/v-mask/dist/v-mask.min.js}"></script>
 </html>

@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
 <head th:fragment="head">
-    <meta charset="UTF-8">
+<!--    <meta charset="UTF-8">-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
     <!--Przy tx:text="${}" nic się nie wyświetla w środku-->
     <!--<title th:text="${title}">Password manager</title>-->
     <title>MyBudget</title>
@@ -11,8 +14,9 @@
     <!--for bootstrap 4.3-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <link th:href="@{https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css}" th:rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css}" th:rel="stylesheet"/>
 </head>
 
 
@@ -40,17 +44,22 @@
                     <a class="nav-link" onclick="changeContent('history'); return false;" href="/history">Payments</a>
                 </li>
                 <li class="nav-item">
+                    <!--<button class="nav-link" onclick="changeContent('history')" >Payments</button>-->
+                    <a class="nav-link" onclick="changeContent('history'); return false;" href="/futurePayments">Future payments</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" onclick="changeContent('category'); return false;"
                        href="/category">Categories</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" onclick="changeContent('budget'); return false;"
-                       href="/budget">Set budget</a>
+                       href="/budget">Budget</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" onclick="changeContent('tobuy'); return false;"
-                       href="/">To buy</a>
+                    <a class="nav-link" onclick="changeContent('fixedPayments'); return false;"
+                       href="/fixedpayments">Fixed payments</a>
                 </li>
+
             </th:block>
         </ul>
     </div>
@@ -60,6 +69,7 @@
         <!--<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
         <th:block sec:authorize="isAuthenticated()">
+            <div id="headerBudgetDiv">Budget: <span id="headerBudget"></span></div>
             <a class="nav-link" th:href="@{/myAccount}">My Account</a>
 
             <!--<a class="nav-link" th:href="@{/logout}">Logout</a>-->
@@ -79,22 +89,44 @@
 
 
 <div th:fragment="js-include" class="js-include">
-    <!--for bootstrap 4.3-->
+    <!--BOOTSTRAP 4.3-->
     <script th:src="@{https://code.jquery.com/jquery-3.3.1.min.js}"></script>
     <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js}"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
     <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.js}"></script>
+    <!--DATATABLES and on document ready default methods-->
+    <script th:src="@{http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            table = $('#dataTable').DataTable({
+                "order": [],
+            });
+            getBudget ()
+        });
+    </script>
+    <!--TOASTR js-->
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js}"></script>   <!--https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.min.js   <PRODUCTION-->
+    <!--AXIOS-->
+    <script th:src="@{https://unpkg.com/axios/dist/axios.min.js}"></script>
+    <!--VUE.JS-->
+    <script th:src="@{https://cdn.jsdelivr.net/npm/vue/dist/vue.js}"></script>  <!--https://cdn.jsdelivr.net/npm/vue  <PRODUCTION-->
+    <!--MY COMMON JS-->
+    <script th:src="@{/js/common/common.js}"></script>
+    <script>
 
-
-    <!--    <script th:src="@{/js/contentLoad.js}"></script>-->
-       <script th:src="@{/js/modals.js}"></script>
-
+    </script>
 </div>
 
 
 <footer th:fragment="footer" class="footer">
     <p>MyBudget by Dawid W.</p>
+    <div>Icons made by
+        <a href="https://www.flaticon.com/authors/alfredo-hernandez" title="Alfredo Hernandez">Alfredo Hernandez</a>
+        from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+    and
+    <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
+        from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 </footer>
 
 

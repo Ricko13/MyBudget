@@ -21,16 +21,15 @@
 
 
         <!--<table class="table">-->
-        <table class="table table-sm table-hover">
+        <table id="categoryTable" class="table table-sm table-hover" >
             <thead class="thead-dark">
             <tr>
                 <th scope="col">Category name</th>
-                <th scope="col">edit name</th>
-                <th scope="col">show in category</th>
+<!--                <th scope="col">Color</th>-->
                 <th scope="col"></th>
             </tr>
             </thead>
-            <tbody>
+           <!-- <tbody>
             <th:block th:each="category: ${categories}">
                 <tr>
                     <td th:text="${category.name}"></td>
@@ -41,7 +40,7 @@
                            th:attr="data-id=${category.id}, data-name=${category.name}">delete</a></td>
                 </tr>
             </th:block>
-            </tbody>
+            </tbody>-->
         </table>
 
     </div>
@@ -57,12 +56,12 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Do you really want to delete position <span class="name" style="font-weight: bold;"></span>?
+                    Do you really want to delete position <span id="catName" class="name" style="font-weight: bold;"></span>?
                     <br/><strong style="color: red;">It will remove category from all linked payments</strong>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <form action="" method="get" id="hiddenForm">
+                    <form id="categoryDeleteForm" action="" method="get" >
                         <button type="submit" class="btn btn-primary">Delete</button>
                     </form>
 
@@ -72,5 +71,6 @@
     </div>
 </div>
 <div th:replace="template.html :: js-include"></div>
+<script th:src="@{/js/category.js}"></script>
 </body>
 </html>

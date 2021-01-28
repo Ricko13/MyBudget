@@ -1,25 +1,19 @@
 package com.wiktorski.mybudget.repository;
 
-
-// This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
-// CRUD refers Create, Read, Update, Delete
-
-
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
-/*CrudRepository<typ obiektu,typ id>*/
+@Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    //UTWORZENIE WŁASNEJ METODY - wyszukiwania po nazwisku czy loginie
     User findByUsername(String username);                                                   /*WYWALA SIĘ BO MAM WIĘCEJ NIŻ JEDNEGO UŻYTKOWNIKA Z DANYM USERNAME*/  //ALBO GDY NIE MA TAKIEGO UZYTKOWNIKA
 
     User findByConfirmationToken(String confirmationToken);
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-    List<User> findBySurname(String surname);
 
 }

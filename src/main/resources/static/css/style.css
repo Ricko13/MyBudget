@@ -1,4 +1,29 @@
 
+#headerBudget {
+    font-weight: bold;
+    font-size: large;
+    color: forestgreen; !important;
+}
+
+#headerBudgetDiv {
+    margin-right: 50px;
+    color: dimgray;
+    font-weight: bold;
+    background: ghostwhite;
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+.income {
+    color: chartreuse;
+    font-weight: bold;
+}
+
+.outcome {
+    color: #FF0000;
+    font-weight: bold;
+}
+
 body {
     /*OBRAZ W TLE*/
     /*background-image: url(../assets/padlock_photo.jpg);
@@ -19,13 +44,14 @@ body {
 }
 
 .container {
-    margin-top: 20px;
+    padding: 20px;
     width: 1000px;
     /*height: 750px;*/
     /*height:86vh;                                            !*!!!!!!!!!!!!!!!!!!*!*/
     border-radius: 8px;
     overflow: auto;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-top: 20px;
 }
 
 .container, .container-small {
@@ -78,11 +104,24 @@ body {
 }
 
 .container-wide {
-    margin-top: 20px;
+    padding: 20px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
     width: auto; /*100%;*/ /*1300px;*/
+}
+
+#chartsVue {
+    width: 1400px;
+    /*margin-left: 100px;*/
+    margin-left: auto;
+    /*margin-right: 100px;*/
+    margin-right: auto;
+    background: #1D1F20;
+}
+
+.dark-body {
+    background: #1D1F20;
 }
 
 .overflow {
@@ -114,6 +153,10 @@ header {
 
 .table {
     margin-top: 15px;
+}
+
+.table-payments {
+    table-layout: fixed;
 }
 
 .table-budget {
@@ -175,6 +218,10 @@ a:hover {
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
+}
+
+.shadow {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 /*DO MIERNIKA HASLA*/
@@ -262,3 +309,24 @@ a:hover {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
 }
 
+#dataTable_filter input{
+    border-radius: 5px;
+    color: red;
+}
+
+#budgetTable {
+    font-size: x-large;
+}
+
+#chartDiv {
+    /*border: 1px dotted red;*/
+}
+
+.pieChart {
+    width: 400px; height:400px;
+}
+
+.barChart {
+    width: 400px; height: 800px;
+    margin-bottom: 200px; margin-left:auto; margin-right:auto;
+}

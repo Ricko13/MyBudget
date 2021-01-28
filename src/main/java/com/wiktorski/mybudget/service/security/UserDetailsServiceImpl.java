@@ -1,7 +1,7 @@
 package com.wiktorski.mybudget.service.security;
 
-import com.wiktorski.mybudget.model.Role;
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.Role;
+import com.wiktorski.mybudget.model.entity.User;
 import com.wiktorski.mybudget.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

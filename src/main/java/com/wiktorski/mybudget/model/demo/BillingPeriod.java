@@ -1,11 +1,13 @@
 package com.wiktorski.mybudget.model.demo;
 
-import com.wiktorski.mybudget.model.Payment;
-import com.wiktorski.mybudget.model.User;
+import com.wiktorski.mybudget.model.entity.Payment;
+import com.wiktorski.mybudget.model.entity.User;
 
 import javax.persistence.*;
 import java.util.List;
 
+
+//TODO to delete
 //@Entity
 public class BillingPeriod {
 

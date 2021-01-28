@@ -1,163 +1,89 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="template.html::head">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<body class="dark-body">
 
 <div th:replace="template.html::navbar"></div>
-<div class="container-wide">
-
-    <!--
-    <div class="button-group" sec:authorize="isAuthenticated()">
-        &lt;!&ndash;<p th:if="${loggedIn}"><h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]] !</h1></p>&ndash;&gt;
-        <div th:if="${loggedIn}" class="alert alert-success" role="alert">
-            <h5>Signed in</h5>
-            <h5 th:text="${loggedIn}"></h5>
-            &lt;!&ndash;<h5>Hello [[${#httpServletRequest.remoteUser}]] !</h5>&ndash;&gt;
+<div id="chartsVue" class="container-wide">
+    <header style="margin-bottom: 40px; color: gray;"><h2>Summary</h2></header>
+    <div class="form-row" style="width:450px; margin-left: auto; margin-right: auto; margin-bottom: 30px;">
+        <div class="col">
+            <input v-model="startDate"
+                   class="form-control" type="date" id="startDate"
+                   style="width: 200px; margin-right: auto; margin-left: auto;">
+        </div>
+        <div class="col">-</div>
+        <div class="col">
+            <input v-model="endDate"
+                   class="form-control" type="date" id="endDate"
+                   style="width: 200px; margin-right: auto; margin-left: auto;">
+        </div>
+        <div class="col" style="margin-top:10px;">
+            <button v-on:click="submitRange" id="chartDateRangeSubmit" class="btn btn-secondary">apply range</button>
         </div>
     </div>
-    -->
-
-    <div class="indexAddPayment">
-        <header><h2>Add payment</h2></header>
-        <br/>
-        <form th:action="@{/payment/add}" method="post">
-            <div class="form-group">
-                <div class="form-row">
-                    <div class="col">
-                        <label for="name" style="font-weight: bold">Position name *</label>
-                        <input type="text" class="form-control" id="name"
-                               placeholder="Position name" name="name" required
-                               style="width: 180px; margin-right: auto; margin-left: auto;">
-                    </div>
-                    <div class="col">
-                        <label for="price">Value *</label>
-                        <input type="number"
-                               min="0" step="any" class="form-control" id="price" placeholder="Type price"
-                               name="price" required
-                               style="width: 200px; margin-right: auto; margin-left: auto;">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="form-row">
-                    <div class="col">
-                        <label for="categories">Category</label>
-                        <select id="categories" name="categories" class="form-control"
-                                style="width: 250px; margin-right: auto; margin-left: auto;">
-                            <option value="-1">None</option>
-                            <option th:each="category : ${categories}"
-                                    th:value="${category.id}"
-                                    th:text="${category.name}"></option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="form-row">
-                    <div class="col">
-                        <label for="date" th:value="${date}">Date</label>
-                        <input class="form-control" type="date" id="date" name="date"
-                               style="width: 160px; margin-right: auto; margin-left: auto;">
-                    </div>
-                    <div class="col">
-                        <label for="time" th:value="${date}">Time</label>
-                        <input class="form-control" type="time" id="time" name="time"
-                               style="width: 100px; margin-right: auto; margin-left: auto;">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col">
-                        <label for="description">Description</label>
-                        <input id="description" name="description" class="form-control" type="text" autocomplete="off">
-                    </div>
-                </div>
-            </div>
-
-            <button id="buttonPaymentCollapse" type="submit" class="btn btn-secondary pull-right">Submit
-            </button>
-        </form>
-    </div>
-
-
-    <div class="indexBudget">
-        <header><h2>My budget</h2></header>
-        <hr>
-
-        <div th:class="addToBudget">
-            <form th:action="@{/budget/add}" th:method="post" th:class="form-inline">
-                <div class="form-group" style="margin-right: auto; margin-left: auto;">
-                    <input class="form-control" type="number" name="amount" placeholder="Add to budget..." min="0" required>
-                    <button type="submit" class="btn btn-secondary pull-right">Add</button>
-                </div>
-            </form>
-        </div>
-
-        <table class="table">
-            <tr>
-                <td><strong>Budget:</strong></td>
-                <td>
-                       <span th:text="${user.budget}" style="font-weight: bold; margin-right: 5px;">
-                       </span>
-                    (<span th:text="${budgetSum}" data-toggle="tooltip" title="Without amount to save"></span>)
-                </td>
-            </tr>
-            <tr>
-                <td>Savings:</td>
-                <td th:text="${user.savings}"></td>
-            </tr>
-            <!--<tr>
-                <td>Budget sum:</td>
-                <td th:text="${budgetSum}"></td>
-            </tr>
-            <tr>
-                <td>I'd like to save monthly:</td>
-                <td th:text="${user.toSave}"></td>
-            </tr>-->
-            <tr>
-                <td></td>
-                <td><strong><a th:href="@{/budget}">show all</a></strong></td>
-            </tr>
-        </table>
-    </div>
-
-
-    <div th:class="indexHistory">
-        <header><h2>History</h2></header>
-
-        <table class="table table-sm table-hover">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Pos name</th>
-                <th scope="col">price</th>
-                <th scope="col">Date</th>
-                <th scope="col">Category</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            <th:block th:each="payment: ${payments}">
+    <div class="form-row">
+        <div div="reportInfo" class="col" >
+            <header style="color:gray;"><h2>Summary info</h2></header>
+            <table class="table table-dark">
+                <tbody>
                 <tr>
-                    <td th:text="${payment.name}"></td>
-                    <td th:text="${payment.price}"></td>
-                    <td th:text="${payment.justDate}"></td>
-                    <!--<td th:text="${payment.category!=null}?${payment.category.name} : ''"></td>-->
-                    <td style="width:120px;"><a
-                            th:href="${payment.category!=null}?@{'/category/'+${payment.category.name}} : '#'"
-                            th:text="${payment.category!=null}?${payment.category.name} : ''"></a></td>
-                    <!--<td><a th:href="@{'/payment/delete/' +${payment.id}}" th:onclick="'deletePos('+${payment.id}+')'">delete</a> </td>-->
+                    <td><strong>Budget</strong> (overall)</td>
+                    <td><strong>{{reportData.budget}}</strong></td>
                 </tr>
-            </th:block>
-            </tbody>
-        </table>
-
+                <tr>
+                    <td>Income</td>
+                    <td class="income">{{reportData.totalIncomeAmount}}</td>
+                </tr>
+                <tr>
+                    <td>Payments value</td>
+                    <td class="outcome">{{reportData.totalOutcomeAmount}}</td>
+                </tr>
+                <tr>
+                    <td>Amount of payments</td>
+                    <td>{{reportData.paymentsAmount}}</td>
+                </tr>
+                <tr>
+                    <td>Average daily outcome</td>
+                    <td>{{reportData.averageDailyOutcome}}</td>
+                </tr>
+                <tr>
+                    <td>Income/outcome comparison</td>
+                    <td>{{reportData.incomeMinusOutcome}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="chartDiv" class="col"
+             style="width:300px; height:400px; margin-bottom: 200px; margin-left:auto; margin-right:auto;">
+            <div v-if="reportData.paymentsAmount > 0">
+                <button v-on:click="initChart('pie')" class="btn btn-secondary">Pie chart</button>
+                <button v-on:click="initChart('bar')" class="btn btn-secondary">Bar chart</button>
+                <canvas id="chart" width="300" height="200" style="margin-top: 20px;"></canvas>
+            </div>
+        </div>
     </div>
-
-
-    <!--<div class="button-group" sec:authorize="isAnonymous()">-->
+  <!--  <div class="form-row">
+        <div class="col">
+        <div class="overflow">
+            <table id="dataTable" class="table table-sm table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Pos name</th>
+                    <th scope="col">price</th>
+                    <th scope="col">Date</th>
+                    <th scope="col" style="width: 150px;">Description</th>
+                    <th scope="col">Category</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    </div>-->
     <div class="button-group" sec:authorize="!isFullyAuthenticated()">
         <p><a href="/login">Login</a></p>
         <p><a href="/registration">Register</a></p>
@@ -165,6 +91,8 @@
 
 </div>
 <div th:replace="template.html :: js-include"></div>
-<script src="/js/redirect.js"></script>
+<script th:src="@{/js/index.js}"></script>
+<script th:src="@{https://cdn.jsdelivr.net/npm/chart.js@2.8.0}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js}"></script>
 </body>
 </html>
